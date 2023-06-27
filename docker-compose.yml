@@ -36,7 +36,7 @@ services:
 volumes:
   caddy_data:
     name: rat_caddy_data
-    #external: true
+    #external: true -- uncomment for prod
   caddy_config:
 
   pb_data:
