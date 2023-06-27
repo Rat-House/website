@@ -1,0 +1,17 @@
+# replace with domain
+:80 {
+  handle /api/* {
+    reverse_proxy pocketbase:8090
+  }
+
+  handle_path /admin/* {
+    # I dont think it needs an extra slash
+    rewrite * /_{path}?{query}
+    reverse_proxy pocketbase:8090
+  }
+
+  handle {
+		respond "ok"
+    #reverse_proxy website:5173
+  }
+}

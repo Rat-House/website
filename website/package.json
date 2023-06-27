@@ -1,0 +1,9 @@
+{
+  "name": "ratsite",
+  "version": "1.0.0",
+  "description": "a rats site",
+  "main": "index.js",
+  "scripts": {
+    "build": "mkdir -p build && cp index.js build/index.js"
+  }
+}

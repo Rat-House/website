@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  website:
+    build: ./website
+    #restart: unless-stopped
+    depends_on:
+      - caddy
+
+  caddy:
+    image: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+
+  pocketbase:
+    image: ghcr.io/muchobien/pocketbase:latest
+    container_name: pocketbase
+    restart: unless-stopped
+    volumes:
+      - pb_data:/pb_data
+    healthcheck: #optional (recommended) since v0.10.0
+      test: wget --no-verbose --tries=1 --spider http://localhost:8090/api/health || exit 1
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - caddy
+
+volumes:
+  caddy_data:
+    name: rat_caddy_data
+    #external: true
+  caddy_config:
+
+  pb_data:
+    name: rat_pocketbase_data
+    #external: true
+
+
