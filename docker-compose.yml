@@ -3,7 +3,7 @@ version: "3.9"
 services:
   website:
     build: ./website
-    #restart: unless-stopped
+    restart: unless-stopped
     depends_on:
       - caddy
 
