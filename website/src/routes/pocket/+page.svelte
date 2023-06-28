@@ -1,6 +1,6 @@
 <script>
 	import PocketBase from 'pocketbase';
-  import {PUBLIC_POCKETBASE_PAGEURL} from "$env/static/public";
+	import { PUBLIC_POCKETBASE_PAGEURL } from '$env/static/public';
 
 	const pb = new PocketBase(PUBLIC_POCKETBASE_PAGEURL); //'/');
 
@@ -9,11 +9,11 @@
 	});
 </script>
 
-tags:<br>
+tags:<br />
 {#await result}
 	loading...
 {:then r}
-{#each r.items as item}
-{item.name} - {item.description}<br> 
-{/each}
+	{#each r.items as item}
+		{item.name} - {item.description}<br />
+	{/each}
 {/await}
