@@ -1,5 +1,8 @@
 # replace with domain
 :80 {
+  redir /api /api/
+  redir /admin /admin/
+
   handle /api/* {
     reverse_proxy pocketbase:8090
   }
