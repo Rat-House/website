@@ -9,7 +9,7 @@ export async function load({ params }) {
   const pb = new PocketBase(PUBLIC_POCKETBASE_PAGEURL);
   try {
     const data = await pb.collection('posts').getOne(params.slug, {
-      expand: 'creator,editors'
+      expand: 'creator,editors,tags'
     });
     return {
       title: data.title,
