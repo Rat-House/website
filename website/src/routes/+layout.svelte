@@ -31,7 +31,7 @@
         </ul>
       </div>
       <a class="btn btn-ghost normal-case text-xl" href="/">
-        <img src="/FullLogo.png" width="200" class="filter-none dark:invert" alt="website logo" />
+        <img src="/FullLogo.png" width="200" class="filter-none dark:invert pointer-events-none" alt="website logo" />
       </a>
     </div>
     <div class="navbar-end">
@@ -66,7 +66,7 @@
 <slot />
 
 <footer class="footer items-center p-4 bg-base-300">
-  <div class="items-center grid-flow-col">
+  <div class="items-center grid-flow-col pointer-events-none select-none">
     <img src="/house.png" width="50" class="filter-none dark:invert" alt="website icon" />
     <p>Copyright © 2023 - All right reserved</p>
   </div>
