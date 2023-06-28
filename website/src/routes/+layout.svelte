@@ -37,7 +37,7 @@
         </ul>
       </div>
       <a class="btn btn-ghost normal-case text-xl">
-        <img src="Full Logo.png" width="200" class="filter-none dark:invert" />
+        <img src="/FullLogo.png" width="200" class="filter-none dark:invert" />
       </a>
     </div>
     <div class="navbar-end">
