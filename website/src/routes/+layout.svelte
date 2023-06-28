@@ -8,7 +8,7 @@
   });
 </script>
 
-<section class="flex flex-col h-screen justify-between">
+<section class="min-h-screen">
   <header>
     <div class="navbar bg-base-100">
       <div class="navbar-start">
@@ -69,11 +69,11 @@
     </div>
   </header>
 
-  <div class="mb-auto">
-    <slot />
-  </div>
+  <slot />
 
-  <footer class="footer items-center p-4 bg-base-300 pointer-events-none select-none">
+  <footer
+    class="footer sticky top-[100vh] items-center p-4 bg-base-300 pointer-events-none select-none"
+  >
     <div class="items-center grid-flow-col">
       <img src="/house.png" width="50" class="filter-none dark:invert" alt="website icon" />
       <p>Copyright © 2023 - All right reserved</p>
