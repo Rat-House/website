@@ -65,8 +65,8 @@
 
 <slot />
 
-<footer class="footer items-center p-4 bg-base-300">
-  <div class="items-center grid-flow-col pointer-events-none select-none">
+<footer class="footer items-center p-4 bg-base-300 pointer-events-none select-none">
+  <div class="items-center grid-flow-col">
     <img src="/house.png" width="50" class="filter-none dark:invert" alt="website icon" />
     <p>Copyright © 2023 - All right reserved</p>
   </div>
