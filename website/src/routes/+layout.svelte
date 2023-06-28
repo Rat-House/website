@@ -31,7 +31,12 @@
         </ul>
       </div>
       <a class="btn btn-ghost normal-case text-xl" href="/">
-        <img src="/FullLogo.png" width="200" class="filter-none dark:invert pointer-events-none" alt="website logo" />
+        <img
+          src="/FullLogo.png"
+          width="200"
+          class="filter-none dark:invert pointer-events-none"
+          alt="website logo"
+        />
       </a>
     </div>
     <div class="navbar-end">
