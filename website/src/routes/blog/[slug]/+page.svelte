@@ -1,4 +1,5 @@
 <script>
+  import '../blogpost.pcss';
   export let data;
 </script>
 
@@ -9,6 +10,8 @@
     <p><i>unpublished</i></p>
   {/if}
   <h1>{data.title}</h1>
-  <!-- eslint-disable-next-line svelte/no-at-html-tags-->
-  <p>{@html data.content}</p>
+  <div class="markdown">
+    <!-- eslint-disable-next-line svelte/no-at-html-tags-->
+    {@html data.content}
+  </div>
 {/if}
