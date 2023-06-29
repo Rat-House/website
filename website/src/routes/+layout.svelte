@@ -68,21 +68,10 @@
                                 }
                             }}
                     >
-                        <button class="btn btn-accent btn-sm" >Log out</button>
+                        <button class="btn btn-accent btn-sm">Log out</button>
                     </form>
                 {:else}
-                    <form
-                            method="GET"
-                            action="/user/login"
-                            use:enhance={() => {
-                                return async ({ result }) => {
-                                    loginModal.showModal()
-                                    await applyAction(result)
-                                }
-                            }}
-                    >
-                    <button class="btn btn-accent btn-sm">login</button>
-                    </form>
+                    <a class="btn btn-accent btn-sm" href="/user/login">login</a>
                 {/if}
                 <label class="swap swap-rotate px-4">
                     <!-- controls the state -->

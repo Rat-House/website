@@ -25,8 +25,8 @@ export async function load({locals, url, cookies}) {
     const redirectURL = `${url.origin}/user/login/callback`;
     const authProvider = authMethods.authProviders.find(v => v.name === provider);
     const authProviderRedirect = `${authProvider.authUrl}${redirectURL}`;
-    cookies.set("state", authProvider.state, {path: "/user/login"})
     cookies.set("provider", JSON.stringify(authProvider), {path: "/user/login"})
+    if (url.searchParams.get("window")!==null) cookies.set("windowed", "true", {path: "/user/login"})
 
     return {
         authProviderRedirect: authProviderRedirect,

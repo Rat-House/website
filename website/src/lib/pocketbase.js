@@ -1,7 +1,7 @@
-import { PUBLIC_POCKETBASE_PAGEURL } from '$env/static/public'
+import {PUBLIC_POCKETBASE_PAGEURL} from '$env/static/public'
 import PocketBase from 'pocketbase'
-import { writable } from 'svelte/store'
+import {browser} from "$app/environment";
 
-export const pb = new PocketBase(PUBLIC_POCKETBASE_PAGEURL)
+export const pb = new PocketBase(PUBLIC_POCKETBASE_PAGEURL);
+if (browser) pb.authStore.loadFromCookie(document.cookie); // this wont run when using only ssr
 
-export const currentUser = writable(pb.authStore.model)
