@@ -16,9 +16,15 @@ export async function load({ params, parent }) {
           headerIds: false,
           mangle: false
         })
-      )
+      ),
+      published: data.published
     };
-  } catch (e) {
-    throw error(404, 'Not found');
+  } catch {
+    const data = await pb.collection('postList').getOne(params.slug);
+    return {
+      title: "",
+      content: "",
+      published: data.published
+    };
   }
 }
