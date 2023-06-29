@@ -57,7 +57,7 @@
         </div>
         {#if data.isLoggedIn}
           <!--todo replace with user info dropdown-->
-          <!--                    <p>{$currentUser.email}</p> todo make this no js friendly-->
+          <p>{data.user.email}</p>
           <form
             method="POST"
             action="/user/logout"

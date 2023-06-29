@@ -3,7 +3,7 @@
   import { PUBLIC_POCKETBASE_PAGEURL } from '$env/static/public';
   import { invalidateAll } from '$app/navigation';
   import { createEventDispatcher } from 'svelte';
-  import { currentUser, pb } from '$lib/pocketbase.js';
+  import { pb } from '$lib/pocketbase.js';
 
   const dispatcher = createEventDispatcher();
 
@@ -45,7 +45,7 @@
 </script>
 
 <div class="text-center">
-  {#if $currentUser}
+  {#if pb.authStore.model}
     <h3>Already logged in</h3>
   {:else}
     <h4>Auth providers:</h4>
