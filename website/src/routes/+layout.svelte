@@ -8,7 +8,9 @@
 
   export let data;
 
+  /** @type string[] */
   let providers = [];
+  /** @type HTMLDialogElement */
   let loginModal;
 
   onMount(() => {

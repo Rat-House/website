@@ -4,9 +4,13 @@
   import { pb } from '$lib/pocketbase.js';
   import { invalidateAll } from '$app/navigation';
 
+  /** @type string[] */
   export let providers = [];
   const dispatcher = createEventDispatcher();
 
+  /**
+   * @param {string} provider
+   */
   function authLogin(provider) {
     return () => {
       if (!browser) return;
@@ -51,7 +55,7 @@
           await unsub
         )();
       });
-      w.onclose = refresh;
+      if (w) w.onclose = refresh;
       pb.authStore.onChange(refresh);
     };
   }

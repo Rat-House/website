@@ -8,7 +8,7 @@ export async function load({ data }) {
   if (data.path === '') return;
 
   if (browser) {
-    pb.authStore.loadFromCookie(data.authCookie);
+    pb.authStore.loadFromCookie(data.authCookie || '');
     console.log(pb.authStore);
     pb.authStore.save(pb.authStore.token, pb.authStore.model);
     invalidateAll();

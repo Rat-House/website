@@ -1,9 +1,12 @@
 import { marked } from 'marked';
 import sanitizeHtml from 'sanitize-html';
+import { pb } from '$lib/pocketbase.js';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, parent }) {
-  const { pb } = await parent();
+  const { pbCookie } = await parent();
+  pb.authStore.loadFromCookie(pbCookie);
+
   try {
     const data = await pb.collection('posts').getOne(params.slug, {
       expand: 'creator,editors,tags'

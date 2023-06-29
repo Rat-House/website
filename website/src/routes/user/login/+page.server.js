@@ -8,6 +8,7 @@ export async function load({ locals, url, cookies }) {
     };
   }
 
+  /** @type string[] */
   let providers = [];
   authMethods.authProviders.forEach((p) => {
     providers.push(p.name);
@@ -15,7 +16,8 @@ export async function load({ locals, url, cookies }) {
   providers.sort((a, b) => a.localeCompare(b));
 
   const provider = (url.searchParams.get('provider') || '').toLowerCase();
-  if (!providers.includes(provider)) {
+  const authProvider = authMethods.authProviders.find((v) => v.name === provider);
+  if (authProvider === undefined) {
     return {
       authProviderRedirect: '',
       providers: providers
@@ -23,7 +25,6 @@ export async function load({ locals, url, cookies }) {
   }
 
   const redirectURL = `${url.origin}/user/login/callback`;
-  const authProvider = authMethods.authProviders.find((v) => v.name === provider);
   const authProviderRedirect = `${authProvider.authUrl}${redirectURL}`;
   cookies.set('provider', JSON.stringify(authProvider), { path: '/user/login' });
   if (url.searchParams.get('window') !== null)
