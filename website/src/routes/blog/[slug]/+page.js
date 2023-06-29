@@ -1,12 +1,10 @@
 import { error } from '@sveltejs/kit';
 import { marked } from 'marked';
 import sanitizeHtml from 'sanitize-html';
-import PocketBase from 'pocketbase';
-import { PUBLIC_POCKETBASE_PAGEURL } from '$env/static/public';
 
 /** @type {import('./$types').PageLoad} */
-export async function load({ params }) {
-  const pb = new PocketBase(PUBLIC_POCKETBASE_PAGEURL);
+export async function load({ params, parent }) {
+  const {pb} = await parent();
   try {
     const data = await pb.collection('posts').getOne(params.slug, {
       expand: 'creator,editors,tags'
