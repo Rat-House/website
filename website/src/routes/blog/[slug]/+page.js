@@ -1,4 +1,3 @@
-import { error } from '@sveltejs/kit';
 import { marked } from 'marked';
 import sanitizeHtml from 'sanitize-html';
 
