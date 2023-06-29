@@ -1,45 +1,58 @@
 <script>
   import { browser } from '$app/environment';
-  import { PUBLIC_POCKETBASE_PAGEURL } from '$env/static/public';
-  import { invalidateAll } from '$app/navigation';
   import { createEventDispatcher } from 'svelte';
   import { pb } from '$lib/pocketbase.js';
+  import { invalidateAll } from '$app/navigation';
 
+  export let providers = [];
   const dispatcher = createEventDispatcher();
-
-  async function getAuthMethods() {
-    const methods = await pb.collection('users').listAuthMethods();
-    let providers = [];
-    methods.authProviders.forEach((p) => {
-      providers.push(p);
-    });
-    providers.sort((a, b) => a.name.localeCompare(b.name));
-    return providers;
-  }
 
   function authLogin(provider) {
     return () => {
       if (!browser) return;
       console.log(`logging in with ${provider}`);
 
-      const authData = {
-        provider: provider,
-        redirectUrl: `${PUBLIC_POCKETBASE_PAGEURL}/api/oauth2-redirect`
+      let width = 1024;
+      let height = 768;
+
+      let windowWidth = window.innerWidth;
+      let windowHeight = window.innerHeight;
+
+      // normalize window size
+      width = width > windowWidth ? windowWidth : width;
+      height = height > windowHeight ? windowHeight : height;
+
+      let left = windowWidth / 2 - width / 2;
+      let top = windowHeight / 2 - height / 2;
+
+      const w = window.open(
+        `/user/login?provider=${provider}&window`,
+        'oauth2-popup',
+        'width=' +
+          width +
+          ',height=' +
+          height +
+          ',top=' +
+          top +
+          ',left=' +
+          left +
+          ',resizable,menubar=no'
+      );
+
+      // try to catch auth finish
+      const refresh = () => {
+        dispatcher('auth');
+        invalidateAll();
       };
-      if (provider === 'discord') {
-        authData.scopes = ['identify', 'email'];
-      }
-
-      pb.collection('users')
-        .authWithOAuth2(authData)
-        .then(() => {
-          if (pb.authStore.isValid) invalidateAll();
-          dispatcher('auth', pb.authStore);
-
-          // console.log(pocketBase.authStore.isValid);
-          // console.log(pocketBase.authStore.token);
-          // console.log(pocketBase.authStore.model.id);
-        });
+      const unsub = pb.collection('users').subscribe('@oauth2', async (e) => {
+        console.log(e);
+        refresh();
+        await (
+          await unsub
+        )();
+      });
+      w.onclose = refresh;
+      pb.authStore.onChange(refresh);
     };
   }
 </script>
@@ -49,14 +62,15 @@
     <h3>Already logged in</h3>
   {:else}
     <h4>Auth providers:</h4>
-    {#await getAuthMethods()}
-      <span>loading...</span>
-    {:then providers}
-      {#each providers as provider (provider.name)}
-        <button on:click={authLogin(provider.name)} class="btn btn-accent btn-sm m-0.5"
-          >{provider.name}</button
+    {#key providers}
+      {#each providers as provider}
+        <a
+          href="/user/login?provider={provider}"
+          class="btn btn-accent btn-sm m-0.5"
+          data-sveltekit-preload-data="tap"
+          on:click|preventDefault={authLogin(provider)}>Login with {provider}</a
         >
       {/each}
-    {/await}
+    {/key}
   {/if}
 </div>

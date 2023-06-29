@@ -1,8 +1,11 @@
-import { redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ locals, url, cookies }) {
   if (url.searchParams.get('window') !== null) return { path: '' };
+  if (url.searchParams.get('error') !== null) {
+    throw error(424, url.searchParams.get('error_description') || 'error with oath');
+  }
 
   const redirectURL = `${url.origin}/user/login/callback`;
   const providerText = cookies.get('provider');

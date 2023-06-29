@@ -8,11 +8,20 @@
 
   export let data;
 
+  let providers = [];
+  let loginModal;
+
   onMount(() => {
     themeChange(false);
+    pb.collection('users')
+      .listAuthMethods()
+      .then((methods) => {
+        methods.authProviders.forEach((p) => {
+          providers.push(p.name);
+        });
+        providers = providers.sort((a, b) => a.localeCompare(b));
+      });
   });
-
-  let loginModal;
 </script>
 
 <section class="min-h-screen">
@@ -71,7 +80,11 @@
             <button class="btn btn-accent btn-sm">Log out</button>
           </form>
         {:else}
-          <a class="btn btn-accent btn-sm" href="/user/login">login</a>
+          <a
+            class="btn btn-accent btn-sm"
+            href="/user/login"
+            on:click|preventDefault={() => loginModal.showModal()}>login</a
+          >
         {/if}
         <label class="swap swap-rotate px-4">
           <!-- controls the state -->
@@ -107,11 +120,11 @@
   </footer>
 </section>
 
-{#if data.isLoggedIn}
+{#if !data.isLoggedIn}
   <dialog bind:this={loginModal} class="modal">
     <form method="dialog" class="modal-box">
       <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-      <Login on:auth={() => loginModal.close()} />
+      <Login {providers} on:auth={() => loginModal.close()} />
       <div class="pb-4" />
     </form>
     <form method="dialog" class="modal-backdrop">
