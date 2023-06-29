@@ -46,7 +46,7 @@
           >
             <li><a href="/blog">Blog</a></li>
             <li><a href="/projects">Projects</a></li>
-            <li><a href="#?">About</a></li>
+            <li><a href="/about">About</a></li>
           </ul>
         </div>
         <a class="btn btn-ghost normal-case text-xl" href="/">
@@ -63,7 +63,7 @@
           <ul class="menu menu-horizontal px-1">
             <li><a href="/blog">Blog</a></li>
             <li><a href="/projects">Projects</a></li>
-            <li><a href="#?">About</a></li>
+            <li><a href="/about">About</a></li>
           </ul>
         </div>
         {#if data.isLoggedIn}
