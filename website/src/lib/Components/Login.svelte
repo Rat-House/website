@@ -3,21 +3,20 @@
     import {PUBLIC_POCKETBASE_PAGEURL} from '$env/static/public';
     import {invalidateAll} from "$app/navigation";
     import {createEventDispatcher} from "svelte";
-
-    export let pocketBase;
+    import {currentUser, pb} from "$lib/pocketbase.js";
 
     const dispatcher = createEventDispatcher();
 
-    const providers = new Promise((resolve) => {
-        pocketBase.collection("users").listAuthMethods().then(auth => {
-            let providers = []
-            auth.authProviders.forEach(p => {
-                providers.push(p)
-            })
-            providers.sort((a, b) => a.name.localeCompare(b.name))
-            resolve(providers)
+    async function getAuthMethods() {
+        const methods = await pb.collection("users").listAuthMethods()
+        let providers = []
+        methods.authProviders.forEach(p => {
+            providers.push(p)
         })
-    })
+        providers.sort((a, b) => a.name.localeCompare(b.name))
+        return providers
+
+    }
 
     function authLogin(provider) {
         return () => {
@@ -32,26 +31,26 @@
                 authData.scopes = ['identify', 'email']
             }
 
-            pocketBase.collection('users')
+            pb.collection('users')
                 .authWithOAuth2(authData)
                 .then(() => {
-                    if (pocketBase.authStore.isValid) invalidateAll()
-                    dispatcher("auth", pocketBase.authStore)
+                    if (pb.authStore.isValid) invalidateAll()
+                    dispatcher("auth", pb.authStore)
 
-                    console.log(pocketBase.authStore.isValid);
-                    console.log(pocketBase.authStore.token);
-                    console.log(pocketBase.authStore.model.id);
+                    // console.log(pocketBase.authStore.isValid);
+                    // console.log(pocketBase.authStore.token);
+                    // console.log(pocketBase.authStore.model.id);
                 });
         }
     }
 </script>
 
 <div class="text-center">
-    {#if pocketBase.authStore.isValid}
+    {#if $currentUser}
         <h3>Already logged in</h3>
     {:else}
         <h4>Auth providers:</h4>
-        {#await providers}
+        {#await getAuthMethods()}
             <span>loading...</span>
         {:then providers}
             {#each providers as provider (provider.name)}

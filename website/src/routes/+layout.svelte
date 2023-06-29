@@ -2,20 +2,15 @@
     import '../app.css';
     import {onMount} from 'svelte';
     import {themeChange} from 'theme-change';
-    import {invalidateAll} from "$app/navigation";
     import Login from "$lib/Components/Login.svelte";
+    import {pb} from '$lib/pocketbase'
+    import {applyAction, enhance} from "$app/forms";
 
-    /** @type {import('./$types').LayoutData} */
     export let data;
 
     onMount(() => {
         themeChange(false);
     });
-
-    function logout(){
-      data.auth.clear(); //todo make login/out use actions
-      invalidateAll()
-    }
 
     let loginModal;
 </script>
@@ -60,10 +55,34 @@
                         <li><a href="#?">About</a></li>
                     </ul>
                 </div>
-                {#if !data.pb.authStore.isValid}
-                    <button class="btn btn-accent btn-sm" on:click={()=>loginModal.showModal()}>login</button>
+                {#if data.isLoggedIn}
+                    <!--todo replace with user info dropdown-->
+<!--                    <p>{$currentUser.email}</p> todo make this no js friendly-->
+                    <form
+                            method="POST"
+                            action="/user/logout"
+                            use:enhance={() => {
+                                return async ({ result }) => {
+                                    pb.authStore.clear()
+                                    await applyAction(result)
+                                }
+                            }}
+                    >
+                        <button class="btn btn-accent btn-sm" >Log out</button>
+                    </form>
                 {:else}
-                    <button class="btn btn-accent btn-sm" on:click={logout}>Logout</button> <!--todo replace with user info dropdown-->
+                    <form
+                            method="GET"
+                            action="/user/login"
+                            use:enhance={() => {
+                                return async ({ result }) => {
+                                    loginModal.showModal()
+                                    await applyAction(result)
+                                }
+                            }}
+                    >
+                    <button class="btn btn-accent btn-sm">login</button>
+                    </form>
                 {/if}
                 <label class="swap swap-rotate px-4">
                     <!-- controls the state -->
@@ -99,13 +118,15 @@
     </footer>
 </section>
 
-<dialog bind:this={loginModal} class="modal">
-    <form method="dialog" class="modal-box">
-        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-        <Login on:auth={()=>loginModal.close()} pocketBase={data.pb}/>
-        <div class="pb-4"></div>
-    </form>
-    <form method="dialog" class="modal-backdrop">
-        <button tabindex="-1">close</button>
-    </form>
-</dialog>
+{#if data.isLoggedIn}
+    <dialog bind:this={loginModal} class="modal">
+        <form method="dialog" class="modal-box">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+            <Login on:auth={()=>loginModal.close()}/>
+            <div class="pb-4"></div>
+        </form>
+        <form method="dialog" class="modal-backdrop">
+            <button tabindex="-1">close</button>
+        </form>
+    </dialog>
+{/if}
