@@ -1,6 +1,7 @@
 <script>
-  import {currentUser} from "$lib/pocketbase.js";
+  import { currentUser } from '$lib/pocketbase.js';
 </script>
+
 {$currentUser}
 
 <div class="hero min-h-screen bg-base-200">

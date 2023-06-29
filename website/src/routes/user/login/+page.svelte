@@ -1,10 +1,9 @@
 <script>
-    export let data;
+  export let data;
 </script>
 
 {#each data.providers as provider}
-    <a href="?provider={provider}"
-       class="btn"
-       data-sveltekit-preload-data="tap"
-    >Login with {provider}</a>
+  <a href="?provider={provider}" class="btn" data-sveltekit-preload-data="tap"
+    >Login with {provider}</a
+  >
 {/each}

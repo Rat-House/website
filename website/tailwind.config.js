@@ -1,4 +1,4 @@
-import daisyUI from "daisyui";
+import daisyUI from 'daisyui';
 
 /** @type {import('tailwindcss').Config} */
 export default {

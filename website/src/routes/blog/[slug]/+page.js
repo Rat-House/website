@@ -4,7 +4,7 @@ import sanitizeHtml from 'sanitize-html';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, parent }) {
-  const {pb} = await parent();
+  const { pb } = await parent();
   try {
     const data = await pb.collection('posts').getOne(params.slug, {
       expand: 'creator,editors,tags'
@@ -22,8 +22,8 @@ export async function load({ params, parent }) {
   } catch {
     const data = await pb.collection('postList').getOne(params.slug);
     return {
-      title: "",
-      content: "",
+      title: '',
+      content: '',
       published: data.published
     };
   }
