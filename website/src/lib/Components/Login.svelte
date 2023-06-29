@@ -29,34 +29,22 @@
       let left = windowWidth / 2 - width / 2;
       let top = windowHeight / 2 - height / 2;
 
-      const w = window.open(
+      window.open(
         `/user/login?provider=${provider}&window`,
         'oauth2-popup',
-        'width=' +
-          width +
-          ',height=' +
-          height +
-          ',top=' +
-          top +
-          ',left=' +
-          left +
-          ',resizable,menubar=no'
+        `width=${width},height=${height},top=${top},left=${left},resizable,menubar=no`
       );
 
-      // try to catch auth finish
-      const refresh = () => {
+      // catch auth finish
+      const listener = ({ key }) => {
+        if (key !== 'loggedin') return;
+
+        localStorage.removeItem('loggedin');
         dispatcher('auth');
         invalidateAll();
+        window.removeEventListener('storage', listener);
       };
-      const unsub = pb.collection('users').subscribe('@oauth2', async (e) => {
-        console.log(e);
-        refresh();
-        await (
-          await unsub
-        )();
-      });
-      if (w) w.onclose = refresh;
-      pb.authStore.onChange(refresh);
+      window.addEventListener('storage', listener);
     };
   }
 </script>

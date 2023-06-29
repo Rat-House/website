@@ -1,7 +1,9 @@
 <script>
   import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
 
   onMount(() => {
+    if (browser) localStorage.setItem('loggedin', 'true');
     window.close();
   });
 </script>
