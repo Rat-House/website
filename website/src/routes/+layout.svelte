@@ -38,8 +38,8 @@
                     <ul
                             class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
                     >
-                        <li><a href="#?">Blog</a></li>
-                        <li><a href="#?">Projects</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/projects">Projects</a></li>
                         <li><a href="#?">About</a></li>
                     </ul>
                 </div>
@@ -55,8 +55,8 @@
             <div class="navbar-end">
                 <div class="hidden lg:flex">
                     <ul class="menu menu-horizontal px-1">
-                        <li><a href="#?">Blog</a></li>
-                        <li><a href="#?">Projects</a></li>
+                        <li><a href="/blog">Blog</a></li>
+                        <li><a href="/projects">Projects</a></li>
                         <li><a href="#?">About</a></li>
                     </ul>
                 </div>
