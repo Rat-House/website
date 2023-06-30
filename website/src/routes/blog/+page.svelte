@@ -1,17 +1,19 @@
 <script>
+  /**
+   * @typedef {import("../../dbtypes.js").Tag} Tag
+   * @typedef {import("../../dbtypes.js").User} User
+   * @typedef {import("pocketbase").Record} PR
+   */
+
   export let data;
 
   /**
-   * @typedef {{level:number,name:string}} Auth
-   * @typedef {{name:string,avatar:string,authority:string, expand:{authority:Auth}}} User
-   * @typedef {{id:string,name?:string,description?:string,colour?:string}} Tag
-   * @typedef {import("pocketbase").Record} RR
    * @param {string} tagID
-   * @param {RR|Array.<RR>} tagList
+   * @param {PR|Array.<PR>} tagList
    * @return {Tag}
    * */
   function getTag(tagList, tagID) {
-    return tagList.find(/** @param {Tag} tag */ (tag) => tag.id === tagID) || { id: tagID };
+    return /** @type {Tag} */ (tagList.find(/** @param {Tag} tag */(tag) => tag.id === tagID));
   }
 
   // console.log(data.posts);
@@ -22,7 +24,7 @@
 <div class="flex flex-col place-items-center justify-center m-8">
   <div class="divider">Recent Posts</div>
   {#each data.posts.items as post}
-    {@const creator = /** @type {User} */ (/** @type {unknown} */ (post.expand.creator))}
+    {@const creator = /** @type {User} */ (post.expand.creator)}
     <a href="/blog/{post.id}">
       <div class="card card-compact w-96 bg-base-300 shadow-xl">
         <div class="card-body">
