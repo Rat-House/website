@@ -26,6 +26,7 @@ export async function load({ url, parent }) {
         .getOne(user.authority)
         .then(/** @type {Authority}*/ (r) => resolve(r.level))
         .catch(() => resolve(0));
+    else resolve(0);
   });
 
   return {
