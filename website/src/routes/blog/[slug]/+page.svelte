@@ -11,9 +11,6 @@
   <p>the article you are looking for is not public</p>
 {:else}
   {@const author = /** @type {import("../../../dbtypes.js").User} */ (data.author)}
-  {#if !data.published}
-    <p><i>unpublished</i></p>
-  {/if}
   <h1 class="text-6xl text-center text-secondary mt-8 mb-4">{data.title}</h1>
 
   <div class="flex flex-col place-items-center my-2">
@@ -25,7 +22,9 @@
       </div>
       <div class="flex flex-col mx-2 text-accent">
         <p class="p-0 m-0">{author.name}</p>
-        <p class="p-0 m-0 text-xs">{data.published}</p>
+        {#if !data.published}
+          <p class="p-0 m-0 text-xs italic">unpublished</p>
+        {/if}
         <!-- not really needed here -->
       </div>
     </div>
