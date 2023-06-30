@@ -13,9 +13,20 @@
   let providers = [];
   /** @type HTMLDialogElement */
   let loginModal;
+  let darkMode = false;
 
   onMount(() => {
     themeChange(false);
+    if (
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches &&
+      localStorage.getItem('theme') === null
+    ) {
+      const html = document.querySelector('html');
+      if (html) html.setAttribute('data-theme', 'dark');
+      darkMode = true;
+    }
+
     pb.collection('users')
       .listAuthMethods()
       .then((methods) => {
@@ -101,7 +112,12 @@
         {/if}
         <label class="swap swap-rotate px-4">
           <!-- controls the state -->
-          <input type="checkbox" data-toggle-theme="dark,light" data-act-class="ACTIVECLASS" />
+          <input
+            type="checkbox"
+            data-toggle-theme="dark,light"
+            data-act-class="ACTIVECLASS"
+            bind:checked={darkMode}
+          />
           <!-- Light-->
           <svg class="swap-on fill-current w-10 h-10" viewBox="0 0 24 24">
             <path
