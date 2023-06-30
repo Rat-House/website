@@ -3,12 +3,11 @@
  * @typedef {import("../../../dbtypes.js").Post} Post
  */
 
-import { pb } from '$lib/pocketbase.js';
+import { authFromCookie, pb } from '$lib/pocketbase.js';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, parent }) {
-  const { pbCookie } = await parent();
-  pb.authStore.loadFromCookie(pbCookie);
+  authFromCookie((await parent()).pbCookie);
 
   //todo make auths table in authority collection
 

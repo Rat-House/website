@@ -2,7 +2,7 @@
  * @typedef {import("../../dbtypes.js").Authority} Authority
  */
 
-import { pb } from '$lib/pocketbase.js';
+import { authFromCookie, pb } from '$lib/pocketbase.js';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ url, parent }) {
@@ -10,7 +10,7 @@ export async function load({ url, parent }) {
   const viewAll = url.searchParams.get('all') != null;
 
   const { user, pbCookie } = await parent();
-  pb.authStore.loadFromCookie(pbCookie);
+  authFromCookie(pbCookie);
 
   /**@type {import('pocketbase').RecordListQueryParams} */
   const params = {
