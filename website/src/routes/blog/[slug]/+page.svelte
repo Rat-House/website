@@ -1,5 +1,6 @@
 <script>
-  import MarkdownPage from "$lib/Components/MarkdownPage.svelte";
+  import MarkdownPage from '$lib/Components/MarkdownPage.svelte';
+  import { getAvatarUrl } from '$lib/avatar.js';
 
   export let data;
 </script>
@@ -18,18 +19,19 @@
     <div class="flex flex-row place-items-center">
       <div class="avatar placeholder">
         <div class="bg-neutral-focus text-neutral-content rounded-full w-8">
-          <span class="text-xs">AA</span>
+          <img src={getAvatarUrl(data.author)} alt="{data.author.name}'s icon" />
         </div>
       </div>
       <div class="flex flex-col mx-2 text-accent">
-        <p class="p-0 m-0">{data.user.name}</p>
+        <p class="p-0 m-0">{data.author.name}</p>
         <p class="p-0 m-0 text-xs">{data.published}</p>
+        <!-- not really needed here -->
       </div>
     </div>
   </div>
 
-  <div class="divider"/>
+  <div class="divider" />
   <div class="my-8 mx-16">
-    <MarkdownPage text={data.content}/>
+    <MarkdownPage text={data.content} />
   </div>
 {/if}

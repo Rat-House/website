@@ -3,9 +3,9 @@
   import { marked } from 'marked';
   import sanitizeHtml from 'sanitize-html';
 
-  export let text = "";
+  export let text = '';
 
-  function parseMarkdown(markdown){
+  function parseMarkdown(markdown) {
     return sanitizeHtml(
       marked.parse(markdown, {
         headerIds: false,

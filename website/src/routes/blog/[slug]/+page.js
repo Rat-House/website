@@ -7,11 +7,14 @@ export async function load({ params, parent }) {
 
   try {
     const data = await pb.collection('posts').getOne(params.slug, {
-      expand: 'creator,editors,tags'
+      expand: 'creator,editors,tags,creator.authority,editors.authority'
     });
+    //console.log(data);
     return {
       title: data.title,
       content: data.content,
+      author: data.expand.creator,
+      editors: data.expand.editors,
       published: data.published
     };
   } catch {
@@ -19,6 +22,8 @@ export async function load({ params, parent }) {
     return {
       title: '',
       content: '',
+      author: undefined,
+      editors: [],
       published: data.published
     };
   }
