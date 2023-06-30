@@ -4,7 +4,6 @@
    * @typedef {import("../../dbtypes.js").User} User
    * @typedef {import("pocketbase").Record} PR
    */
-  import { PUBLIC_POCKETBASE_PAGEURL } from '$env/static/public';
   import { getAvatarUrl } from '$lib/avatar.js';
 
   export let data;
