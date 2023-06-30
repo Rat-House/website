@@ -61,8 +61,11 @@
             </div>
           </div>
           <div class="divider" />
-          <div class="max-h-40 overflow-y-clip">
+          <div class="max-h-40 overflow-clip relative">
             <MarkdownPage text={post.content} />
+            <div
+              class="absolute inset-0 z-10 w-full h-full bg-gradient-to-t from-base-300 via-base-300/80 to-transparent"
+            />
           </div>
           <div class="divider" />
 
