@@ -17,15 +17,15 @@
 
   onMount(() => {
     themeChange(false);
+    const html = document.querySelector('html');
     if (
       window.matchMedia &&
       window.matchMedia('(prefers-color-scheme: dark)').matches &&
       localStorage.getItem('theme') === null
     ) {
-      const html = document.querySelector('html');
       if (html) html.setAttribute('data-theme', 'dark');
-      darkMode = true;
     }
+    if (html) darkMode = html.getAttribute('data-theme') === 'dark';
 
     pb.collection('users')
       .listAuthMethods()
