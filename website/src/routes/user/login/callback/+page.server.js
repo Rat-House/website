@@ -32,12 +32,15 @@ export async function load({ locals, url, cookies }) {
     const user = await locals.pb
       .collection('users')
       .authWithOAuth2Code(provider.name, code, provider.codeVerifier, redirectURL);
-    if (user.record.avatar === '' && user.meta && user.meta.avatarUrl) {
-      fetch(user.meta.avatarUrl).then(async (v) => {
-        const formData = new FormData();
-        formData.append('avatar', await v.blob());
+    if (user.record.avatar === '') {
+      const formData = new FormData();
+      if (user.meta && user.meta.avatarUrl) {
+        const imageBlob = await fetch(user.meta.avatarUrl).then((r) => r.blob());
+        formData.append('avatar', imageBlob);
         await locals.pb.collection('users').update(user.record.id, formData);
-      });
+      } /*else {
+        formData.append('avatar', 123123); //maybe upload default image
+      }*/
     }
   } catch (err) {
     console.log('Error logging in with 0Auth user', err);
