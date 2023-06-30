@@ -4,6 +4,7 @@
    * @typedef {import("../../dbtypes.js").User} User
    * @typedef {import("pocketbase").Record} PR
    */
+  import { PUBLIC_POCKETBASE_PAGEURL } from '$env/static/public';
 
   export let data;
 
@@ -13,7 +14,15 @@
    * @return {Tag}
    * */
   function getTag(tagList, tagID) {
-    return /** @type {Tag} */ (tagList.find(/** @param {Tag} tag */(tag) => tag.id === tagID));
+    return /** @type {Tag} */ (tagList.find(/** @param {Tag} tag */ (tag) => tag.id === tagID));
+  }
+
+  /**
+   * @param {User} user
+   * @return {string} url
+   */
+  function getAvatarUrl(user) {
+    return `${PUBLIC_POCKETBASE_PAGEURL}/api/files/${user.collectionId}/${user.id}/${user.avatar}`;
   }
 
   // console.log(data.posts);
@@ -38,6 +47,13 @@
             </div>
             <div class="flex flex-col mx-2 text-accent">
               <p class="p-0 m-0">{creator.name}</p>
+              <img
+                src="{getAvatarUrl(creator)}?thumb=32x32"
+                class="rounded-full"
+                width="32"
+                height="32"
+                alt="avatar"
+              />
               <p class="p-0 m-0 text-xs">{post.created}</p>
             </div>
           </div>
