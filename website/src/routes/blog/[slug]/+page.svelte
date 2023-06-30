@@ -1,5 +1,6 @@
 <script>
-  import '../blogpost.pcss';
+  import MarkdownPage from "$lib/Components/MarkdownPage.svelte";
+
   export let data;
 </script>
 
@@ -27,9 +28,8 @@
     </div>
   </div>
 
-  <div class="divider" />
-  <div class="markdown my-8 mx-16">
-    <!-- eslint-disable-next-line svelte/no-at-html-tags-->
-    {@html data.content}
+  <div class="divider"/>
+  <div class="my-8 mx-16">
+    <MarkdownPage text={data.content}/>
   </div>
 {/if}

@@ -1,5 +1,3 @@
-import { marked } from 'marked';
-import sanitizeHtml from 'sanitize-html';
 import { pb } from '$lib/pocketbase.js';
 
 /** @type {import('./$types').PageLoad} */
@@ -13,12 +11,7 @@ export async function load({ params, parent }) {
     });
     return {
       title: data.title,
-      content: sanitizeHtml(
-        marked.parse(data.content, {
-          headerIds: false,
-          mangle: false
-        })
-      ),
+      content: data.content,
       published: data.published
     };
   } catch {
@@ -30,11 +23,3 @@ export async function load({ params, parent }) {
     };
   }
 }
-
-/*
-function toHtml(content) {
-    const html =
-    const doc = new DOMParser().parseFromString(html,"text/html")
-    doc.for
-}
-*/
