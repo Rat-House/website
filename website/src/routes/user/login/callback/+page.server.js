@@ -29,10 +29,16 @@ export async function load({ locals, url, cookies }) {
   }
 
   try {
-    await locals.pb
+    const user = await locals.pb
       .collection('users')
       .authWithOAuth2Code(provider.name, code, provider.codeVerifier, redirectURL);
-    // todo figure out why discord is not saving authing properly
+    if (user.record.avatar === '' && user.meta && user.meta.avatarUrl) {
+      fetch(user.meta.avatarUrl).then(async (v) => {
+        const formData = new FormData();
+        formData.append('avatar', await v.blob());
+        await locals.pb.collection('users').update(user.record.id, formData);
+      });
+    }
   } catch (err) {
     console.log('Error logging in with 0Auth user', err);
   }

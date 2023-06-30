@@ -2,6 +2,8 @@
   export let data;
 
   /**
+   * @typedef {{level:number,name:string}} Auth
+   * @typedef {{name:string,avatar:string,authority:Auth}} User
    * @typedef {{id:string,name?:string,description?:string,colour?:string}} Tag
    * @typedef {import("pocketbase").Record} RR
    * @param {string} tagID
@@ -12,7 +14,15 @@
     return tagList.find(/** @param {Tag} tag */ (tag) => tag.id === tagID) || { id: tagID };
   }
 
-  console.log(data.posts);
+  /**
+   * @param {RR|Array.<RR>} user
+   * @return {User}
+   */
+  function convertUserType(user) {
+    return /** @type {User} */ (/** @type {unknown} */ (user));
+  }
+
+  // console.log(data.posts);
 </script>
 
 <h1 class="text-center text-6xl text-primary font-bold">Blog</h1>
@@ -32,7 +42,7 @@
               </div>
             </div>
             <div class="flex flex-col mx-2 text-accent">
-              <p class="p-0 m-0">{post.expand.creator.name}</p>
+              <p class="p-0 m-0">{convertUserType(post.expand.creator).name}</p>
               <p class="p-0 m-0 text-xs">{post.created}</p>
             </div>
           </div>
