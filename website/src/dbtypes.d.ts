@@ -17,4 +17,13 @@ declare class Tag extends Record {
   colour: string;
 }
 
-export { User, Authority, Tag };
+declare class Post extends Record {
+  title: string;
+  content: string;
+  tags: Tagp[];
+  creator: string;
+  editors: string[];
+  published: boolean;
+}
+
+export { User, Authority, Tag, Post };

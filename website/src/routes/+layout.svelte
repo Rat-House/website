@@ -67,8 +67,9 @@
           </ul>
         </div>
         {#if data.isLoggedIn}
+          {@const user = /** @type {import("../dbtypes.js").User} */ (data.user)}
           <!--todo replace with user info dropdown-->
-          <p>{data.user.email}</p>
+          <p>{user.email}</p>
           <form
             method="POST"
             action="/user/logout"

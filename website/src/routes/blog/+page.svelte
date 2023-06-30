@@ -17,18 +17,25 @@
   function getTag(tagList, tagID) {
     return /** @type {Tag} */ (tagList.find(/** @param {Tag} tag */ (tag) => tag.id === tagID));
   }
-
-  // console.log(data.posts);
 </script>
 
+{#if data.authorityLevel > 0}
+  {#if data.showAll}
+    <a href="?" class="btn">hide all</a>
+  {:else}
+    <a href="?all" class="btn">show all</a>
+  {/if}
+{/if}
+
 <h1 class="text-center text-6xl text-primary font-bold">Blog</h1>
+<h4 class="text-center text-sm mt-1.5"><span>{data.posts.items.length}</span> total posts</h4>
 
 <div class="flex flex-col place-items-center justify-center m-8">
   <div class="divider">Recent Posts</div>
-  {#each data.posts.items as post}
+  {#each data.posts.items as post (post.id)}
     {@const creator = /** @type {User} */ (post.expand.creator)}
     <a href="/blog/{post.id}">
-      <div class="card card-compact w-96 bg-base-300 shadow-xl">
+      <div class="card card-compact w-96 bg-base-300 shadow-xl my-2">
         <div class="card-body">
           <h2 class="card-title text-secondary">{post.title}</h2>
 
@@ -48,6 +55,9 @@
                 alt="avatar"
               />
               <p class="p-0 m-0 text-xs">{post.created}</p>
+              {#if !post.published}
+                <p class="p-0 m-0 text-xs"><i>unpublished</i></p>
+              {/if}
             </div>
           </div>
           <div class="divider" />

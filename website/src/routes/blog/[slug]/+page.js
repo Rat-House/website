@@ -1,5 +1,6 @@
 /**
  * @typedef {import("../../../dbtypes.js").User} User
+ * @typedef {import("../../../dbtypes.js").Post} Post
  */
 
 import { pb } from '$lib/pocketbase.js';
@@ -9,17 +10,19 @@ export async function load({ params, parent }) {
   const { pbCookie } = await parent();
   pb.authStore.loadFromCookie(pbCookie);
 
+  //todo make auths table in authority collection
+
   try {
-    const data = await pb.collection('posts').getOne(params.slug, {
+    const data = /** @type {Post} */ await pb.collection('posts').getOne(params.slug, {
       expand: 'creator,editors,tags,creator.authority,editors.authority'
     });
     //console.log(data);
     return {
-      title: /** @type {string} */ data.title,
-      content: /** @type {string} */ data.content,
+      title: data.title,
+      content: data.content,
       author: /** @type {User} */ data.expand.creator,
       editors: /** @type {Array.<User>} */ data.expand.editors,
-      published: /** @type {bool} */ data.published
+      published: data.published
     };
   } catch {
     const data = await pb.collection('postList').getOne(params.slug);

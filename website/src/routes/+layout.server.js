@@ -2,7 +2,7 @@
 export async function load({ locals, cookies }) {
   return {
     pbCookie: cookies.serialize('pb_auth', cookies.get('pb_auth') || ''),
-    user: locals.pb && locals.pb.authStore.model ? locals.pb.authStore.model.export() : {},
+    user: locals.pb && locals.pb.authStore.model ? locals.pb.authStore.model.export() : undefined,
     isLoggedIn: locals.pb ? locals.pb.authStore.isValid : false
   };
 }
