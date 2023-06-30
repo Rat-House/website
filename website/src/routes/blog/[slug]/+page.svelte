@@ -1,6 +1,6 @@
 <script>
   import MarkdownPage from '$lib/Components/MarkdownPage.svelte';
-  import { getAvatarUrl } from '$lib/avatar.js';
+  import { getAvatarUrl } from '$lib/tools.js';
 
   export let data;
 </script>

@@ -13,3 +13,11 @@ export function getAvatarUrl(user, size) {
 
   return `http://localhost:5173/dynamic/icon/${user.id}`;
 }
+
+/**
+ * @param {string} string
+ * @return {string}
+ */
+export function capitaliseOnlyFirst(string) {
+  return string.at(0).toUpperCase() + string.slice(1).toLowerCase();
+}

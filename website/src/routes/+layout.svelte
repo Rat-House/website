@@ -5,7 +5,7 @@
   import Login from '$lib/Components/Login.svelte';
   import { pb } from '$lib/pocketbase';
   import { applyAction, enhance } from '$app/forms';
-  import { getAvatarUrl } from '$lib/avatar.js';
+  import { getAvatarUrl } from '$lib/tools.js';
 
   export let data;
 

@@ -4,7 +4,7 @@
    * @typedef {import("../../dbtypes.js").User} User
    * @typedef {import("pocketbase").Record} PR
    */
-  import { getAvatarUrl } from '$lib/avatar.js';
+  import { getAvatarUrl } from '$lib/tools.js';
   import MarkdownPage from '$lib/Components/MarkdownPage.svelte';
 
   export let data;
