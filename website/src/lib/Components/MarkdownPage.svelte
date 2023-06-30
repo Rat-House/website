@@ -19,5 +19,7 @@
   }
 </script>
 
-<!-- eslint-disable-next-line svelte/no-at-html-tags-->
-{@html parseMarkdown(text)}
+<div class="markdown">
+  <!-- eslint-disable-next-line svelte/no-at-html-tags-->
+  {@html parseMarkdown(text)}
+</div>
