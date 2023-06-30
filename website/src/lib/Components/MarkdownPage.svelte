@@ -5,6 +5,10 @@
 
   export let text = '';
 
+  /**
+   * @param {string} markdown
+   * @return {string}
+   */
   function parseMarkdown(markdown) {
     return sanitizeHtml(
       marked.parse(markdown, {

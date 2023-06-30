@@ -10,6 +10,7 @@
 {#if data.title === ''}
   <p>the article you are looking for is not public</p>
 {:else}
+  {@const author = /** @type {import("../../../dbtypes.js").User} */ (data.author)}
   {#if !data.published}
     <p><i>unpublished</i></p>
   {/if}
@@ -19,11 +20,11 @@
     <div class="flex flex-row place-items-center">
       <div class="avatar placeholder">
         <div class="bg-neutral-focus text-neutral-content rounded-full w-8">
-          <img src={getAvatarUrl(data.author)} alt="{data.author.name}'s icon" />
+          <img src={getAvatarUrl(author)} alt="{author.name}'s icon" />
         </div>
       </div>
       <div class="flex flex-col mx-2 text-accent">
-        <p class="p-0 m-0">{data.author.name}</p>
+        <p class="p-0 m-0">{author.name}</p>
         <p class="p-0 m-0 text-xs">{data.published}</p>
         <!-- not really needed here -->
       </div>

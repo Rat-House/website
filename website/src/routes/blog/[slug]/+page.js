@@ -1,3 +1,7 @@
+/**
+ * @typedef {import("../../../dbtypes.js").User} User
+ */
+
 import { pb } from '$lib/pocketbase.js';
 
 /** @type {import('./$types').PageLoad} */
@@ -11,11 +15,11 @@ export async function load({ params, parent }) {
     });
     //console.log(data);
     return {
-      title: data.title,
-      content: data.content,
-      author: data.expand.creator,
-      editors: data.expand.editors,
-      published: data.published
+      title: /** @type {string} */ data.title,
+      content: /** @type {string} */ data.content,
+      author: /** @type {User} */ data.expand.creator,
+      editors: /** @type {Array.<User>} */ data.expand.editors,
+      published: /** @type {bool} */ data.published
     };
   } catch {
     const data = await pb.collection('postList').getOne(params.slug);
