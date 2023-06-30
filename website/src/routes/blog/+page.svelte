@@ -3,7 +3,7 @@
 
   /**
    * @typedef {{level:number,name:string}} Auth
-   * @typedef {{name:string,avatar:string,authority:Auth}} User
+   * @typedef {{name:string,avatar:string,authority:string, expand:{authority:Auth}}} User
    * @typedef {{id:string,name?:string,description?:string,colour?:string}} Tag
    * @typedef {import("pocketbase").Record} RR
    * @param {string} tagID
@@ -11,7 +11,7 @@
    * @return {Tag}
    * */
   function getTag(tagList, tagID) {
-    return tagList.find(/** @param {Tag} tag */ (tag) => tag.id === tagID) || { id: tagID };
+    return tagList.find(/** @param {Tag} tag */(tag) => tag.id === tagID) || {id: tagID};
   }
 
   /**
@@ -30,6 +30,7 @@
 <div class="flex flex-col place-items-center justify-center m-8">
   <div class="divider">Recent Posts</div>
   {#each data.posts.items as post}
+    {@const creator =convertUserType(post.expand.creator) }
     <a href="/blog/{post.id}">
       <div class="card card-compact w-96 bg-base-300 shadow-xl">
         <div class="card-body">
@@ -42,7 +43,7 @@
               </div>
             </div>
             <div class="flex flex-col mx-2 text-accent">
-              <p class="p-0 m-0">{convertUserType(post.expand.creator).name}</p>
+              <p class="p-0 m-0">{creator.name}</p>
               <p class="p-0 m-0 text-xs">{post.created}</p>
             </div>
           </div>
