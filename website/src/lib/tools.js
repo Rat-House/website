@@ -19,5 +19,6 @@ export function getAvatarUrl(user, size) {
  * @return {string}
  */
 export function capitaliseOnlyFirst(string) {
-  return string.at(0).toUpperCase() + string.slice(1).toLowerCase();
+  if (string.length < 1) return '';
+  return /** @type {string!} */ (string.at(0)).toUpperCase() + string.slice(1).toLowerCase();
 }
