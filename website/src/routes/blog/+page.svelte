@@ -28,7 +28,7 @@
 {/if}
 
 <h1 class="text-center text-6xl text-primary font-bold">Blog</h1>
-<h4 class="text-center text-sm mt-1.5"><span>{data.posts.items.length}</span> total posts</h4>
+<h4 class="text-center text-sm mt-1.5"><span>{data.posts.items.length}</span> displayed posts</h4>
 
 <div class="flex flex-col place-items-center justify-center m-8">
   <div class="divider">Recent Posts</div>
