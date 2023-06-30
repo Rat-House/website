@@ -5,6 +5,7 @@
    * @typedef {import("pocketbase").Record} PR
    */
   import { getAvatarUrl } from '$lib/avatar.js';
+  import MarkdownPage from '$lib/Components/MarkdownPage.svelte';
 
   export let data;
 
@@ -50,7 +51,9 @@
             </div>
           </div>
           <div class="divider" />
-          <p class="truncate">{post.content}</p>
+          <div class="max-h-40 overflow-y-clip">
+            <MarkdownPage text={post.content} />
+          </div>
           <div class="divider" />
 
           <div class="flex flex-row">
