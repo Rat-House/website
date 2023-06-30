@@ -11,15 +11,7 @@
    * @return {Tag}
    * */
   function getTag(tagList, tagID) {
-    return tagList.find(/** @param {Tag} tag */(tag) => tag.id === tagID) || {id: tagID};
-  }
-
-  /**
-   * @param {RR|Array.<RR>} user
-   * @return {User}
-   */
-  function convertUserType(user) {
-    return /** @type {User} */ (/** @type {unknown} */ (user));
+    return tagList.find(/** @param {Tag} tag */ (tag) => tag.id === tagID) || { id: tagID };
   }
 
   // console.log(data.posts);
@@ -30,7 +22,7 @@
 <div class="flex flex-col place-items-center justify-center m-8">
   <div class="divider">Recent Posts</div>
   {#each data.posts.items as post}
-    {@const creator =convertUserType(post.expand.creator) }
+    {@const creator = /** @type {User} */ (/** @type {unknown} */ (post.expand.creator))}
     <a href="/blog/{post.id}">
       <div class="card card-compact w-96 bg-base-300 shadow-xl">
         <div class="card-body">
