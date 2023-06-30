@@ -1,5 +1,16 @@
 <script>
   export let data;
+
+  /**
+   * @typedef {{id:string,name?:string,description?:string,colour?:string}} Tag
+   * @typedef {import("pocketbase").Record} RR
+   * @param {string} tagID
+   * @param {RR|Array.<RR>} tagList
+   * @return {Tag}
+   * */
+  function getTag(tagList, tagID) {
+    return tagList.find(/** @param {Tag} tag */ (tag) => tag.id === tagID) || { id: tagID };
+  }
 </script>
 
 {#each data.posts.items as post}
@@ -8,7 +19,7 @@
       <div class="card-body">
         <h2 class="card-title">{post.title}</h2>
         {#each post.tags as tagID}
-          {@const tag = post.expand.tags.find((v) => v.id === tagID)}
+          {@const tag = getTag(post.expand.tags, tagID)}
           <div class="badge">
             <div class="tooltip" data-tip={tag.description}>
               {tag.name}

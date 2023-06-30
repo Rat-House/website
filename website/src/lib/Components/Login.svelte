@@ -36,8 +36,9 @@
       );
 
       // catch auth finish
-      const listener = ({ key }) => {
-        if (key !== 'loggedin') return;
+      /** @param {StorageEvent} e */
+      const listener = (e) => {
+        if (e.key !== 'loggedin') return;
 
         localStorage.removeItem('loggedin');
         dispatcher('auth');

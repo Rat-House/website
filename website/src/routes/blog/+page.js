@@ -2,7 +2,7 @@ import { pb } from '$lib/pocketbase.js';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ url }) {
-  let page = parseInt(url.searchParams.get('page')) || 1;
+  let page = parseInt(url.searchParams.get('page') || '1');
   return {
     posts: pb
       .collection('posts')
