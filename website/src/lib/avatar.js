@@ -1,5 +1,4 @@
 import { PUBLIC_POCKETBASE_PAGEURL } from '$env/static/public';
-import { minidenticon } from 'minidenticons';
 
 /**
  * @param {import("../dbtypes.js").User} user
@@ -12,5 +11,5 @@ export function getAvatarUrl(user, size) {
       size ? '?thumb=' + size : ''
     }`;
 
-  return 'data:image/svg+xml;utf8,' + encodeURIComponent(minidenticon(user.id));
+  return `http://localhost:5173/dynamic/icon/${user.id}`;
 }
