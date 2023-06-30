@@ -29,23 +29,23 @@
       let left = windowWidth / 2 - width / 2;
       let top = windowHeight / 2 - height / 2;
 
-      window.open(
+      const w = window.open(
         `/user/login?provider=${provider}&window`,
         'oauth2-popup',
         `width=${width},height=${height},top=${top},left=${left},resizable,menubar=no`
       );
 
       // catch auth finish
-      /** @param {StorageEvent} e */
-      const listener = (e) => {
-        if (e.key !== 'loggedin') return;
+      const bc = new BroadcastChannel('log_in');
+      /** @param {MessageEvent} m */
+      bc.onmessage = (m) => {
+        console.log(m);
 
-        localStorage.removeItem('loggedin');
         dispatcher('auth');
         invalidateAll();
-        window.removeEventListener('storage', listener);
+        bc.close();
       };
-      window.addEventListener('storage', listener);
+      if (w) w.onclose = console.log;
     };
   }
 </script>

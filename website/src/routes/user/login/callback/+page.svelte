@@ -3,7 +3,11 @@
   import { browser } from '$app/environment';
 
   onMount(() => {
-    if (browser) localStorage.setItem('loggedin', 'true');
+    if (browser) {
+      const bc = new BroadcastChannel('log_in');
+      bc.postMessage('callback reached');
+      bc.close();
+    }
     window.close();
   });
 </script>

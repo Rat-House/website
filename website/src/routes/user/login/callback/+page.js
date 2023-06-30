@@ -8,7 +8,6 @@ export async function load({ data }) {
   if (data.path === '') return;
 
   if (browser) {
-    localStorage.setItem('loggedin', 'true');
     pb.authStore.loadFromCookie(data.authCookie || '');
     console.log(pb.authStore);
     pb.authStore.save(pb.authStore.token, pb.authStore.model);
