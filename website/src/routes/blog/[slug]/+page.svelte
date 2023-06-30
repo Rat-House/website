@@ -3,6 +3,8 @@
   export let data;
 </script>
 
+<a href="/blog" class="btn btn-primary">go back</a>
+
 {#if data.title === ''}
   <p>the article you are looking for is not public</p>
 {:else}
