@@ -18,7 +18,7 @@
 
   <div class="flex flex-col place-items-center my-2">
     <div class="flex flex-row place-items-center">
-      <div class="avatar placeholder">
+      <div class="avatar">
         <div class="bg-neutral-focus text-neutral-content rounded-full w-8">
           <img src={getAvatarUrl(author)} alt="{author.name}'s icon" />
         </div>

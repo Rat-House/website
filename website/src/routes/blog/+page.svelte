@@ -47,13 +47,16 @@
             </div>
             <div class="flex flex-col mx-2 text-accent">
               <p class="p-0 m-0">{creator.name}</p>
-              <img
-                src={getAvatarUrl(creator, '32x32')}
-                class="rounded-full"
-                width="32"
-                height="32"
-                alt="avatar"
-              />
+              <div class="avatar">
+                <div class="w-8 rounded-full">
+                  <img
+                    src={getAvatarUrl(creator, '32x32')}
+                    width="32"
+                    height="32"
+                    alt="{creator.name}'s icon"
+                  />
+                </div>
+              </div>
               <p class="p-0 m-0 text-xs">{post.created}</p>
               {#if !post.published}
                 <p class="p-0 m-0 text-xs"><i>unpublished</i></p>

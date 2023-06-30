@@ -5,6 +5,7 @@
   import Login from '$lib/Components/Login.svelte';
   import { pb } from '$lib/pocketbase';
   import { applyAction, enhance } from '$app/forms';
+  import { getAvatarUrl } from '$lib/avatar.js';
 
   export let data;
 
@@ -68,8 +69,17 @@
         </div>
         {#if data.isLoggedIn}
           {@const user = /** @type {import("../dbtypes.js").User} */ (data.user)}
-          <!--todo replace with user info dropdown-->
-          <p>{user.email}</p>
+          <div class="avatar">
+            <div class="w-9 rounded-full">
+              <img
+                src={getAvatarUrl(user, '128x128')}
+                width="128"
+                height="128"
+                alt="{user.name}'s icon"
+              />
+            </div>
+          </div>
+
           <form
             method="POST"
             action="/user/logout"
