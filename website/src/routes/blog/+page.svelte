@@ -11,6 +11,8 @@
   function getTag(tagList, tagID) {
     return tagList.find(/** @param {Tag} tag */ (tag) => tag.id === tagID) || { id: tagID };
   }
+
+  console.log(data.posts);
 </script>
 
 {#each data.posts.items as post}
@@ -26,7 +28,7 @@
             </div>
           </div>
         {/each}
-        <p />
+        <p >{post.expand.creator.name}</p>
       </div>
     </div>
   </a>

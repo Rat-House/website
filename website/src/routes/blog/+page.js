@@ -6,6 +6,6 @@ export async function load({ url }) {
   return {
     posts: pb
       .collection('posts')
-      .getList(page, 50, { filter: 'published=true', expand: 'creator,tags' })
+      .getList(page, 50, { filter: 'published=true', expand: 'creator,creator.authority,tags' })
   };
 }
