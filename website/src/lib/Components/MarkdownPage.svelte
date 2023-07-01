@@ -4,12 +4,13 @@
   import hljs from 'highlight.js';
   import GithubSlugger from 'github-slugger';
 
-  //borowing from https://github.com/Flet/markdown-it-github-headings/blob/master/index.js
+  import Token from 'markdown-it/lib/token';
+
+  //borrowing from https://github.com/Flet/markdown-it-github-headings/blob/master/index.js
 
   export let text = '';
 
   const slugger = new GithubSlugger();
-  let Token;
 
   const md = MarkdownIt({
     html: true,
@@ -32,24 +33,39 @@
     }
   });
 
-  md.core.ruler.push('headingLinks', function (state) {
-    slugger.reset();
-
-    if (!Token) {
-      Token = state.Token;
+  /** @type {import("markdown-it/lib/parser_core")} */ (md.core).ruler.push(
+    'headingLinks',
+    function () {
+      slugger.reset();
     }
-  });
+  );
 
-  const proxy = (tokens, idx, options, env, self) => self.renderToken(tokens, idx, options);
-  const defaultHeadingRenderer = md.renderer.rules.heading_open || proxy;
+  // todo adjust a links as well
+  /**
+   * @typedef {import("markdown-it/lib/renderer")} Renderer
+   * @param {Array.<Token>} tokens
+   * @param {number} idx
+   * @param {Object} options
+   * @param {Renderer} self
+   * @return {*}
+   */
+  const proxy = (tokens, idx, options, self) => self.renderToken(tokens, idx, options);
   const titleId = /[^\\]{#(.+)}$/g;
   const canceledId = /(\\){#.+}$/g;
 
-  md.renderer.rules.heading_open = (tokens, idx, options, env, self) => {
+  /**
+   * @param {Array.<Token>} tokens
+   * @param {number} idx
+   * @param {Object} options
+   * @param {*} env
+   * @param {import("markdown-it/lib/renderer")} self
+   * @return {*}
+   */
+  function headingRenderer(tokens, idx, options, env, self) {
     const token = tokens[idx];
     const content = tokens[idx + 1];
     if (!(content.children && content.children.length)) {
-      return defaultHeadingRenderer(tokens, idx, options, env, self);
+      return proxy(tokens, idx, options, self);
     }
 
     let id = clearGetHeaderId(content);
@@ -77,9 +93,16 @@
     content.children.unshift(text);
     content.children.unshift(linkOpen);
 
-    return defaultHeadingRenderer(tokens, idx, options, env, self);
-  };
+    return proxy(tokens, idx, options, self);
+  }
 
+  /** @type {Renderer} */ (md.renderer).rules.heading_open = headingRenderer;
+
+  /**
+   *
+   * @param {Token} token
+   * @return {string}
+   */
   function clearGetHeaderId(token) {
     if (token.type === 'text') {
       if (token.content.match(titleId)) {
@@ -107,7 +130,7 @@
    * @return {string}
    */
   function parseMarkdown(markdown) {
-    return /*sanitizeHtml(*/ md.render(markdown); //);
+    return /*sanitizeHtml(*/ md.render(markdown); //); todo
   }
 </script>
 
