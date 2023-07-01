@@ -10,7 +10,8 @@
 
   export let text = '';
 
-  const slugger = new GithubSlugger();
+  const headerslugger = new GithubSlugger();
+  const linkSlugger = new GithubSlugger();
 
   const md = MarkdownIt({
     html: true,
@@ -36,11 +37,11 @@
   /** @type {import("markdown-it/lib/parser_core")} */ (md.core).ruler.push(
     'headingLinks',
     function () {
-      slugger.reset();
+      headerslugger.reset();
+      linkSlugger.reset();
     }
   );
 
-  // todo adjust a links as well
   /**
    * @typedef {import("markdown-it/lib/renderer")} Renderer
    * @param {Array.<Token>} tokens
@@ -50,6 +51,7 @@
    * @return {*}
    */
   const proxy = (tokens, idx, options, self) => self.renderToken(tokens, idx, options);
+  // const defaultLinkRenderer = /** @type {Renderer} */ (md.renderer).rules.link_open || proxy;
   const titleId = /[^\\]{#(.+)}$/g;
   const canceledId = /(\\){#.+}$/g;
 
@@ -72,7 +74,7 @@
     if (id === '') {
       id = content.content.toLowerCase().replace(/[<>]/g, '');
     }
-    id = slugger.slug(id);
+    id = headerslugger.slug(id);
 
     token.attrJoin('tabindex', '-1');
 
@@ -96,7 +98,25 @@
     return proxy(tokens, idx, options, self);
   }
 
+  /**
+   * @param {Array.<Token>} tokens
+   * @param {number} idx
+   * @param {Object} options
+   * @param {*} env
+   * @param {Renderer} self
+   * @return {*}
+   */
+  function linkRenderer(tokens, idx, options, env, self) {
+    const token = tokens[idx];
+    const href = /** @type {string|null} */ token.attrGet('href');
+    if (token.attrGet('class') === null && href != null && href.length > 0 && href.at(0) === '#')
+      token.attrSet('href', '#' + linkSlugger.slug(href.slice(1)));
+
+    return proxy(tokens, idx, options, self);
+  }
+
   /** @type {Renderer} */ (md.renderer).rules.heading_open = headingRenderer;
+  /** @type {Renderer} */ (md.renderer).rules.link_open = linkRenderer;
 
   /**
    *
