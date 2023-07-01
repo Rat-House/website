@@ -3,7 +3,7 @@
   import MarkdownIt from 'markdown-it';
   import Token from 'markdown-it/lib/token';
   import hljs from 'highlight.js';
-  import sanitizeHtml from "sanitize-html";
+  import sanitizeHtml from 'sanitize-html';
   import GithubSlugger from 'github-slugger';
 
   //borrowing from https://github.com/Flet/markdown-it-github-headings/blob/master/index.js
@@ -108,7 +108,7 @@
   function linkRenderer(tokens, idx, options, env, self) {
     const token = tokens[idx];
     const href = /** @type {string|null} */ token.attrGet('href');
-    if (token.attrGet('class') === null && href != null && href.length > 0 && href.at(0) === '#')
+    if (href != null && '#' + token.attrGet('id') !== href && href.length > 0 && href.at(0) === '#')
       token.attrSet('href', '#' + linkSlugger.slug(href.slice(1)));
 
     return proxy(tokens, idx, options, self);
