@@ -1,7 +1,7 @@
 import PocketBase from 'pocketbase';
 import { PUBLIC_POCKETBASE_PAGEURL } from '$env/static/public';
 
-/** @type {import('@sveltejs/kit').Handle} */
+/** @type {import("@sveltejs/kit").Handle} */
 export async function handle({ event, resolve }) {
   event.locals.pb = new PocketBase(PUBLIC_POCKETBASE_PAGEURL);
 
@@ -16,7 +16,14 @@ export async function handle({ event, resolve }) {
     event.locals.pb.authStore.clear();
   }
 
-  const response = await resolve(event);
+  let theme = event.request.headers.get('cookie') || '';
+  const givenTheme = [...theme.matchAll(/theme=(\w+)/g)];
+  if (givenTheme.length) theme = givenTheme[0][1];
+  if (theme === '') theme = 'light';
+
+  const response = await resolve(event, {
+    transformPageChunk: ({ html }) => html.replace('%theme%', theme)
+  });
 
   // send back the default 'pb_auth' cookie to the client with the latest store state
   response.headers.append(

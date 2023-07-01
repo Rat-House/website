@@ -6,26 +6,30 @@
   import { pb } from '$lib/pocketbase';
   import { applyAction, enhance } from '$app/forms';
   import { getAvatarUrl } from '$lib/tools.js';
+  import { browser } from '$app/environment';
 
+  /** @type {import("./$types").LayoutData} */
   export let data;
 
   /** @type string[] */
   let providers = [];
   /** @type HTMLDialogElement */
   let loginModal;
-  let darkMode = false;
+
+  let darkMode = data.theme === 'dark';
 
   onMount(() => {
     themeChange(false);
-    const html = document.querySelector('html');
     if (
       window.matchMedia &&
       window.matchMedia('(prefers-color-scheme: dark)').matches &&
       localStorage.getItem('theme') === null
     ) {
-      if (html) html.setAttribute('data-theme', 'dark');
+      data.theme = 'dark';
+    } else if (localStorage.getItem('theme') !== null) {
+      data.theme = localStorage.getItem('theme') || 'light';
     }
-    if (html) darkMode = html.getAttribute('data-theme') === 'dark';
+    darkMode = data.theme === 'dark';
 
     pb.collection('users')
       .listAuthMethods()
@@ -36,6 +40,8 @@
         providers = providers.sort((a, b) => a.localeCompare(b));
       });
   });
+
+  $: if (browser) document.cookie = `theme=${data.theme}; path=/; SameSite=lax; max-age=31536000`;
 </script>
 
 <section class="min-h-screen">
