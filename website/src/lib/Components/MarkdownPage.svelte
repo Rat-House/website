@@ -1,10 +1,10 @@
 <script>
   import './blogpost.pcss';
   import MarkdownIt from 'markdown-it';
-  import hljs from 'highlight.js';
-  import GithubSlugger from 'github-slugger';
-
   import Token from 'markdown-it/lib/token';
+  import hljs from 'highlight.js';
+  import sanitizeHtml from "sanitize-html";
+  import GithubSlugger from 'github-slugger';
 
   //borrowing from https://github.com/Flet/markdown-it-github-headings/blob/master/index.js
 
@@ -86,7 +86,6 @@
 
     // add some link attributes
     linkOpen.attrSet('id', id);
-    linkOpen.attrSet('class', 'anchor');
     linkOpen.attrSet('href', '#' + id);
     linkOpen.attrSet('aria-hidden', 'true');
 
@@ -150,7 +149,7 @@
    * @return {string}
    */
   function parseMarkdown(markdown) {
-    return /*sanitizeHtml(*/ md.render(markdown); //); todo
+    return md.render(sanitizeHtml(markdown));
   }
 </script>
 

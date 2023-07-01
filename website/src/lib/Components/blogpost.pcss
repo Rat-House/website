@@ -7,15 +7,13 @@
     @apply text-2xl;
   }
 
-  .anchor {
-    @apply before:content-['↗'] -ml-[26px] pr-1 hover:underline text-accent text-3xl float-left align-middle leading-none;
-  }
 
   *:is(h1, h2, h3, h4, h5, h6) {
-    > .anchor {
+    > a {
+      @apply before:content-['↗'] -ml-[26px] pr-1 hover:underline text-accent text-3xl float-left align-middle leading-none;
       visibility: hidden;
     }
-    &:hover > .anchor {
+    &:hover > a {
       visibility: visible;
     }
   }
