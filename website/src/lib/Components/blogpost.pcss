@@ -12,8 +12,15 @@
       @apply before:content-['↗'] -ml-[26px] pr-1 hover:underline text-accent text-3xl float-left align-middle leading-none;
       opacity: 0;
     }
-    &:hover > a {
+    :is(&:hover > a, & > a:focus) {
       opacity: 1;
     }
+  }
+
+  .user {
+    @apply hover:link text-secondary hover:text-secondary-focus before:content-['@'];
+  }
+  span.user {
+    @apply hover:cursor-text;
   }
 }

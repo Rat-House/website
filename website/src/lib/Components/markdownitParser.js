@@ -8,7 +8,7 @@ import GithubSlugger from 'github-slugger';
 
 const headerslugger = new GithubSlugger();
 const linkSlugger = new GithubSlugger();
-const usernames = /@([a-z0-9-_]+)/gi;
+const usernames = /(?<![[\\])@([a-z0-9-_]+)/gi;
 
 const md = MarkdownIt({
   html: true,
@@ -150,8 +150,7 @@ function clearGetHeaderId(token) {
  */
 function userNameParser(tokens, idx, options, env, self) {
   const token = tokens[idx];
-  const match = token.content.match(usernames);
-  if (!match || match[0].length === token.content.length) {
+  if (!token.content.match(usernames)) {
     return defaultTextRenderer(tokens, idx, options, self);
   }
 
@@ -165,7 +164,7 @@ function userNameParser(tokens, idx, options, env, self) {
     // token.content = token.content.slice(0,match.index) +"USERNAME"+ token.content.slice(match.index + match[0].length)
     const linkOpen = new Token('link_open', 'a', 1);
     const text = new Token('text', '', 0);
-    text.content = match[0];
+    text.content = match[1];
     const linkClose = new Token('link_close', 'a', -1);
 
     linkOpen.attrSet('href', '/user/' + match[1]);
