@@ -1,6 +1,5 @@
 <script>
   import { onMount } from 'svelte';
-  import { themeChange } from 'theme-change';
   import { theme as Theme } from '$lib/stores/theme.js';
   import { enhance } from '$app/forms';
   import { page } from '$app/stores';
@@ -11,7 +10,6 @@
   let disabled = true;
 
   onMount(() => {
-    themeChange(false);
     disabled = false;
 
     darkMode = $Theme === 'dark';
@@ -27,8 +25,6 @@
       <!-- controls the state -->
       <input
         type="checkbox"
-        data-toggle-theme="dark,light"
-        data-act-class="ACTIVECLASS"
         bind:checked={darkMode}
         class="pointer-events-auto cursor-pointer"
         {disabled}

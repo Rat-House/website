@@ -29,6 +29,9 @@ subscribe((value) => {
   if (browser) {
     localStorage.setItem('theme', value);
     document.cookie = `theme=${value}; path=/; SameSite=lax; max-age=31536000;`;
+
+    const html = document.querySelector('html');
+    if (html) html.setAttribute('data-theme', value);
   }
 });
 
