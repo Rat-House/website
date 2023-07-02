@@ -15,13 +15,15 @@
 
   <div class="flex flex-col place-items-center my-2">
     <div class="flex flex-row place-items-center">
-      <div class="avatar">
-        <div class="bg-neutral-focus text-neutral-content rounded-full w-8">
-          <img src={getAvatarUrl(author)} alt="{author.name}'s icon" />
+      <a href="/user/{author.id}">
+        <div class="avatar">
+          <div class="bg-neutral-focus text-neutral-content rounded-full w-8 pointer-events-none">
+            <img src={getAvatarUrl(author)} alt="{author.name}'s icon" />
+          </div>
         </div>
-      </div>
+      </a>
       <div class="flex flex-col mx-2 text-accent">
-        <p class="p-0 m-0">{author.name}</p>
+        <a class="p-0 m-0" href="/user/{author.id}">{author.name}</a>
         {#if !data.published}
           <p class="p-0 m-0 text-xs italic">unpublished</p>
         {/if}
