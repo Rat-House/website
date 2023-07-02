@@ -6,7 +6,8 @@
   export let text = '';
 
   onMount(() => {
-    const users = [...document.querySelectorAll('a.user')];
+    /** @type {Array.<HTMLLinkElement>} */
+    const users = Array.from(document.querySelectorAll('a.user'));
     if (users.length !== 0) {
       fetch(`/dynamic/userList?=${users.map((u) => `user=${u.innerText}`).join('&')}`).then(
         async (r) => {
@@ -17,7 +18,8 @@
             } else {
               const noUser = document.createElement('span');
               noUser.innerHTML = user.innerHTML;
-              noUser.classList = user.classList;
+              noUser.classList.add(...user.classList);
+              if (user.parentNode == null) continue;
               user.parentNode.insertBefore(noUser, user);
               user.parentNode.removeChild(user);
             }
