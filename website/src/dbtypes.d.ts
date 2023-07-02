@@ -2,6 +2,7 @@ import type { Record } from 'pocketbase';
 
 declare class User extends Record {
   name: string;
+  username: string;
   avatar: string;
   authority: string;
 }
