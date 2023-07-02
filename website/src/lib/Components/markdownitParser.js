@@ -150,37 +150,35 @@ function clearGetHeaderId(token) {
  * @return {*}
  */
 function userNameParser(tokens, idx, options, env, self) {
-  const token = tokens[idx];
-  if (!token.content.match(usernames)) {
+  const originalText = tokens[idx].content;
+  if (!originalText.match(usernames)) {
     return defaultTextRenderer(tokens, idx, options, self);
   }
 
-  const users = [...token.content.matchAll(usernames)];
-  token.children = [];
+  const users = [...originalText.matchAll(usernames)];
+  const content = [];
 
   for (const match of users) {
     const start = new Token('text', '', 0);
-    start.content = token.content.slice(0, match.index);
-    token.children.push(start);
-    // token.content = token.content.slice(0,match.index) +"USERNAME"+ token.content.slice(match.index + match[0].length)
-    const linkOpen = new Token('link_open', 'a', 1);
-    const text = new Token('text', '', 0);
-    text.content = match[1];
-    const linkClose = new Token('link_close', 'a', -1);
+    content.push(start);
 
+    const linkOpen = new Token('link_open', 'a', 1);
+    content.push(linkOpen);
+    const text = new Token('text', '', 0);
+    content.push(text);
+    content.push(new Token('link_close', 'a', -1));
+
+    start.content = originalText.slice(0, match.index);
+    text.content = match[1];
     linkOpen.attrSet('href', '/user/' + match[1]);
     linkOpen.attrSet('class', 'user');
-
-    token.children.push(linkOpen);
-    token.children.push(text);
-    token.children.push(linkClose);
   }
 
   const end = new Token('text', '', 0);
+  content.push(end);
   const last = users[users.length - 1];
-  end.content = token.content.slice((last.index || 0) + last[0].length);
-  token.children.push(end);
-  return self.renderInline(token.children, options, env);
+  end.content = originalText.slice((last.index || 0) + last[0].length);
+  return self.renderInline(content, options, env);
 }
 
 /** @type {Renderer} */ (md.renderer).rules.text = userNameParser;
