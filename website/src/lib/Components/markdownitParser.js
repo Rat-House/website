@@ -8,6 +8,7 @@ import GithubSlugger from 'github-slugger';
 
 const headerslugger = new GithubSlugger();
 const linkSlugger = new GithubSlugger();
+const usernames = /@([a-z0-9-_]+)/gi;
 
 const md = MarkdownIt({
   html: true,
@@ -30,13 +31,11 @@ const md = MarkdownIt({
   }
 });
 
-/** @type {import("markdown-it/lib/parser_core")} */ (md.core).ruler.push(
-  'headingLinks',
-  function () {
-    headerslugger.reset();
-    linkSlugger.reset();
-  }
-);
+/** @type {import("markdown-it/lib/parser_core")} */ (md.core).ruler.push('headingLinks', () => {
+  // {src}
+  headerslugger.reset();
+  linkSlugger.reset();
+});
 
 /**
  * @typedef {import("markdown-it/lib/renderer")} Renderer
@@ -47,7 +46,8 @@ const md = MarkdownIt({
  * @return {*}
  */
 const proxy = (tokens, idx, options, self) => self.renderToken(tokens, idx, options);
-// const defaultLinkRenderer = /** @type {Renderer} */ (md.renderer).rules.link_open || proxy; todo username parser
+// const defaultLinkRenderer = /** @type {Renderer} */ (md.renderer).rules.link_open || proxy;
+const defaultTextRenderer = /** @type {Renderer} */ (md.renderer).rules.text || proxy;
 const titleId = /[^\\]{#(.+)}$/g;
 const canceledId = /(\\){#.+}$/g;
 
@@ -139,6 +139,51 @@ function clearGetHeaderId(token) {
 
   return '';
 }
+
+/**
+ * @param {Array.<Token>} tokens
+ * @param {number} idx
+ * @param {Object} options
+ * @param {*} env
+ * @param {Renderer} self
+ * @return {*}
+ */
+function userNameParser(tokens, idx, options, env, self) {
+  const token = tokens[idx];
+  const match = token.content.match(usernames);
+  if (!match || match[0].length === token.content.length) {
+    return defaultTextRenderer(tokens, idx, options, self);
+  }
+
+  const users = [...token.content.matchAll(usernames)];
+  token.children = [];
+
+  for (const match of users) {
+    const start = new Token('text', '', 0);
+    start.content = token.content.slice(0, match.index);
+    token.children.push(start);
+    // token.content = token.content.slice(0,match.index) +"USERNAME"+ token.content.slice(match.index + match[0].length)
+    const linkOpen = new Token('link_open', 'a', 1);
+    const text = new Token('text', '', 0);
+    text.content = match[0];
+    const linkClose = new Token('link_close', 'a', -1);
+
+    linkOpen.attrSet('href', '/user/' + match[1]);
+    linkOpen.attrSet('class', 'user');
+
+    token.children.push(linkOpen);
+    token.children.push(text);
+    token.children.push(linkClose);
+  }
+
+  const end = new Token('text', '', 0);
+  const last = users[users.length - 1];
+  end.content = token.content.slice((last.index || 0) + last[0].length);
+  token.children.push(end);
+  return self.renderInline(token.children, options, env);
+}
+
+/** @type {Renderer} */ (md.renderer).rules.text = userNameParser;
 
 /**
  * @param {string} markdown
