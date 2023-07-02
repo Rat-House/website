@@ -4,9 +4,10 @@
   import { enhance } from '$app/forms';
   import { page } from '$app/stores';
 
-  export let theme = 'light';
+  export let theme = '';
 
-  let darkMode = theme === 'dark';
+  if (theme !== '') Theme.set(theme);
+  let darkMode = $Theme === 'dark';
   let disabled = true;
 
   onMount(() => {

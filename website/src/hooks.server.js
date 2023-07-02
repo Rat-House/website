@@ -1,6 +1,6 @@
 import PocketBase from 'pocketbase';
 import { PUBLIC_POCKETBASE_PAGEURL } from '$env/static/public';
-import { cookieRegex, defaultTheme } from '$lib/stores/theme.js';
+import { cookieRegex } from '$lib/stores/theme.js';
 
 /** @type {import("@sveltejs/kit").Handle} */
 export async function handle({ event, resolve }) {
@@ -20,7 +20,7 @@ export async function handle({ event, resolve }) {
   let theme = event.request.headers.get('cookie') || '';
   const givenTheme = [...theme.matchAll(cookieRegex)];
   if (givenTheme.length) theme = givenTheme[0][1];
-  if (theme === '') theme = defaultTheme;
+  // if (theme === '') theme = defaultTheme;
 
   const response = await resolve(event, {
     transformPageChunk: ({ html }) => html.replace('%theme%', theme)

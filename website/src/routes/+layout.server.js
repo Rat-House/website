@@ -5,6 +5,6 @@ export async function load({ locals, cookies }) {
     user: locals.pb && locals.pb.authStore.model ? locals.pb.authStore.model.export() : undefined,
     isLoggedIn: locals.pb ? locals.pb.authStore.isValid : false,
 
-    theme: cookies.get('theme') || 'light'
+    theme: cookies.get('theme') || ''
   };
 }

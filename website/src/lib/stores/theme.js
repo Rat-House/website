@@ -7,11 +7,13 @@ export const cookieRegex = /theme=(\w+)/g;
 export function getStartingTheme() {
   if (!browser) return defaultTheme;
 
+  // check if user has theme in the cookie
   const givenTheme = [...document.cookie.matchAll(cookieRegex)];
   if (givenTheme.length !== 0) {
     return givenTheme[0][1];
   }
 
+  // no theme saved in cookie or local storage check if user wants dark mode
   if (
     window.matchMedia &&
     window.matchMedia('(prefers-color-scheme: dark)').matches &&
@@ -20,6 +22,7 @@ export function getStartingTheme() {
     return 'dark';
   }
 
+  // get theme from local storage or get the default if there is nothing there
   return localStorage.getItem('theme') || defaultTheme;
 }
 
