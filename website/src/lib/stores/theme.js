@@ -1,10 +1,16 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
 
-const defaultMode = 'light';
+export const defaultTheme = 'light';
+export const cookieRegex = /theme=(\w+)/g;
 
-function getStartingTheme() {
-  if (!browser) return defaultMode;
+export function getStartingTheme() {
+  if (!browser) return defaultTheme;
+
+  const givenTheme = [...document.cookie.matchAll(cookieRegex)];
+  if (givenTheme.length !== 0) {
+    return givenTheme[0][1];
+  }
 
   if (
     window.matchMedia &&
@@ -14,15 +20,15 @@ function getStartingTheme() {
     return 'dark';
   }
 
-  return localStorage.getItem('theme') || defaultMode;
+  return localStorage.getItem('theme') || defaultTheme;
 }
 
 const { subscribe, set, update } = writable(getStartingTheme());
 
 subscribe((value) => {
   if (browser) {
-    // localStorage.setItem("theme",value)
-    document.cookie = `theme=${value}; path=/; SameSite=lax; max-age=31536000`;
+    localStorage.setItem('theme', value);
+    document.cookie = `theme=${value}; path=/; SameSite=lax; max-age=31536000;`;
   }
 });
 
