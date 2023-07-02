@@ -14,9 +14,12 @@ export async function GET({ locals, url }) {
   /** @type {Array.<User>} */
   const users = await locals.pb.collection('userList').getFullList({ filter: filter });
   return json(
-    users.reduce(/** @param {Object.<string,User>}o */(o, i) => {
-      o[i.username] = i;
-      return o;
-    }, {})
+    users.reduce(
+      /** @param {Object.<string,User>}o */ (o, i) => {
+        o[i.username] = i;
+        return o;
+      },
+      {}
+    )
   );
 }

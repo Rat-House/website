@@ -70,16 +70,16 @@
         {#if data.isLoggedIn}
           {@const user = /** @type {import("../dbtypes.js").User} */ (data.user)}
           <a href="/user/{user.id}">
-          <div class="avatar">
-            <div class="w-9 rounded-full">
-              <img
-                src={getAvatarUrl(user, '128x128')}
-                width="128"
-                height="128"
-                alt="{user.name}'s icon"
-              />
+            <div class="avatar">
+              <div class="w-9 rounded-full">
+                <img
+                  src={getAvatarUrl(user, '128x128')}
+                  width="128"
+                  height="128"
+                  alt="{user.name}'s icon"
+                />
+              </div>
             </div>
-          </div>
           </a>
           <form
             method="POST"
