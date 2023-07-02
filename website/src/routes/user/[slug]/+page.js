@@ -1,19 +1,36 @@
-import { error } from '@sveltejs/kit';
-import { pb } from '$lib/pocketbase.js';
+import { authFromCookie, pb } from '$lib/pocketbase.js';
+
+/**
+ * @typedef {import("../../../dbtypes").User} User
+ * @typedef {import("../../../dbtypes").Authority} Authority
+ */
 
 /** @type {import('./$types').PageLoad} */
-export async function load({ parent }) {
-  const { isLoggedIn, user } = await parent();
-  if (!isLoggedIn || user === undefined) throw error(401, { message: 'Not signed in' });
+export async function load({ parent, params, event }) {
+  console.log(event);
+  const data = await parent();
+  authFromCookie(data.pbCookie);
 
+  let userAuthResolve;
   /** @type {Promise<String>} */
-  let userAuth = pb
-    .collection('authorities')
-    .getOne(user.authority)
-    .then(/** @type {import("../../../dbtypes.js").Authority}*/ (r) => r.name)
-    .catch(() => 'User');
+  const userAuth = new Promise((resolve)=>{
+    userAuthResolve = resolve
+  })
+  /** @type {Promise<User>} */
+  const user = new Promise((resolve)=> {
+    pb.collection('userList').getFirstListItem(`id="${params.slug}" || username="${params.slug}"`, {
+      expand: 'authority',
+    }).then(/** @param {User} user */(user)=>{
+      resolve(user);
+      userAuthResolve(/** @type {Authority} */(user.expand.authority).name)
+    }).catch(()=>{
+      resolve({});
+      userAuthResolve("User");
+    });
+  });
 
   return {
-    authorityName: userAuth
+    user: user,
+    authorityName: userAuth,
   };
 }

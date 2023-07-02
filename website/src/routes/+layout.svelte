@@ -69,6 +69,7 @@
         </div>
         {#if data.isLoggedIn}
           {@const user = /** @type {import("../dbtypes.js").User} */ (data.user)}
+          <a href="/user/{user.id}">
           <div class="avatar">
             <div class="w-9 rounded-full">
               <img
@@ -79,7 +80,7 @@
               />
             </div>
           </div>
-
+          </a>
           <form
             method="POST"
             action="/user/logout"

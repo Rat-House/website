@@ -31,7 +31,7 @@ export async function handle({ event, resolve }) {
     'set-cookie',
     event.locals.pb.authStore.exportToCookie({
       secure: new URL(event.request.url).hostname !== 'localhost',
-      httpOnly: true,
+      httpOnly: true, // false -- if can get cookie to client in ssr
       sameSite: 'Lax'
     })
   );
