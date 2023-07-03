@@ -1,16 +1,20 @@
 <script>
-  import "./blogpost.pcss";
-  import { renderMarkdown } from "./markdownitParser.js";
-  import { pb } from "$lib/pocketbase";
-  import { browser } from "$app/environment";
-  import { onMount } from "svelte";
+  import './blogpost.pcss';
+  import { renderMarkdown } from './markdownitParser.js';
+  import { pb } from '$lib/pocketbase';
+  import { browser } from '$app/environment';
+  import { onMount } from 'svelte';
 
-  export let text = "";
+  export let text = '';
   /** @type {string|undefined} */
   export let initialMarkdown = undefined;
 
-  let markdown = initialMarkdown || /** @type {string!} */renderMarkdown(text);
+  let markdown = initialMarkdown || /** @type {string!} */ renderMarkdown(text);
 
+  /**
+   * @param {string} text
+   * @return {Promise<void>}
+   */
   async function updateMarkdown(text) {
     markdown = await renderMarkdown(text, pb);
   }

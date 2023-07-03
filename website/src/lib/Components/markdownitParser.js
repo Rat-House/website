@@ -213,7 +213,7 @@ export function renderMarkdown(markdown, pocketbase) {
  * @typedef {import("../../dbtypes.d").PocketBase} PocketBase
  */
 
-/** @return {Object.<string,User>} */
+/** @type {Object.<string,User>} */
 let users = {};
 /** @type {Set.<string>} */
 let notUsers = new Set();
@@ -223,47 +223,40 @@ let notUsers = new Set();
  * @param {Array.<string>} userList
  * @return {Promise.<Object.<string,User>>}
  */
-function GetUsers(pocketbase, userList) {
-  return /** @type {Promise.<Object.<string,User>>} */ (
-    new Promise((resolve) => {
-      if (userList.length === 0) return resolve({});
+async function GetUsers(pocketbase, userList) {
+  if (userList.length === 0) return {};
 
-      const returnF = () => {
-        /** @type {Object.<string,User>} */
-        const requested = {};
-        for (let user of userList) {
-          if (user in users) requested[user] = users[user];
-        }
-        resolve(requested);
-      };
+  const returnF = () => {
+    /** @type {Object.<string,User>} */
+    const requested = {};
+    for (let user of userList) {
+      if (user in users) requested[user] = users[user];
+    }
+    return requested;
+  };
 
-      const filter = [...new Set(userList)]
-        .filter((u) => !(u in users || notUsers.has(u)))
-        .map((s) => `username="${s}"`)
-        .join('||');
+  const filter = [...new Set(userList)]
+    .filter((u) => !(u in users || notUsers.has(u)))
+    .map((s) => `username="${s}"`)
+    .join('||');
 
-      if (filter.length === 0) return returnF();
+  if (filter.length === 0) return returnF();
 
-      pocketbase
-        .collection('userList')
-        .getFullList({ filter: filter })
-        .then(
-          /** @param{Array.<User>}userRecords */ (userRecords) => {
-            const userGot = userRecords.reduce(
-              /** @param {Object.<string,User>}o */ (o, i) => {
-                o[i.username] = i;
-                return o;
-              },
-              {}
-            );
-            for (const username of userList) {
-              if (username in userGot) users[username] = userGot[username];
-              else notUsers.add(username);
-            }
-            returnF();
-          }
-        )
-        .catch(returnF);
-    })
+  /** @type {Array.<User>} */
+  const userRecords = await pocketbase.collection('userList').getFullList({ filter: filter });
+
+  const userGot = userRecords.reduce(
+    /** @param {Object.<string,User>}o
+     * @param {User}i
+     */ (o, i) => {
+      o[i.username] = i;
+      return o;
+    },
+    {}
   );
+  for (const username of userList) {
+    if (username in userGot) users[username] = userGot[username];
+    else notUsers.add(username);
+  }
+  return returnF();
 }

@@ -4,7 +4,7 @@
  */
 
 import { authFromCookie, pb } from '$lib/pocketbase.js';
-import { renderMarkdown } from "$lib/Components/markdownitParser.js";
+import { renderMarkdown } from '$lib/Components/markdownitParser.js';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, parent }) {
