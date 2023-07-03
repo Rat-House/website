@@ -1,7 +1,7 @@
 <script>
   import './blogpost.pcss';
   import { renderMarkdown } from './markdownitParser.js';
-  import { afterUpdate, onMount } from 'svelte';
+  import { afterUpdate } from 'svelte';
 
   export let text = '';
 
@@ -53,15 +53,12 @@
     }
   }
 
-  async function updateUsers() {
+  afterUpdate(async () => {
     /** @type {Array.<HTMLLinkElement>} */
     const userNodes = Array.from(document.querySelectorAll('a.user'));
     await getNewUsers(userNodes);
     updateUserNodes(userNodes);
-  }
-
-  onMount(updateUsers);
-  afterUpdate(updateUsers);
+  });
 </script>
 
 <div class="markdown">
