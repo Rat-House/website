@@ -19,7 +19,7 @@ export async function load({ parent, params }) {
   });
   /** @type {Promise<User>} */
   const user = new Promise((resolve, reject) => {
-    pb.collection('renderMD')
+    pb.collection('userList')
       .getFirstListItem(`id="${params.slug}" || username="${params.slug}"`, {
         expand: 'authority'
       })
