@@ -1,6 +1,5 @@
 <script>
   import '../app.css';
-  import { onMount } from 'svelte';
   import Login from '$lib/Components/Login.svelte';
   import { pb } from '$lib/pocketbase';
   import { applyAction, enhance } from '$app/forms';
