@@ -15,16 +15,19 @@
   /** @type HTMLDialogElement */
   let loginModal;
 
-  onMount(() => {
-    pb.collection('users')
+  async function getProviders() {
+    if (providers.length !== 0) return providers;
+    await pb
+      .collection('users')
       .listAuthMethods()
       .then((methods) => {
         methods.authProviders.forEach((p) => {
           providers.push(p.name);
         });
-        providers = providers.sort((a, b) => a.localeCompare(b));
+        providers.sort((a, b) => a.localeCompare(b));
       });
-  });
+    return providers;
+  }
 </script>
 
 <section class="min-h-screen">
@@ -123,7 +126,11 @@
   <dialog bind:this={loginModal} class="modal">
     <form method="dialog" class="modal-box">
       <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-      <Login {providers} on:auth={() => loginModal.close()} />
+      {#await getProviders()}
+        loading providers...
+      {:then providers}
+        <Login {providers} on:auth={() => loginModal.close()} />
+      {/await}
       <div class="pb-4" />
     </form>
     <form method="dialog" class="modal-backdrop">
