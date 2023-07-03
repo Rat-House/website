@@ -162,16 +162,21 @@ function userNameParser(tokens, idx, options, env, self) {
   for (const match of users) {
     const start = new Token('text', '', 0);
     content.push(start);
+    const userValid = env.users !== undefined && match[1] in env.users;
 
-    const linkOpen = new Token('link_open', 'a', 1);
+    const linkOpen = new Token('link_open', userValid ? 'a' : 'span', 1);
     content.push(linkOpen);
     const text = new Token('text', '', 0);
     content.push(text);
-    content.push(new Token('link_close', 'a', -1));
+    content.push(new Token('link_close', userValid ? 'a' : 'span', -1));
 
     start.content = originalText.slice(lastMatchEnd, match.index);
     text.content = match[1];
-    linkOpen.attrSet('href', '/user/' + match[1]);
+    if (userValid) {
+      text.content = env.users[match[1]].name;
+      linkOpen.attrSet('href', '/user/' + match[1]);
+    }
+
     linkOpen.attrSet('class', 'user');
 
     lastMatchEnd = (match.index || 0) + match[0].length;
@@ -187,8 +192,78 @@ function userNameParser(tokens, idx, options, env, self) {
 
 /**
  * @param {string} markdown
- * @return {string}
+ * @param {import("../../dbtypes.d").PocketBase=} pocketbase
+ * @return {string|Promise.<string>}
  */
-export function renderMarkdown(markdown) {
-  return md.render(sanitizeHtml(markdown));
+export function renderMarkdown(markdown, pocketbase) {
+  markdown = sanitizeHtml(markdown);
+  /** @type {string} */
+  if (pocketbase === undefined) return md.render(markdown);
+
+  return new Promise((resolve) => {
+    const userList = [...markdown.matchAll(usernames)].map((u) => u[1]);
+    GetUsers(pocketbase, userList).then((users) => {
+      resolve(md.render(markdown, { users: users }));
+    });
+  });
+}
+
+/**
+ * @typedef {import("../../dbtypes.d").User} User
+ * @typedef {import("../../dbtypes.d").PocketBase} PocketBase
+ */
+
+/** @return {Object.<string,User>} */
+let users = {};
+/** @type {Set.<string>} */
+let notUsers = new Set();
+
+/**
+ * @param {PocketBase} pocketbase
+ * @param {Array.<string>} userList
+ * @return {Promise.<Object.<string,User>>}
+ */
+function GetUsers(pocketbase, userList) {
+  return /** @type {Promise.<Object.<string,User>>} */ (
+    new Promise((resolve) => {
+      if (userList.length === 0) return resolve({});
+
+      const returnF = () => {
+        /** @type {Object.<string,User>} */
+        const requested = {};
+        for (let user of userList) {
+          if (user in users) requested[user] = users[user];
+        }
+        resolve(requested);
+      };
+
+      const filter = [...new Set(userList)]
+        .filter((u) => !(u in users || notUsers.has(u)))
+        .map((s) => `username="${s}"`)
+        .join('||');
+
+      if (filter.length === 0) return returnF();
+
+      pocketbase
+        .collection('userList')
+        .getFullList({ filter: filter })
+        .then(
+          /** @param{Array.<User>}userRecords */ (userRecords) => {
+            const userGot = userRecords.reduce(
+              /** @param {Object.<string,User>}o */ (o, i) => {
+                o[i.username] = i;
+                return o;
+              },
+              {}
+            );
+            for (const username of userList) {
+              if (username in userGot) users[username] = userGot[username];
+              else notUsers.add(username);
+            }
+            returnF();
+          }
+        )
+        .catch(returnF);
+    })
+  );
 }

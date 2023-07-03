@@ -1,4 +1,5 @@
 import type { Record } from 'pocketbase';
+import PocketBase from 'pocketbase';
 
 declare class User extends Record {
   name: string;
@@ -27,4 +28,4 @@ declare class Post extends Record {
   published: boolean;
 }
 
-export { User, Authority, Tag, Post };
+export { User, Authority, Tag, Post, PocketBase };

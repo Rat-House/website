@@ -1,67 +1,26 @@
 <script>
-  import './blogpost.pcss';
-  import { renderMarkdown } from './markdownitParser.js';
-  import { afterUpdate } from 'svelte';
+  import "./blogpost.pcss";
+  import { renderMarkdown } from "./markdownitParser.js";
+  import { pb } from "$lib/pocketbase";
+  import { browser } from "$app/environment";
+  import { onMount } from "svelte";
 
-  export let text = '';
+  export let text = "";
+  /** @type {string|undefined} */
+  export let initialMarkdown = undefined;
 
-  /** @type {Object.<string, import("../../dbtypes").User>} */
-  let users = {};
-  /** @type {Array.<string>} */
-  let notUsers = [];
+  let markdown = initialMarkdown || /** @type {string!} */renderMarkdown(text);
 
-  /**
-   * @param {string} href
-   * @return {string}
-   */
-  const username = (href) => href.replace(/^.*\//, '');
-
-  /**
-   * @param {Array.<HTMLLinkElement>} userNodes
-   * @return {Promise<void>}
-   */
-  async function getNewUsers(userNodes) {
-    const userList = userNodes
-      .map((u) => username(u.href))
-      .filter((u) => !(u in users || notUsers.includes(u)));
-    if (userList.length === 0) return;
-
-    const results = await fetch(`/dynamic/userList?${userList.map((u) => `user=${u}`).join('&')}`);
-    /** @type {Object.<string, import("../../dbtypes").User>} */
-    const json = await results.json();
-    for (const username of userList) {
-      if (username in json) users[username] = json[username];
-      else notUsers.push(username);
-    }
+  async function updateMarkdown(text) {
+    markdown = await renderMarkdown(text, pb);
   }
 
-  /**
-   * @param {Array.<HTMLLinkElement>} userNodes
-   */
-  function updateUserNodes(userNodes) {
-    for (let user of userNodes) {
-      if (username(user.href) in users) {
-        user.innerText = users[username(user.href)].name;
-      } else {
-        const noUser = document.createElement('span');
-        noUser.innerHTML = user.innerHTML;
-        noUser.classList.add(...user.classList);
-        if (user.parentNode == null) continue;
-        user.parentNode.insertBefore(noUser, user);
-        user.parentNode.removeChild(user);
-      }
-    }
-  }
+  onMount(() => renderMarkdown(text));
 
-  afterUpdate(async () => {
-    /** @type {Array.<HTMLLinkElement>} */
-    const userNodes = Array.from(document.querySelectorAll('a.user'));
-    await getNewUsers(userNodes);
-    updateUserNodes(userNodes);
-  });
+  $: if (browser) updateMarkdown(text);
 </script>
 
 <div class="markdown">
   <!-- eslint-disable-next-line svelte/no-at-html-tags-->
-  {@html renderMarkdown(text)}
+  {@html markdown}
 </div>
