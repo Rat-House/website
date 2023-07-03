@@ -158,6 +158,7 @@ function userNameParser(tokens, idx, options, env, self) {
   const users = [...originalText.matchAll(usernames)];
   const content = [];
 
+  let lastMatchEnd = 0;
   for (const match of users) {
     const start = new Token('text', '', 0);
     content.push(start);
@@ -168,16 +169,17 @@ function userNameParser(tokens, idx, options, env, self) {
     content.push(text);
     content.push(new Token('link_close', 'a', -1));
 
-    start.content = originalText.slice(0, match.index);
+    start.content = originalText.slice(lastMatchEnd, match.index);
     text.content = match[1];
     linkOpen.attrSet('href', '/user/' + match[1]);
     linkOpen.attrSet('class', 'user');
+
+    lastMatchEnd = (match.index || 0) + match[0].length;
   }
 
   const end = new Token('text', '', 0);
   content.push(end);
-  const last = users[users.length - 1];
-  end.content = originalText.slice((last.index || 0) + last[0].length);
+  end.content = originalText.slice(lastMatchEnd);
   return self.renderInline(content, options, env);
 }
 

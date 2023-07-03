@@ -19,7 +19,6 @@
       .map((u) => u.href.replace(/^.*\//, ''))
       .filter((u) => !(u in users || notUsers.includes(u)));
     if (userList.length === 0) return;
-    console.log(notUsers);
 
     const results = await fetch(`/dynamic/userList?${userList.map((u) => `user=${u}`).join('&')}`);
     /** @type {Object.<string, import("../../dbtypes").User>} */
