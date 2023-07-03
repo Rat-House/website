@@ -11,12 +11,18 @@
   let notUsers = [];
 
   /**
+   * @param {string} href
+   * @return {string}
+   */
+  const username = (href) => href.replace(/^.*\//, '');
+
+  /**
    * @param {Array.<HTMLLinkElement>} userNodes
    * @return {Promise<void>}
    */
   async function getNewUsers(userNodes) {
     const userList = userNodes
-      .map((u) => u.href.replace(/^.*\//, ''))
+      .map((u) => username(u.href))
       .filter((u) => !(u in users || notUsers.includes(u)));
     if (userList.length === 0) return;
 
@@ -30,12 +36,12 @@
   }
 
   /**
-   * @param {Array.<HTMLElement>} userNodes
+   * @param {Array.<HTMLLinkElement>} userNodes
    */
   function updateUserNodes(userNodes) {
     for (let user of userNodes) {
-      if (user.innerText in users) {
-        user.innerText = users[user.innerText].name;
+      if (username(user.href) in users) {
+        user.innerText = users[username(user.href)].name;
       } else {
         const noUser = document.createElement('span');
         noUser.innerHTML = user.innerHTML;
