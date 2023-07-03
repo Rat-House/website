@@ -4,6 +4,7 @@
  */
 
 import { authFromCookie, pb } from '$lib/pocketbase.js';
+import { renderMarkdown } from "$lib/Components/markdownitParser.js";
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, parent }) {
@@ -19,6 +20,7 @@ export async function load({ params, parent }) {
     return {
       title: data.title,
       content: data.content,
+      initialMarkdown: renderMarkdown(data.content, pb),
       author: /** @type {User} */ data.expand.creator,
       editors: /** @type {Array.<User>} */ data.expand.editors,
       published: data.published
@@ -28,6 +30,7 @@ export async function load({ params, parent }) {
     return {
       title: '',
       content: '',
+      initialMarkdown: '',
       author: undefined,
       editors: [],
       published: data.published

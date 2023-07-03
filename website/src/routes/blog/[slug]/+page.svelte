@@ -34,6 +34,6 @@
 
   <div class="divider" />
   <div class="my-8 mx-16">
-    <MarkdownPage text={data.content} />
+    <MarkdownPage text={data.content} initialMarkdown={data.initialMarkdown} />
   </div>
 {/if}
