@@ -10,16 +10,18 @@
   export let initialMarkdown = undefined;
 
   let markdown = initialMarkdown || /** @type {string!} */ renderMarkdown(text);
+  let loaded = initialMarkdown === undefined;
 
   /**
    * @param {string} text
    * @return {Promise<void>}
    */
   async function updateMarkdown(text) {
+    if (!loaded) return;
     markdown = await renderMarkdown(text, pb);
   }
 
-  onMount(() => renderMarkdown(text));
+  onMount(() => (loaded = true));
 
   $: if (browser) updateMarkdown(text);
 </script>
