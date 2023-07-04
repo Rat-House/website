@@ -6,7 +6,7 @@
 import { authFromCookie, pb } from '$lib/pocketbase.js';
 import { renderMarkdown } from '$lib/Components/markdownitParser.js';
 
-/** @type {import('./$types').PageLoad} */
+/** @type {import("./$types").PageLoad} */
 export async function load({ params, parent }) {
   authFromCookie((await parent()).pbCookie);
 
@@ -16,13 +16,21 @@ export async function load({ params, parent }) {
     const data = /** @type {Post} */ await pb.collection('posts').getOne(params.slug, {
       expand: 'creator,editors,tags,creator.authority,editors.authority'
     });
-    //console.log(data);
+
+    const author = /** @type {User} */ data.expand.creator;
+    const editors = /** @type {Array.<User>|User} */ data.expand.editors || [];
+    let lastEditor = author;
+    if (Array.isArray(editors) && editors.length > 0) lastEditor = editors[editors.length - 1];
+    else if (editors !== undefined && !Array.isArray(editors)) lastEditor = editors;
     return {
       title: data.title,
       content: data.content,
       initialMarkdown: renderMarkdown(data.content, pb),
-      author: /** @type {User} */ data.expand.creator,
-      editors: /** @type {Array.<User>} */ data.expand.editors,
+      created: new Date(data.created),
+      edited: new Date(data.updated),
+      author: author,
+      editors: editors,
+      lastEditor: lastEditor,
       published: data.published
     };
   } catch {
@@ -31,8 +39,11 @@ export async function load({ params, parent }) {
       title: '',
       content: '',
       initialMarkdown: '',
+      created: new Date(0),
+      edited: new Date(0),
       author: undefined,
       editors: [],
+      lastEditor: undefined,
       published: data.published
     };
   }
