@@ -31,7 +31,14 @@
     return providers;
   }
 
-  let headers = Header.updateUrl($page.url).export();
+  function preppedHeader() {
+    return Header.updateUrl($page.url).setImage(
+      `${$page.url.origin}/favicon-128.png`,
+      'website logo'
+    );
+  }
+
+  let headers = preppedHeader().export();
 
   $: if (
     $navigating &&
@@ -39,8 +46,7 @@
     $navigating.from &&
     $navigating.to.route.id !== $navigating.from.route.id
   ) {
-    Header.updateUrl($navigating.to.url);
-    headers = Header.export();
+    headers = preppedHeader().export();
     Header.reset();
   }
 </script>

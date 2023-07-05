@@ -30,6 +30,23 @@ export class HeaderBuilder {
     return this;
   }
 
+  /**
+   * @param {string|URL} imageAddr
+   * @param {string} alt
+   */
+  setImage(imageAddr, alt) {
+    const addr = imageAddr.toString();
+    /** @type {OGPProps} */ (this._props.openGraph).images = [
+      {
+        url: addr,
+        alt: alt
+      }
+    ];
+    /** @type {TwitterProps} */ (this._props.twitter).image = addr;
+    /** @type {TwitterProps} */ (this._props.twitter).imageAlt = alt;
+    return this;
+  }
+
   removeTitleTemplate() {
     this._props.titleTemplate = '';
     return this;
