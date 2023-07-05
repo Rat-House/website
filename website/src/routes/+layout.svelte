@@ -1,10 +1,13 @@
 <script>
   import '../app.css';
+  import { MetaTags } from 'svelte-meta-tags';
   import Login from '$lib/Components/Login.svelte';
   import { pb } from '$lib/pocketbase';
   import { applyAction, enhance } from '$app/forms';
   import { getAvatarUrl } from '$lib/tools.js';
   import ThemeChanger from '$lib/Components/ThemeChanger.svelte';
+  import { Header } from '$lib/headers.js';
+  import { navigating, page } from '$app/stores';
 
   /** @type {import("./$types").LayoutData} */
   export let data;
@@ -27,7 +30,22 @@
       });
     return providers;
   }
+
+  let headers = Header.updateUrl($page.url).export();
+
+  $: if (
+    $navigating &&
+    $navigating.to &&
+    $navigating.from &&
+    $navigating.to.route.id !== $navigating.from.route.id
+  ) {
+    Header.updateUrl($navigating.to.url);
+    headers = Header.export();
+    Header.reset();
+  }
 </script>
+
+<MetaTags {...headers} />
 
 <section class="min-h-screen">
   <header>
