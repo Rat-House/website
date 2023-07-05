@@ -16,7 +16,7 @@ export class HeaderBuilder {
         site_name: 'RatHouse'
       },
       twitter: {
-        cardType: 'summary',
+        cardType: 'summary'
       }
     };
 

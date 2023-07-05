@@ -51,6 +51,10 @@
   }
 </script>
 
+<svelte:head>
+  <meta name="theme-color" content="#0E0F29" />
+</svelte:head>
+
 <MetaTags {...headers} />
 
 <section class="min-h-screen">
