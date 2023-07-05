@@ -41,7 +41,7 @@
     </div>
     {#if +data.created !== +data.edited && latestEditor.id !== author.id}
       <div class="flex flex-row place-items-center">
-        <a href="/user/{latestEditor}">
+        <a href="/user/{latestEditor.id}">
           <div class="avatar">
             <div class="bg-neutral-focus text-neutral-content rounded-full w-8 pointer-events-none">
               <img src={getAvatarUrl(latestEditor)} alt="{latestEditor.name}'s icon" />
