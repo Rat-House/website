@@ -6,6 +6,7 @@
 import { authFromCookie, pb } from '$lib/pocketbase.js';
 import { renderMarkdown } from '$lib/Components/markdownitParser.js';
 import { HeaderBuilder } from '$lib/headers.js';
+import { error } from '@sveltejs/kit';
 
 /** @type {import("./$types").PageLoad} */
 export async function load({ params, parent }) {
@@ -38,17 +39,21 @@ export async function load({ params, parent }) {
       published: data.published
     };
   } catch {
-    const data = await pb.collection('postList').getOne(params.slug);
-    return {
-      title: '',
-      content: '',
-      initialMarkdown: '',
-      created: new Date(0),
-      edited: new Date(0),
-      author: undefined,
-      editors: [],
-      lastEditor: undefined,
-      published: data.published
-    };
+    try {
+      const data = await pb.collection('postList').getOne(params.slug);
+      return {
+        title: '',
+        content: '',
+        initialMarkdown: '',
+        created: new Date(0),
+        edited: new Date(0),
+        author: undefined,
+        editors: [],
+        lastEditor: undefined,
+        published: data.published
+      };
+    } catch {
+      throw error(404, 'Blogpost not found');
+    }
   }
 }
