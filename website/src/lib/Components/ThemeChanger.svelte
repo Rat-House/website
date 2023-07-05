@@ -6,7 +6,7 @@
 
   export let theme = '';
 
-  if (theme !== '') Theme.set(theme);
+  if (theme !== '') $Theme = theme;
   let darkMode = $Theme === 'dark';
   let disabled = true;
 
@@ -16,7 +16,7 @@
     darkMode = $Theme === 'dark';
   });
 
-  $: Theme.set(darkMode ? 'dark' : 'light');
+  $: $Theme = darkMode ? 'dark' : 'light';
 </script>
 
 <form method="POST" action="/dynamic/theme/?/toggle" use:enhance>
