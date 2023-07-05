@@ -5,6 +5,7 @@
 
 import { authFromCookie, pb } from '$lib/pocketbase.js';
 import { renderMarkdown } from '$lib/Components/markdownitParser.js';
+import { HeaderBuilder } from '$lib/headers.js';
 
 /** @type {import("./$types").PageLoad} */
 export async function load({ params, parent }) {
@@ -22,6 +23,9 @@ export async function load({ params, parent }) {
     let lastEditor = author;
     if (Array.isArray(editors) && editors.length > 0) lastEditor = editors[editors.length - 1];
     else if (editors !== undefined && !Array.isArray(editors)) lastEditor = editors;
+
+    new HeaderBuilder().setTitle(data.title).setDescription('A blogpost').save();
+
     return {
       title: data.title,
       content: data.content,

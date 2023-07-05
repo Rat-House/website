@@ -3,11 +3,17 @@
  */
 
 import { authFromCookie, pb } from '$lib/pocketbase.js';
+import { HeaderBuilder } from '$lib/headers.js';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ url, parent }) {
   const page = parseInt(url.searchParams.get('page') || '1');
   const viewAll = url.searchParams.get('all') != null;
+
+  new HeaderBuilder()
+    .setTitle('Latest articles')
+    .setDescription('List of the latest articles')
+    .save();
 
   const { user, pbCookie } = await parent();
   authFromCookie(pbCookie);

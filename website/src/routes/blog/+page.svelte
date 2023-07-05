@@ -36,7 +36,7 @@
     {@const creator = /** @type {User} */ (post.expand.creator)}
     <a href="/blog/{post.id}">
       <div class="card card-compact w-96 bg-base-300 shadow-xl my-2">
-        <div class="card-body">
+        <div class="card-body" tabindex="-1">
           <h2 class="card-title text-secondary">{post.title}</h2>
 
           <div class="flex flex-row">

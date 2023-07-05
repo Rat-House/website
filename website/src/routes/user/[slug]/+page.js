@@ -1,5 +1,6 @@
 import { authFromCookie, pb } from '$lib/pocketbase.js';
 import { error } from '@sveltejs/kit';
+import { HeaderBuilder } from '$lib/headers.js';
 
 /**
  * @typedef {import("../../../dbtypes").User} User
@@ -27,6 +28,11 @@ export async function load({ parent, params }) {
         resolve(/** @type {User} */ (user));
         const auth = /** @type {Authority} */ (user.expand.authority);
         userAuthResolve(auth.name);
+
+        new HeaderBuilder()
+          .setTitle(`${user.name}'s profile page`)
+          .setDescription(`${user.name} is a ${auth.name}`)
+          .save();
       })
       .catch(() => {
         userAuthResolve('User');
