@@ -17,8 +17,6 @@ export class HeaderBuilder {
       },
       twitter: {
         cardType: 'summary',
-        image: '',
-        imageAlt: 'Image alt'
       }
     };
 
@@ -58,10 +56,7 @@ export class HeaderBuilder {
   setTitle(title) {
     this._props.title = title;
     /** @type {OGPProps} */ (this._props.openGraph).title = title;
-    /** @type {TwitterProps} */ (this._props.twitter).title =
-      this._props.titleTemplate !== '' && this._props.titleTemplate !== undefined
-        ? this._props.titleTemplate.replace('%s', title)
-        : title;
+    /** @type {TwitterProps} */ (this._props.twitter).title = title;
     return this;
   }
 
