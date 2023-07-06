@@ -19,6 +19,7 @@
   <img
     src="https://http.cat/{$page.status}"
     alt={errorMessage}
+    title={errorMessage}
     class="max-h-[93vh] w-screen object-contain"
   />
 </div>
