@@ -120,7 +120,7 @@
             use:enhance={async ({ cancel, action, formData }) => {
               cancel();
               pb.authStore.clear();
-              await fetch(action,{ method: 'POST', body:formData });
+              await fetch(action, { method: 'POST', body: formData });
               location.reload();
             }}
           >
@@ -130,7 +130,7 @@
         {:else}
           <a
             class="btn btn-accent btn-sm"
-            href={browser ? '' : `/user/login?origin=${encodeURIComponent($page.url)}`}
+            href={browser ? '' : `/user/login?origin=${encodeURIComponent($page.url.toString())}`}
             on:click|preventDefault={() => loginModal.showModal()}>login</a
           >
         {/if}

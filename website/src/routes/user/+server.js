@@ -15,5 +15,5 @@ export async function POST({ request, locals, url, setHeaders }) {
   }
   const data = await request.formData();
   locals.pb.authStore.clear();
-  throw redirect(303, data.get('origin') ?? '/');
+  throw redirect(303, (data.get('origin') ?? '/').toString());
 }
