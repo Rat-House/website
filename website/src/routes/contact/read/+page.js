@@ -1,6 +1,7 @@
 import { authFromCookie, pb } from '$lib/pocketbase.js';
 import { error } from '@sveltejs/kit';
 import { capitaliseOnlyFirst } from '$lib/tools.js';
+import { HeaderBuilder } from '$lib/headers.js';
 
 /**
  * @typedef {import("../../../dbtypes.d").Contact} Contact
@@ -12,6 +13,11 @@ import { capitaliseOnlyFirst } from '$lib/tools.js';
 
 /** @type {import("./$types").PageLoad} */
 export async function load({ parent }) {
+  new HeaderBuilder()
+    .setTitle('Contact messages')
+    .setDescription('List of messages people sent to us')
+    .save();
+
   authFromCookie((await parent()).pbCookie);
   if (!pb.authStore.model)
     throw error(401, {
