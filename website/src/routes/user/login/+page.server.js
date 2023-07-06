@@ -8,6 +8,9 @@ export async function load({ locals, url, cookies }) {
     };
   }
 
+  const origin = url.searchParams.get('origin');
+  if (origin !== null) cookies.set('origin', origin, { path: '/user/login', httpOnly: true });
+
   /** @type string[] */
   let providers = [];
   authMethods.authProviders.forEach((p) => {
@@ -29,8 +32,6 @@ export async function load({ locals, url, cookies }) {
   cookies.set('provider', JSON.stringify(authProvider), { path: '/user/login' });
   if (url.searchParams.get('window') !== null)
     cookies.set('windowed', 'true', { path: '/user/login' });
-  const origin = url.searchParams.get('provider');
-  if (origin !== null) cookies.set('origin', origin, { path: '/user/login' });
 
   return {
     authProviderRedirect: authProviderRedirect,
