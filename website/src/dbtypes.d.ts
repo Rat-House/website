@@ -28,4 +28,17 @@ declare class Post extends Record {
   published: boolean;
 }
 
+declare class Contact extends Record {
+  name: string;
+  user?: string;
+  reason?: string;
+  email: string;
+  message: string;
+}
+
+declare class ContactsRead extends Record {
+  user: string;
+  message: string;
+}
+
 export { User, Authority, Tag, Post, PocketBase };
