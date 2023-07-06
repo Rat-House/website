@@ -15,9 +15,11 @@ export async function load({ locals, url, cookies }) {
   }
   const provider = JSON.parse(providerText);
   const close = cookies.get('windowed') === 'true';
+  let path = cookies.get('origin') ?? '/';
 
   cookies.delete('provider', { path: '/user/login' });
   cookies.delete('windowed', { path: '/user/login' });
+  cookies.delete('origin', { path: '/user/login' });
 
   const query = new URLSearchParams(url.search);
   const state = query.get('state');
@@ -46,7 +48,6 @@ export async function load({ locals, url, cookies }) {
     console.log('Error logging in with 0Auth user', err);
   }
 
-  let path = '/'; //todo return user to page they came from
   if (close) path = '/user/login/callback?window';
 
   return {

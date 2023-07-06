@@ -3,11 +3,12 @@
   import { MetaTags } from 'svelte-meta-tags';
   import Login from '$lib/Components/Login.svelte';
   import { pb } from '$lib/pocketbase';
-  import { applyAction, enhance } from '$app/forms';
+  import { enhance } from '$app/forms';
   import { getAvatarUrl } from '$lib/tools.js';
   import ThemeChanger from '$lib/Components/ThemeChanger.svelte';
   import { Header } from '$lib/headers.js';
   import { navigating, page } from '$app/stores';
+  import { browser } from '$app/environment';
 
   /** @type {import("./$types").LayoutData} */
   export let data;
@@ -115,20 +116,21 @@
           </a>
           <form
             method="POST"
-            action="/user/logout"
-            use:enhance={() => {
-              return async ({ result }) => {
-                pb.authStore.clear();
-                await applyAction(result);
-              };
+            action="/user?/logout"
+            use:enhance={async ({ cancel, action, formData }) => {
+              cancel();
+              pb.authStore.clear();
+              await fetch(action,{ method: 'POST', body:formData });
+              location.reload();
             }}
           >
+            <input type="hidden" name="origin" value={$page.url} />
             <button class="btn btn-accent btn-sm">Log out</button>
           </form>
         {:else}
           <a
             class="btn btn-accent btn-sm"
-            href="/user/login"
+            href={browser ? '' : `/user/login?origin=${encodeURIComponent($page.url)}`}
             on:click|preventDefault={() => loginModal.showModal()}>login</a
           >
         {/if}
