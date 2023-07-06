@@ -9,6 +9,7 @@
   import { Header } from '$lib/headers.js';
   import { navigating, page } from '$app/stores';
   import { browser } from '$app/environment';
+  import { invalidateAll } from '$app/navigation';
 
   /** @type {import("./$types").LayoutData} */
   export let data;
@@ -121,7 +122,7 @@
               cancel();
               pb.authStore.clear();
               await fetch(action, { method: 'POST', body: formData });
-              location.reload();
+              await invalidateAll();
             }}
           >
             <input type="hidden" name="origin" value={$page.url} />
