@@ -36,9 +36,13 @@ declare class Contact extends Record {
   message: string;
 }
 
-declare class ContactsRead extends Record {
+declare class ContactRead extends Record {
   user: string;
   message: string;
 }
 
-export { User, Authority, Tag, Post, PocketBase };
+declare class ReadableContact extends Contact {
+  read: boolean;
+}
+
+export { User, Authority, Tag, Post, PocketBase, Contact, ContactRead, ReadableContact };
