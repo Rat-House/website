@@ -27,6 +27,10 @@
   // if (form) console.log(form);
 </script>
 
+{#if data.isLoggedIn}
+  <a href="/contact/read" class="btn">Read messages</a>
+{/if}
+
 {#if form?.error}
   <div class="alert alert-error">
     <span>{form.error}</span>
