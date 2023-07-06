@@ -10,10 +10,10 @@ export const actions = {
       const record = await sendContactMessage(
         locals.pb,
         user,
-        (formData.get('name') ?? '').toString(),
-        (formData.get('email') ?? '').toString(),
-        (formData.get('message') ?? '').toString(),
-        (formData.get('reason') ?? '').toString()
+        (formData.get('name') ?? '').toString().trim(),
+        (formData.get('email') ?? '').toString().trim(),
+        (formData.get('message') ?? '').toString().trim(),
+        (formData.get('reason') ?? '').toString().trim()
       );
 
       return {
