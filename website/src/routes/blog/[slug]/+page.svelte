@@ -39,10 +39,12 @@
           <p class="p-0 m-0 text-xs italic">unpublished</p>
         {/if}
         <p class="p-0 m-0 text-xs">
-          created <span>{data.created.toLocaleString().slice(0, 10)}</span>
+          created <span>{data.created.toLocaleString(undefined, { dateStyle: 'long' })}</span>
         </p>
         {#if +data.created !== +data.edited && latestEditor.id === author.id}
-          <p class="p-0 m-0 text-xs">edited <span>{data.edited.toLocaleString()}</span></p>
+          <p class="p-0 m-0 text-xs">
+            edited <span>{data.edited.toLocaleString(undefined, { dateStyle: 'long' })}</span>
+          </p>
         {/if}
       </div>
     </div>
@@ -60,7 +62,7 @@
         <div class="flex flex-col mx-2 text-accent">
           <a class="p-0 m-0" href="/user/{latestEditor.id}">{latestEditor.name}</a>
           <p class="p-0 m-0 text-xs">
-            edited <span>{data.edited.toLocaleString().slice(0, 10)}</span>
+            edited <span>{data.edited.toLocaleString(undefined, { dateStyle: 'long' })}</span>
           </p>
         </div>
       </div>

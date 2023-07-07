@@ -68,7 +68,9 @@
             <div class="flex flex-col mx-2 text-accent">
               <p class="p-0 m-0">{creator.name}</p>
 
-              <p class="p-0 m-0 text-xs">{post.created.slice(0, 10)}</p>
+              <p class="p-0 m-0 text-xs">
+                {new Date(post.created).toLocaleString(undefined, { dateStyle: 'long' })}
+              </p>
               {#if !post.published}
                 <p class="p-0 m-0 text-xs"><i>unpublished</i></p>
               {/if}
