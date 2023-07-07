@@ -68,6 +68,7 @@
       name="name"
       type="text"
       value={name}
+      maxlength="256"
       required
       disabled={sending}
       placeholder="Your name"

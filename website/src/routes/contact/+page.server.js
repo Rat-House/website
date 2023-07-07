@@ -32,7 +32,7 @@ export const actions = {
         email: formData.get('email'),
         reason: formData.get('reason'),
         message: formData.get('message'),
-        error: /** @type {Error} */ (e).message
+        error: /** @type {Error} */ (e).message ?? e
       });
     }
   }
