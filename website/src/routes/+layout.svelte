@@ -64,6 +64,16 @@
   <header>
     <div class="navbar bg-base-100">
       <div class="navbar-start">
+        <a class="btn btn-ghost normal-case text-xl" href="/">
+          <img
+            src="/FullLogo.png"
+            width="200"
+            class="filter-none dark:invert pointer-events-none"
+            alt="website logo"
+          />
+        </a>
+      </div>
+      <div class="navbar-end">
         <div class="dropdown">
           <button class="btn btn-ghost lg:hidden">
             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -84,16 +94,6 @@
             <li><Navlink href="/about">About</Navlink></li>
           </ul>
         </div>
-        <a class="btn btn-ghost normal-case text-xl" href="/">
-          <img
-            src="/FullLogo.png"
-            width="200"
-            class="filter-none dark:invert pointer-events-none"
-            alt="website logo"
-          />
-        </a>
-      </div>
-      <div class="navbar-end">
         <div class="hidden lg:flex">
           <ul class="menu menu-horizontal px-1">
             <li><Navlink href="/blog">Blog</Navlink></li>

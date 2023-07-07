@@ -54,24 +54,21 @@
           <h2 class="card-title text-secondary">{post.title}</h2>
 
           <div class="flex flex-row">
-            <div class="avatar placeholder">
-              <div class="bg-neutral-focus text-neutral-content rounded-full w-8">
-                <span class="text-xs">AA</span>
+            <div class="avatar">
+              <div class="w-8 rounded-full bg-primary text-center leading-9">
+                <!-- Add last name to use initials in placeholder?-->
+                <img
+                  src={getAvatarUrl(creator, '32x32')}
+                  width="32"
+                  height="32"
+                  alt="{creator.name[0]}M"
+                />
               </div>
             </div>
             <div class="flex flex-col mx-2 text-accent">
               <p class="p-0 m-0">{creator.name}</p>
-              <div class="avatar">
-                <div class="w-8 rounded-full">
-                  <img
-                    src={getAvatarUrl(creator, '32x32')}
-                    width="32"
-                    height="32"
-                    alt="{creator.name}'s icon"
-                  />
-                </div>
-              </div>
-              <p class="p-0 m-0 text-xs">{post.created}</p>
+
+              <p class="p-0 m-0 text-xs">{post.created.slice(0, 10)}</p>
               {#if !post.published}
                 <p class="p-0 m-0 text-xs"><i>unpublished</i></p>
               {/if}

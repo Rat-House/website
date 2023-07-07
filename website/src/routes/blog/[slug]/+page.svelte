@@ -23,8 +23,13 @@
     <div class="flex flex-row place-items-center">
       <a href="/user/{author.id}">
         <div class="avatar">
-          <div class="bg-neutral-focus text-neutral-content rounded-full w-8 pointer-events-none">
-            <img src={getAvatarUrl(author)} alt="{author.name}'s icon" />
+          <div class="w-8 rounded-full bg-primary text-center leading-8">
+            <img
+              src={getAvatarUrl(author, '32x32')}
+              width="32"
+              height="32"
+              alt="{author.name[0]}M"
+            />
           </div>
         </div>
       </a>
@@ -33,7 +38,9 @@
         {#if !data.published}
           <p class="p-0 m-0 text-xs italic">unpublished</p>
         {/if}
-        <p class="p-0 m-0 text-xs">created <span>{data.created.toLocaleString()}</span></p>
+        <p class="p-0 m-0 text-xs">
+          created <span>{data.created.toLocaleString().slice(0, 10)}</span>
+        </p>
         {#if +data.created !== +data.edited && latestEditor.id === author.id}
           <p class="p-0 m-0 text-xs">edited <span>{data.edited.toLocaleString()}</span></p>
         {/if}
@@ -43,14 +50,18 @@
       <div class="flex flex-row place-items-center">
         <a href="/user/{latestEditor.id}">
           <div class="avatar">
-            <div class="bg-neutral-focus text-neutral-content rounded-full w-8 pointer-events-none">
-              <img src={getAvatarUrl(latestEditor)} alt="{latestEditor.name}'s icon" />
+            <div
+              class="bg-neutral-focus text-neutral-content rounded-full w-8 pointer-events-none text-center leading-8"
+            >
+              <img src={getAvatarUrl(latestEditor)} alt="{latestEditor.name[0]}M" />
             </div>
           </div>
         </a>
         <div class="flex flex-col mx-2 text-accent">
           <a class="p-0 m-0" href="/user/{latestEditor.id}">{latestEditor.name}</a>
-          <p class="p-0 m-0 text-xs">edited <span>{data.edited.toLocaleString()}</span></p>
+          <p class="p-0 m-0 text-xs">
+            edited <span>{data.edited.toLocaleString().slice(0, 10)}</span>
+          </p>
         </div>
       </div>
     {/if}
