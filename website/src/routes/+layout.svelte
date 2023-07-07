@@ -10,6 +10,7 @@
   import { navigating, page } from '$app/stores';
   import { browser } from '$app/environment';
   import { invalidateAll } from '$app/navigation';
+  import Navlink from '$lib/Components/Navlink.svelte';
 
   /** @type {import("./$types").LayoutData} */
   export let data;
@@ -77,10 +78,10 @@
           <ul
             class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
           >
-            <li><a href="/blog">Blog</a></li>
-            <li><a href="/projects">Projects</a></li>
-            <li><a href="/contact">Contact us</a></li>
-            <li><a href="/about">About</a></li>
+            <li><Navlink href="/blog">Blog</Navlink></li>
+            <li><Navlink href="/projects">Projects</Navlink></li>
+            <li><Navlink href="/contact">Contact us</Navlink></li>
+            <li><Navlink href="/about">About</Navlink></li>
           </ul>
         </div>
         <a class="btn btn-ghost normal-case text-xl" href="/">
@@ -95,10 +96,10 @@
       <div class="navbar-end">
         <div class="hidden lg:flex">
           <ul class="menu menu-horizontal px-1">
-            <li><a href="/blog">Blog</a></li>
-            <li><a href="/projects">Projects</a></li>
-            <li><a href="/contact">Contact us</a></li>
-            <li><a href="/about">About</a></li>
+            <li><Navlink href="/blog">Blog</Navlink></li>
+            <li><Navlink href="/projects">Projects</Navlink></li>
+            <li><Navlink href="/contact">Contact us</Navlink></li>
+            <li><Navlink href="/about">About</Navlink></li>
           </ul>
         </div>
         {#if data.isLoggedIn}
