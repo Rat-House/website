@@ -95,6 +95,7 @@ function generateEmbed(contactMessage) {
       }
     ],
     username: 'Contact message',
+    avatar_url: 'https://rathouse.ca/favicon.png',
     attachments: [],
     flags: 4096
   };
