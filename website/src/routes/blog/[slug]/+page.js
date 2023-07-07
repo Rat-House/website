@@ -10,9 +10,18 @@ import { error } from '@sveltejs/kit';
 
 /** @type {import("./$types").PageLoad} */
 export async function load({ params, parent }) {
-  authFromCookie((await parent()).pbCookie);
+  const {pbCookie, user} = await parent()
+  authFromCookie(pbCookie);
 
-  //todo make auths table in authority collection
+  /** @type {Promise<number>} */
+  let userAuth = new Promise((resolve) => {
+    if (user)
+      pb.collection('authorities')
+        .getOne(user.authority)
+        .then(/** @type {Authority}*/ (r) => resolve(r.level))
+        .catch(() => resolve(0));
+    else resolve(0);
+  });
 
   try {
     const data = /** @type {Post} */ await pb.collection('posts').getOne(params.slug, {
@@ -39,7 +48,9 @@ export async function load({ params, parent }) {
       author: author,
       editors: editors,
       lastEditor: lastEditor,
-      published: data.published
+      published: data.published,
+
+      userAuth
     };
   } catch {
     try {
@@ -53,7 +64,9 @@ export async function load({ params, parent }) {
         author: undefined,
         editors: [],
         lastEditor: undefined,
-        published: data.published
+        published: data.published,
+
+        userAuth
       };
     } catch {
       throw error(404, 'Blogpost not found');

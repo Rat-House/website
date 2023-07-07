@@ -1,6 +1,7 @@
 <script>
   import MarkdownPage from '$lib/Components/MarkdownPage.svelte';
   import { getAvatarUrl } from '$lib/tools.js';
+  import { page } from "$app/stores";
 
   /**
    * @typedef {import("../../../dbtypes.d").User} User
@@ -10,7 +11,10 @@
   export let data;
 </script>
 
-<a href="/blog" class="btn btn-primary">go back</a>
+<a href="/blog" class="btn btn-primary float-left mt-1 ml-4">go back</a>
+{#if data.userAuth >= 1}
+<a href="{$page.url.pathname}/edit" class="btn btn-secondary float-right mt-1 mr-4">Edit</a>
+{/if}
 
 {#if data.title === ''}
   <p>the article you are looking for is not public</p>
