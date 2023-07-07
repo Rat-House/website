@@ -21,7 +21,7 @@
 
 <form method="POST" action="/dynamic/theme/?/toggle" use:enhance>
   <input type="hidden" name="origin" value={$page.url} />
-  <button type="submit" class={disabled ? '' : 'pointer-events-none'}>
+  <button type="submit" class={disabled ? '' : 'pointer-events-none'} tabindex={disabled ? 0 : -1}>
     <label class="swap swap-rotate px-4">
       <!-- controls the state -->
       <input
@@ -29,6 +29,7 @@
         bind:checked={darkMode}
         class="pointer-events-auto cursor-pointer"
         {disabled}
+        tabindex={disabled ? -1 : 0}
       />
       <!-- Light-->
       <svg class="swap-on fill-current w-10 h-10" viewBox="0 0 24 24">
