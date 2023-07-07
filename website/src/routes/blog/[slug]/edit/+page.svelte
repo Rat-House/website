@@ -1,14 +1,24 @@
 <script>
-  import { enhance } from '$app/forms';
-  import MarkdownPage from '$lib/Components/MarkdownPage.svelte';
-  import { browser } from '$app/environment';
+  import { enhance } from "$app/forms";
+  import MarkdownPage from "$lib/Components/MarkdownPage.svelte";
+  import { browser } from "$app/environment";
 
+  export let data;
   export let form;
 
   let sending = false;
 
-  let content = form ? form.content : undefined ?? '';
-  let title = form ? form.title : undefined ?? '';
+  let content = "";
+  let title = "";
+  let published = false;
+  if (form?.error === undefined && data) {
+    title = data.title;
+    content = data.content;
+    published = data.published;
+  } else if (form) {
+    content = form.content.toString();
+    title = form.title.toString();
+  }
 </script>
 
 {#if form?.error}
@@ -17,17 +27,17 @@
   </div>
 {/if}
 
-{#if form?.blogId && form?.new}
+{#if form?.blogId && !data?.blogId}
   <div class="alert alert-success">
     <p>
       Success! your post is now available at <a class="link" href="/blog/{form.blogId}"
-        >{form.blogId}</a
-      >
+    >{form.blogId}</a
+    >
     </p>
   </div>
 {/if}
 
-<div class="grid mx-auto {browser ? 'lg:grid-cols-2' : ''} w-2/3 gap-4">
+<div class="grid mx-auto {browser ? 'lg:grid-cols-2' : ''} w-11/12 md:w-4/5 2xl:w-3/4 gap-4">
   <form
     method="POST"
     action="?/post"
@@ -40,7 +50,7 @@
       };
     }}
   >
-    <input type="hidden" name="blogId" value={form?.blogId ?? ''} />
+    <input type="hidden" name="blogId" value={data?.blogId ?? ''} />
 
     <div class="form-control">
       <label class="label" for="title">
@@ -68,16 +78,30 @@
         disabled={sending}
         bind:value={content}
         placeholder="Content"
+        rows="15"
       />
     </div>
-    <button disabled={sending} type="submit" class="btn float-right mt-4">
-      {#if sending}
-        <span class="loading loading-spinner" />
-        loading
-      {:else}
-        Send
-      {/if}
-    </button>
+
+
+    <div class="join float-right mt-4">
+      <button disabled={sending} name="save" type="submit" class="btn join-item">
+        {#if sending}
+          <span class="loading loading-spinner" />
+        {/if}
+        {#if published}
+          Unpublish and save
+        {:else}
+          Save draft
+        {/if}
+      </button>
+      <button disabled={sending} name="publish" type="submit" class="btn btn-primary join-item">
+        {#if published}
+          Save
+        {:else}
+          Publish
+        {/if}
+      </button>
+      <div>
   </form>
 
   {#if browser}
@@ -85,7 +109,7 @@
       <h1 class="text-3xl text-center text-secondary mt-8 mb-4 {title ? '' : 'italic'}">
         {title || 'Title'}
       </h1>
-      <div class="bg-base-200 rounded-md px-4 py-1 min-h-16 {content ? '' : 'italic'}">
+      <div class="bg-base-200 rounded-md px-4 py-1 pl-8 min-h-16 {content ? '' : 'italic'}">
         <MarkdownPage text={content || 'Content'} />
       </div>
     </div>
