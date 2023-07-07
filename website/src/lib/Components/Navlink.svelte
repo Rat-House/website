@@ -7,6 +7,12 @@
   export let href;
 </script>
 
-<a {href} class={$page.url.pathname.startsWith(href) ? 'font-bold' : ''}>
+<a {href} aria-current={$page.url.pathname.startsWith(href)}>
   <slot />
 </a>
+
+<style lang="postcss">
+    a[aria-current='true'] {
+        @apply font-bold;
+    }
+</style>
