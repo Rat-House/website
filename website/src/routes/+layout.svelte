@@ -88,24 +88,40 @@
           <ul
             class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
           >
-            <li><Navlink href="/blog">Blog</Navlink></li>
-            <li><Navlink href="/projects">Projects</Navlink></li>
-            <li><Navlink href="/contact">Contact us</Navlink></li>
-            <li><Navlink href="/about">About</Navlink></li>
+            <li>
+              <Navlink href="/blog">Blog</Navlink>
+            </li>
+            <li>
+              <Navlink href="/projects">Projects</Navlink>
+            </li>
+            <li>
+              <Navlink href="/contact">Contact us</Navlink>
+            </li>
+            <li>
+              <Navlink href="/about">About</Navlink>
+            </li>
           </ul>
         </div>
         <div class="hidden lg:flex">
           <ul class="menu menu-horizontal px-1">
-            <li><Navlink href="/blog">Blog</Navlink></li>
-            <li><Navlink href="/projects">Projects</Navlink></li>
-            <li><Navlink href="/contact">Contact us</Navlink></li>
-            <li><Navlink href="/about">About</Navlink></li>
+            <li>
+              <Navlink href="/blog">Blog</Navlink>
+            </li>
+            <li>
+              <Navlink href="/projects">Projects</Navlink>
+            </li>
+            <li>
+              <Navlink href="/contact">Contact us</Navlink>
+            </li>
+            <li>
+              <Navlink href="/about">About</Navlink>
+            </li>
           </ul>
         </div>
         {#if data.isLoggedIn}
           {@const user = /** @type {import("../dbtypes.js").User} */ (data.user)}
-          <a href="/user/{user.id}">
-            <div class="avatar">
+          <div class="dropdown dropdown-hover dropdown-bottom dropdown-end">
+            <button tabindex="0" class="avatar m-1">
               <div class="w-9 rounded-full">
                 <img
                   src={getAvatarUrl(user, '128x128')}
@@ -114,21 +130,26 @@
                   alt="{user.name}'s icon"
                 />
               </div>
-            </div>
-          </a>
-          <form
-            method="POST"
-            action="/user?/logout"
-            use:enhance={async ({ cancel, action, formData }) => {
-              cancel();
-              pb.authStore.clear();
-              await fetch(action, { method: 'POST', body: formData });
-              await invalidateAll();
-            }}
-          >
-            <input type="hidden" name="origin" value={$page.url} />
-            <button class="btn btn-accent btn-sm">Log out</button>
-          </form>
+            </button>
+            <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-52">
+              <li><a href="/user/{user.id}">Profile</a></li>
+              <li>
+                <form
+                  method="POST"
+                  action="/user?/logout"
+                  use:enhance={async ({ cancel, action, formData }) => {
+                    cancel();
+                    pb.authStore.clear();
+                    await fetch(action, { method: 'POST', body: formData });
+                    await invalidateAll();
+                  }}
+                >
+                  <input type="hidden" name="origin" value={$page.url} />
+                  <button>Log out</button>
+                </form>
+              </li>
+            </ul>
+          </div>
         {:else}
           <a
             class="btn btn-accent btn-sm"
