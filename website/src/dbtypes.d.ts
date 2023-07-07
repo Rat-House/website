@@ -26,6 +26,7 @@ declare class Post extends Record {
   creator: string;
   editors: string[];
   published: boolean;
+  datePublished: string;
 }
 
 declare class Contact extends Record {

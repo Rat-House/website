@@ -27,12 +27,15 @@ export async function load({ params, parent }) {
 
     new HeaderBuilder().setTitle(data.title).setDescription('A blogpost').save();
 
+    const created = new Date(data.datePublished ?? data.created);
+    let updated = new Date(data.updated);
+    if (created > updated) updated = created;
     return {
       title: data.title,
       content: data.content,
       initialMarkdown: renderMarkdown(data.content, pb),
-      created: new Date(data.created),
-      edited: new Date(data.updated),
+      created: created,
+      edited: updated,
       author: author,
       editors: editors,
       lastEditor: lastEditor,
