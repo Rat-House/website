@@ -33,7 +33,7 @@
       class="btn btn-circle btn-sm absolute bottom-1 right-1"
       title="mark as {isRead ? 'unread' : 'read'}"
     >
-      <svg viewBox="0 0 10 10" class="{isRead ? 'fill-neutral' : 'fill-none'}">
+      <svg viewBox="0 0 10 10" class={isRead ? 'fill-neutral' : 'fill-none'}>
         <circle cx="5" cy="5" r="4.5" />
       </svg>
     </button>
