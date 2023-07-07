@@ -1,3 +1,4 @@
+import typography from '@tailwindcss/typography';
 import daisyUI from 'daisyui';
 
 /** @type {import('tailwindcss').Config} */
@@ -6,7 +7,7 @@ export default {
   theme: {
     extend: {}
   },
-  plugins: [daisyUI],
+  plugins: [typography, daisyUI],
   darkMode: ['class', '[data-theme="dark"]']
   // ...
 };

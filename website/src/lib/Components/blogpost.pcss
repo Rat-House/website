@@ -1,12 +1,13 @@
 @import 'highlight.js/styles/hybrid.css';
 
 .markdown {
-  h1 {
-    @apply text-4xl text-primary
-  }
+  @apply prose mx-auto;
 
+  h1 {
+    @apply text-primary;
+  }
   h2 {
-    @apply text-2xl;
+    @apply text-secondary;
   }
 
   h1,
@@ -21,13 +22,14 @@
       @apply -ml-7 pr-1 stroke-2 border-info stroke-info fill-none hover:border-l-4 hover:-ml-8 text-accent float-left leading-none;
       opacity: 0;
     }
-    &:hover > a, & > a:focus {
+    &:hover > a,
+    & > a:focus {
       opacity: 1;
     }
   }
 
   .user {
-    @apply hover:link text-secondary hover:text-secondary-focus before:content-['@'];
+    @apply hover:link underline text-secondary hover:text-secondary-focus before:content-['@'];
   }
   span.user {
     @apply hover:cursor-text;
