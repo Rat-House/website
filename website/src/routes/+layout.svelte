@@ -78,8 +78,8 @@
         <a class="btn btn-ghost normal-case text-xl" href="/">
           <img
             src="/FullLogo.png"
-            width="200"
-            class="filter-none dark:invert pointer-events-none"
+            width="990"
+            class="filter-none dark:invert pointer-events-none w-52"
             alt="website logo"
           />
         </a>
@@ -133,14 +133,15 @@
           {@const user = /** @type {import("../dbtypes.js").User} */ (data.user)}
           <div class="dropdown dropdown-hover dropdown-bottom dropdown-end">
             <button tabindex="0" class="avatar m-1">
-              <div class="w-9 rounded-full">
+              <span class="w-9">
                 <img
                   src={getAvatarUrl(user, '128x128')}
                   width="128"
                   height="128"
-                  alt="{user.name}'s icon"
+                  class="rounded-full"
+                  alt="{user.name}'s avatar"
                 />
-              </div>
+              </span>
             </button>
             <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-52">
               <li><a href="/user/{user.id}">Profile</a></li>
@@ -182,7 +183,7 @@
     class="footer sticky top-[100vh] items-center p-4 bg-base-300 pointer-events-none select-none"
   >
     <div class="items-center grid-flow-col">
-      <img src="/house.png" width="50" class="filter-none dark:invert" alt="website icon" />
+      <img src="/house.png" width="234" class="filter-none dark:invert w-12" alt="website icon" />
       <p>Copyright © 2023 - All right reserved</p>
     </div>
   </footer>
