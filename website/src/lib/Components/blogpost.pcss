@@ -16,8 +16,6 @@
   h4,
   h5,
   h6 {
-    @apply flex items-center whitespace-pre-wrap;
-
     > a:nth-child(1) {
       @apply stroke-info fill-none stroke-2 leading-none border-info;
       opacity: 0;
@@ -28,15 +26,18 @@
     }
 
     @media only screen and (min-width: 640px) {
+      @apply flex items-center whitespace-pre-wrap;
+
       > a:nth-child(1) {
         @apply -ml-7 pr-1 hover:border-l-4 hover:-ml-8;
       }
     }
 
     @media only screen and (max-width: 640px) {
-      @apply flex-row-reverse;
+      @apply flex flex-row-reverse items-baseline;
+
       > a:nth-child(1) {
-        @apply flex-grow flex justify-end hover:border-r-4 hover:-mr-1;
+        @apply ml-auto hover:border-r-4 hover:-mr-1;
       }
     }
   }

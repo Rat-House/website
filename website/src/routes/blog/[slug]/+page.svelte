@@ -11,13 +11,15 @@
   export let data;
 </script>
 
-<div class="flex flex-row relative">
-  <a href="/blog" class="btn btn-primary mt-1 ml-4">go back</a>
+<div class="flex flex-row relative pointer-events-none">
+  <a href="/blog" class="btn btn-primary mt-1 ml-4 pointer-events-auto">go back</a>
 
   <div class="grow my-10" />
 
   {#if data.userAuth >= 1}
-    <a href="{$page.url.pathname}/edit" class="btn btn-secondary mt-1 mr-4">Edit</a>
+    <a href="{$page.url.pathname}/edit" class="btn btn-secondary mt-1 mr-4 pointer-events-auto"
+      >Edit</a
+    >
   {/if}
 </div>
 
@@ -65,7 +67,7 @@
           <a href="/user/{latestEditor.id}">
             <div class="avatar">
               <div
-                class="bg-neutral-focus text-neutral-content rounded-full w-8 pointer-events-none text-center leading-8"
+                class="bg-neutral-focus text-neutral-content rounded-full w-8 text-center leading-8"
               >
                 <img src={getAvatarUrl(latestEditor)} alt="{latestEditor.name[0]}M" />
               </div>
