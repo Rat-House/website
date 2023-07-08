@@ -4,8 +4,8 @@
    * @typedef {import("../../dbtypes.js").User} User
    * @typedef {import("pocketbase").Record} PR
    */
-  import { getAvatarUrl } from "$lib/tools.js";
-  import MarkdownPage from "$lib/Components/MarkdownPage.svelte";
+  import { getAvatarUrl } from '$lib/tools.js';
+  import MarkdownPage from '$lib/Components/MarkdownPage.svelte';
 
   export let data;
 
@@ -15,7 +15,7 @@
    * @return {Tag}
    * */
   function getTag(tagList, tagID) {
-    return /** @type {Tag} */ (tagList.find(/** @param {Tag} tag */(tag) => tag.id === tagID));
+    return /** @type {Tag} */ (tagList.find(/** @param {Tag} tag */ (tag) => tag.id === tagID));
   }
 </script>
 
@@ -34,8 +34,8 @@
 
   <div class="grow mt-14 sm:mb-0 mb-14" />
   <div class="absolute inset-0 text-center pointer-events-none sm:mt-0 mt-14">
-      <h1 class="text-6xl text-primary font-bold">Blog</h1>
-      <h4 class="text-sm mt-1.5"><span>{data.posts.items.length}</span> displayed posts</h4>
+    <h1 class="text-6xl text-primary font-bold">Blog</h1>
+    <h4 class="text-sm mt-1.5"><span>{data.posts.items.length}</span> displayed posts</h4>
   </div>
 
   <div class="mr-4 mt-2">

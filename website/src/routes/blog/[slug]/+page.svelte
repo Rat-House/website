@@ -12,18 +12,19 @@
 </script>
 
 <div class="flex flex-row relative">
-<a href="/blog" class="btn btn-primary mt-1 ml-4">go back</a>
+  <a href="/blog" class="btn btn-primary mt-1 ml-4">go back</a>
 
-<div class="grow my-10 mb-24 sm:mb-10" />
+  <div class="grow my-10 mb-24 sm:mb-10" />
   {#if data.title !== ''}
-<div class="absolute inset-0 text-center mt-14 sm:mt-0 pointer-events-none"> <!-- cheep fix to disable pointer events -->
-  <h1 class="text-6xl text-center text-secondary">{data.title}</h1>
-</div>
+    <div class="absolute inset-0 text-center mt-14 sm:mt-0 pointer-events-none">
+      <!-- cheep fix to disable pointer events -->
+      <h1 class="text-6xl text-center text-secondary">{data.title}</h1>
+    </div>
   {/if}
 
-{#if data.userAuth >= 1}
-  <a href="{$page.url.pathname}/edit" class="btn btn-secondary mt-1 mr-4">Edit</a>
-{/if}
+  {#if data.userAuth >= 1}
+    <a href="{$page.url.pathname}/edit" class="btn btn-secondary mt-1 mr-4">Edit</a>
+  {/if}
 </div>
 
 {#if data.title === ''}
@@ -33,53 +34,53 @@
   {@const latestEditor = /**@type{User}*/ (data.lastEditor)}
   <div class="flex flex-col place-items-center my-2">
     <div>
-    <div class="flex flex-row place-items-center">
-      <a href="/user/{author.id}">
-        <div class="avatar">
-          <div class="w-8 rounded-full bg-primary text-center leading-8">
-            <img
-              src={getAvatarUrl(author, '32x32')}
-              width="32"
-              height="32"
-              alt="{author.name[0]}M"
-            />
-          </div>
-        </div>
-      </a>
-      <div class="flex flex-col mx-2 text-accent">
-        <a class="p-0 m-0" href="/user/{author.id}">{author.name}</a>
-        {#if !data.published}
-          <p class="p-0 m-0 text-xs italic">unpublished</p>
-        {/if}
-        <p class="p-0 m-0 text-xs">
-          created <span>{data.created.toLocaleString(undefined, { dateStyle: 'long' })}</span>
-        </p>
-        {#if +data.created !== +data.edited && latestEditor.id === author.id}
-          <p class="p-0 m-0 text-xs">
-            edited <span>{data.edited.toLocaleString(undefined, { dateStyle: 'long' })}</span>
-          </p>
-        {/if}
-      </div>
-    </div>
-    {#if +data.created !== +data.edited && latestEditor.id !== author.id}
       <div class="flex flex-row place-items-center">
-        <a href="/user/{latestEditor.id}">
+        <a href="/user/{author.id}">
           <div class="avatar">
-            <div
-              class="bg-neutral-focus text-neutral-content rounded-full w-8 pointer-events-none text-center leading-8"
-            >
-              <img src={getAvatarUrl(latestEditor)} alt="{latestEditor.name[0]}M" />
+            <div class="w-8 rounded-full bg-primary text-center leading-8">
+              <img
+                src={getAvatarUrl(author, '32x32')}
+                width="32"
+                height="32"
+                alt="{author.name[0]}M"
+              />
             </div>
           </div>
         </a>
         <div class="flex flex-col mx-2 text-accent">
-          <a class="p-0 m-0" href="/user/{latestEditor.id}">{latestEditor.name}</a>
+          <a class="p-0 m-0" href="/user/{author.id}">{author.name}</a>
+          {#if !data.published}
+            <p class="p-0 m-0 text-xs italic">unpublished</p>
+          {/if}
           <p class="p-0 m-0 text-xs">
-            edited <span>{data.edited.toLocaleString(undefined, { dateStyle: 'long' })}</span>
+            created <span>{data.created.toLocaleString(undefined, { dateStyle: 'long' })}</span>
           </p>
+          {#if +data.created !== +data.edited && latestEditor.id === author.id}
+            <p class="p-0 m-0 text-xs">
+              edited <span>{data.edited.toLocaleString(undefined, { dateStyle: 'long' })}</span>
+            </p>
+          {/if}
         </div>
       </div>
-    {/if}
+      {#if +data.created !== +data.edited && latestEditor.id !== author.id}
+        <div class="flex flex-row place-items-center">
+          <a href="/user/{latestEditor.id}">
+            <div class="avatar">
+              <div
+                class="bg-neutral-focus text-neutral-content rounded-full w-8 pointer-events-none text-center leading-8"
+              >
+                <img src={getAvatarUrl(latestEditor)} alt="{latestEditor.name[0]}M" />
+              </div>
+            </div>
+          </a>
+          <div class="flex flex-col mx-2 text-accent">
+            <a class="p-0 m-0" href="/user/{latestEditor.id}">{latestEditor.name}</a>
+            <p class="p-0 m-0 text-xs">
+              edited <span>{data.edited.toLocaleString(undefined, { dateStyle: 'long' })}</span>
+            </p>
+          </div>
+        </div>
+      {/if}
     </div>
   </div>
 
