@@ -175,7 +175,7 @@
     </div>
   </header>
 
-  <main class="mx-2 sm:mx-0">
+  <main>
     <slot />
   </main>
 
