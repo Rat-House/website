@@ -1,16 +1,16 @@
 <script>
-  import "../app.css";
-  import { MetaTags } from "svelte-meta-tags";
-  import Login from "$lib/Components/Login.svelte";
-  import { pb } from "$lib/pocketbase";
-  import { enhance } from "$app/forms";
-  import { getAvatarUrl } from "$lib/tools.js";
-  import ThemeChanger from "$lib/Components/ThemeChanger.svelte";
-  import { Header } from "$lib/headers.js";
-  import { navigating, page } from "$app/stores";
-  import { browser } from "$app/environment";
-  import { invalidateAll } from "$app/navigation";
-  import Navlink from "$lib/Components/Navlink.svelte";
+  import '../app.css';
+  import { MetaTags } from 'svelte-meta-tags';
+  import Login from '$lib/Components/Login.svelte';
+  import { pb } from '$lib/pocketbase';
+  import { enhance } from '$app/forms';
+  import { getAvatarUrl } from '$lib/tools.js';
+  import ThemeChanger from '$lib/Components/ThemeChanger.svelte';
+  import { Header } from '$lib/headers.js';
+  import { navigating, page } from '$app/stores';
+  import { browser } from '$app/environment';
+  import { invalidateAll } from '$app/navigation';
+  import Navlink from '$lib/Components/Navlink.svelte';
 
   /** @type {import("./$types").LayoutData} */
   export let data;
@@ -23,7 +23,7 @@
   async function getProviders() {
     if (providers.length !== 0) return providers;
     await pb
-      .collection("users")
+      .collection('users')
       .listAuthMethods()
       .then((methods) => {
         methods.authProviders.forEach((p) => {
@@ -37,16 +37,16 @@
   function preppedHeader() {
     return Header.updateUrl($page.url).setImage(
       `${$page.url.origin}/favicon-128.png`,
-      "website logo"
+      'website logo'
     );
   }
 
-  let modalOpen =false;
-  function openModal (){
+  let modalOpen = false;
+  function openModal() {
     loginModal.showModal();
     modalOpen = true;
   }
-  function closeModal (){
+  function closeModal() {
     loginModal.close();
     modalOpen = false;
   }
