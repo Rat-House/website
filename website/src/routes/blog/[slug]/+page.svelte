@@ -83,7 +83,7 @@
   </div>
 
   <div class="divider" />
-  <div class="my-8 mx-16">
+  <div class="mb-8">
     <MarkdownPage text={data.content} initialMarkdown={data.initialMarkdown} />
   </div>
 {/if}
