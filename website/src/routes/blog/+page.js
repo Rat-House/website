@@ -29,7 +29,7 @@ export async function load({ url, parent }) {
   let userAuth = new Promise((resolve) => {
     if (user)
       pb.collection('authorities')
-        .getOne(user.authority)
+        .getOne(user.authority, { fields: 'level' })
         .then(/** @type {Authority}*/ (r) => resolve(r.level))
         .catch(() => resolve(0));
     else resolve(0);

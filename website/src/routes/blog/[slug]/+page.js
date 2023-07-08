@@ -54,23 +54,24 @@ export async function load({ params, parent }) {
       userAuth
     };
   } catch {
-    try {
-      const data = await pb.collection('postList').getOne(params.slug);
-      return {
-        title: '',
-        content: '',
-        initialMarkdown: '',
-        created: new Date(0),
-        edited: new Date(0),
-        author: undefined,
-        editors: [],
-        lastEditor: undefined,
-        published: data.published,
+    /* empty */
+  }
+  try {
+    const data = await pb.collection('postList').getOne(params.slug);
+    return {
+      title: '',
+      content: '',
+      initialMarkdown: '',
+      created: new Date(0),
+      edited: new Date(0),
+      author: undefined,
+      editors: [],
+      lastEditor: undefined,
+      published: data.published,
 
-        userAuth
-      };
-    } catch {
-      throw error(404, 'Blogpost not found');
-    }
+      userAuth
+    };
+  } catch {
+    throw error(404, 'Blogpost not found');
   }
 }
