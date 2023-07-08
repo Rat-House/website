@@ -26,7 +26,7 @@
 {:else}
   {@const author = /** @type {User} */ (data.author)}
   {@const latestEditor = /**@type{User}*/ (data.lastEditor)}
-  <div class="text-center sm:-mt-20 m-0">
+  <div class="text-center sm:-mt-20 m-0 sm:w-2/3 mx-auto">
     <h1 class="text-6xl text-center text-secondary">{data.title}</h1>
   </div>
 
