@@ -26,6 +26,8 @@
     {:else}
       <a href="?all" class="btn">show all</a>
     {/if}
+
+    <a href="/blog/new/edit" class="btn btn-secondary">Create new</a>
   </div>
 {/if}
 
@@ -69,7 +71,7 @@
               <p class="p-0 m-0">{creator.name}</p>
 
               <p class="p-0 m-0 text-xs">
-                {new Date(post.datePublished ?? post.created).toLocaleString(undefined, {
+                {new Date(post.datePublished || post.created).toLocaleString(undefined, {
                   dateStyle: 'long'
                 })}
               </p>
