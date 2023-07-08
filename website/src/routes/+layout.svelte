@@ -85,7 +85,7 @@
         </a>
       </div>
       <div class="navbar-end">
-        <div class="dropdown">
+        <div class="dropdown dropdown-end">
           <button class="btn btn-ghost lg:hidden">
             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
@@ -131,7 +131,7 @@
         </div>
         {#if data.isLoggedIn}
           {@const user = /** @type {import("../dbtypes.js").User} */ (data.user)}
-          <div class="dropdown dropdown-hover dropdown-bottom dropdown-end">
+          <div class="dropdown dropdown-hover dropdown-end">
             <button tabindex="0" class="avatar m-1">
               <span class="w-9">
                 <img
