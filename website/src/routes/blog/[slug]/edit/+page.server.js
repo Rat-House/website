@@ -61,45 +61,55 @@ export const actions = {
       published: publish
     };
 
-    if (blogId === '') {
-      if (publish) data.datePublished = new Date().toISOString();
-      data.creator = sender;
-    } else {
-      const { editors, published } = await locals.pb
-        .collection('posts')
-        .getOne(blogId, { fields: 'editors,published' })
-        .then(
-          /** @param {Post} r */ (r) => {
-            return {
-              editors: r.editors,
-              published: r.published
-            };
-          }
-        );
+    try {
+      if (blogId === '') {
+        if (publish) data.datePublished = new Date().toISOString();
+        data.creator = sender;
+      } else {
+        const { editors, published } = await locals.pb
+          .collection('posts')
+          .getOne(blogId, { fields: 'editors,published' })
+          .then(
+            /** @param {Post} r */ (r) => {
+              return {
+                editors: r.editors,
+                published: r.published
+              };
+            }
+          );
 
-      const index = editors.indexOf(sender);
-      if (index > -1) {
-        editors.splice(index, 1);
+        const index = editors.indexOf(sender);
+        if (index > -1) {
+          editors.splice(index, 1);
+        }
+        editors.push(sender);
+        data.editors = editors;
+        if (publish && !published) data.datePublished = new Date().toISOString();
       }
-      editors.push(sender);
-      data.editors = editors;
-      if (publish && !published) data.datePublished = new Date().toISOString();
-    }
 
-    if (!publish) data.datePublished = '';
+      if (!publish) data.datePublished = '';
+      throw new Error("cheese");
 
-    /** @type {Post} */
-    let record;
-    // update
-    if (blogId !== '') {
-      record = /** @type {Post} */ await locals.pb.collection('posts').update(blogId, data);
-    }
-    // new post
-    else {
-      record = /** @type {Post} */ await locals.pb.collection('posts').create(data);
-    }
-    return {
-      blogId: record.id
+      /** @type {Post} */
+      let record;
+      // update
+      if (blogId !== '') {
+        record = /** @type {Post} */ await locals.pb.collection('posts').update(blogId, data);
+      }
+      // new post
+      else {
+        record = /** @type {Post} */ await locals.pb.collection('posts').create(data);
+      }
+
+      return {
+        blogId: record.id
+      };
+    } catch (e) {
+      return {
+        error: /** @type {Error} */ (e).message,
+        title: title,
+        content: content
+      };
     }
   }
 };

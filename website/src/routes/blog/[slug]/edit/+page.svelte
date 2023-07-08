@@ -44,11 +44,15 @@
     class="mx-auto w-full"
     use:enhance={() => {
       sending = true;
-      return async ({ update }) => {
-        await update();
+      return async ({ result }) => {
         sending = false;
-        title="";
-        content="";
+        if (result.data.error!==undefined){
+          title=result.data.title;
+          content=result.data.content;
+        } else {
+          title="";
+          content="";
+        }
       };
     }}
   >
