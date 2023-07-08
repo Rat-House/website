@@ -36,7 +36,7 @@ export async function load({ params, parent }) {
 
     new HeaderBuilder().setTitle(data.title).setDescription('A blogpost').save();
 
-    const created = new Date(data.datePublished ?? data.created);
+    const created = new Date(data.datePublished || data.created);
     let updated = new Date(data.updated);
     if (created>updated || ((updated-created)<1000)) updated = created;
     return {
