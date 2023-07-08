@@ -19,7 +19,7 @@
   }
 </script>
 
-<div class="flex flex-row relative">
+<div class="flex flex-row">
   {#if data.authorityLevel > 0}
     <div class="ml-4 mt-2">
       {#if data.showAll}
@@ -32,11 +32,7 @@
     </div>
   {/if}
 
-  <div class="grow mt-14 sm:mb-0 mb-14" />
-  <div class="absolute inset-0 text-center pointer-events-none sm:mt-0 mt-14">
-    <h1 class="text-6xl text-primary font-bold">Blog</h1>
-    <h4 class="text-sm mt-1.5"><span>{data.posts.items.length}</span> displayed posts</h4>
-  </div>
+  <div class="grow mt-14" />
 
   <div class="mr-4 mt-2">
     <a href="/blog/feed" target="_blank" class="btn rounded-full">
@@ -49,6 +45,11 @@
       </svg>
     </a>
   </div>
+</div>
+
+<div class="text-center sm:-mt-14 m-0">
+  <h1 class="text-6xl text-primary font-bold">Blog</h1>
+  <h4 class="text-sm mt-1.5"><span>{data.posts.items.length}</span> displayed posts</h4>
 </div>
 
 <div class="flex flex-col place-items-center justify-center m-8">
