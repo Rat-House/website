@@ -38,7 +38,7 @@ export async function load({ params, parent }) {
 
     const created = new Date(data.datePublished ?? data.created);
     let updated = new Date(data.updated);
-    if (created > updated) updated = created;
+    if (created>updated || ((updated-created)<1000)) updated = created;
     return {
       title: data.title,
       content: data.content,
