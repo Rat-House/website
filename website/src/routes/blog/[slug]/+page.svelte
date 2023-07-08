@@ -11,19 +11,28 @@
   export let data;
 </script>
 
-<a href="/blog" class="btn btn-primary float-left mt-1 ml-4">go back</a>
+<div class="flex flex-row relative">
+<a href="/blog" class="btn btn-primary mt-1 ml-4">go back</a>
+
+<div class="grow my-10 mb-24 sm:mb-10" />
+  {#if data.title !== ''}
+<div class="absolute inset-0 text-center mt-14 sm:mt-0">
+  <h1 class="text-6xl text-center text-secondary">{data.title}</h1>
+</div>
+  {/if}
+
 {#if data.userAuth >= 1}
-  <a href="{$page.url.pathname}/edit" class="btn btn-secondary float-right mt-1 mr-4">Edit</a>
+  <a href="{$page.url.pathname}/edit" class="btn btn-secondary mt-1 mr-4">Edit</a>
 {/if}
+</div>
 
 {#if data.title === ''}
   <p>the article you are looking for is not public</p>
 {:else}
   {@const author = /** @type {User} */ (data.author)}
   {@const latestEditor = /**@type{User}*/ (data.lastEditor)}
-  <h1 class="text-6xl text-center text-secondary mt-8 mb-4">{data.title}</h1>
-
   <div class="flex flex-col place-items-center my-2">
+    <div>
     <div class="flex flex-row place-items-center">
       <a href="/user/{author.id}">
         <div class="avatar">
@@ -71,6 +80,7 @@
         </div>
       </div>
     {/if}
+    </div>
   </div>
 
   <div class="divider" />

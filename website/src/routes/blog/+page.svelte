@@ -32,7 +32,7 @@
     </div>
   {/if}
 
-  <div class="grow" />
+  <div class="grow mt-14" />
   <div class="absolute inset-0 text-center">
     <h1 class="text-6xl text-primary font-bold">Blog</h1>
     <h4 class="text-sm mt-1.5"><span>{data.posts.items.length}</span> displayed posts</h4>
