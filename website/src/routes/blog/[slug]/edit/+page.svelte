@@ -1,5 +1,5 @@
 <script>
-  import { enhance } from "$app/forms";
+  import { applyAction, enhance } from "$app/forms";
   import MarkdownPage from "$lib/Components/MarkdownPage.svelte";
   import { browser } from "$app/environment";
 
@@ -45,6 +45,7 @@
     use:enhance={() => {
       sending = true;
       return async ({ result }) => {
+        await applyAction(result);
         sending = false;
         if (result.data.error!==undefined){
           title=result.data.title;

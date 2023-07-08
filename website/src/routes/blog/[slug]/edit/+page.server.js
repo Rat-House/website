@@ -88,7 +88,6 @@ export const actions = {
       }
 
       if (!publish) data.datePublished = '';
-      throw new Error("cheese");
 
       /** @type {Post} */
       let record;
