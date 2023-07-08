@@ -16,7 +16,7 @@
 
 <div class="grow my-10 mb-24 sm:mb-10" />
   {#if data.title !== ''}
-<div class="absolute inset-0 text-center mt-14 sm:mt-0">
+<div class="absolute inset-0 text-center mt-14 sm:mt-0 pointer-events-none"> <!-- cheep fix to disable pointer events -->
   <h1 class="text-6xl text-center text-secondary">{data.title}</h1>
 </div>
   {/if}
