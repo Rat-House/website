@@ -6,7 +6,7 @@ import { error } from '@sveltejs/kit';
  * @typedef {import("../../../../dbtypes.d").Post} Post
  */
 
-/** @type {import("./$types").PageLoad} */
+/** @type {import("./$types").PageServerLoad} */
 export async function load({ params, locals }) {
   if (!locals.pb.authStore.model) throw error(401, 'Not logged in');
   const authLevel = await locals.pb
@@ -14,10 +14,10 @@ export async function load({ params, locals }) {
     .getOne(locals.pb.authStore.model.authority, {
       fields: 'level'
     })
-    .then(/** @param {Authority}r */ (r) => r.level);
+    .then((r) => /** @type {Authority} */ (r).level);
   if (authLevel < 1) throw error(403, 'Insufficient perms');
 
-  /** @type{Post} */
+  /** @type{Post|undefined} */
   let blogpost;
   // dont allow random urls
   if (params.slug !== 'new') {
@@ -26,7 +26,11 @@ export async function load({ params, locals }) {
         fields: 'id,title,content,published'
       });
     } catch (e) {
-      if (e.status === 404) throw error(404, 'Blogpost not found');
+      if (
+        'status' in /** @type {Object} */ (e) &&
+        /** @type {import("pocketbase").ClientResponseError} */ (e).status === 404
+      )
+        throw error(404, 'Blogpost not found');
       throw e;
     }
   }
@@ -52,13 +56,21 @@ export const actions = {
     const publish = (formData.get('save') ?? '').toString() === 'publish';
     const sender = locals.pb.authStore.model.id;
 
-    const data = /** @type {Post} */ {
+    /**
+     * @typedef {{published: boolean, title: string, content: string, creator: string|undefined, editors: Array.<string>|undefined, datePublished: string|undefined, }} NewPost
+     * @type {NewPost}
+     */
+    const data = /** @type {NewPost} */ {
       title: title,
       content: content,
       // "tags": [
       //   "RELATION_RECORD_ID"
       // ],
-      published: publish
+      published: publish,
+
+      editors: undefined,
+      creator: undefined,
+      datePublished: undefined
     };
 
     try {
@@ -69,14 +81,12 @@ export const actions = {
         const { editors, published } = await locals.pb
           .collection('posts')
           .getOne(blogId, { fields: 'editors,published' })
-          .then(
-            /** @param {Post} r */ (r) => {
-              return {
-                editors: r.editors,
-                published: r.published
-              };
-            }
-          );
+          .then((r) => {
+            return {
+              editors: /** @type {Post} */ (r).editors,
+              published: /** @type {Post} */ (r).published
+            };
+          });
 
         const index = editors.indexOf(sender);
         if (index > -1) {

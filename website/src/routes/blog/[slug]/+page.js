@@ -1,6 +1,7 @@
 /**
  * @typedef {import("../../../dbtypes.js").User} User
  * @typedef {import("../../../dbtypes.js").Post} Post
+ * @typedef {import("../../../dbtypes.js").Authority} Authority
  */
 
 import { authFromCookie, pb } from '$lib/pocketbase.js';
@@ -10,7 +11,7 @@ import { error } from '@sveltejs/kit';
 
 /** @type {import("./$types").PageLoad} */
 export async function load({ params, parent }) {
-  const {pbCookie, user} = await parent()
+  const { pbCookie, user } = await parent();
   authFromCookie(pbCookie);
 
   /** @type {Promise<number>} */
@@ -18,7 +19,7 @@ export async function load({ params, parent }) {
     if (user)
       pb.collection('authorities')
         .getOne(user.authority)
-        .then(/** @type {Authority}*/ (r) => resolve(r.level))
+        .then((r) => resolve(/** @type {Authority}*/ (r).level))
         .catch(() => resolve(0));
     else resolve(0);
   });
@@ -38,7 +39,7 @@ export async function load({ params, parent }) {
 
     const created = new Date(data.datePublished || data.created);
     let updated = new Date(data.updated);
-    if (created>updated || ((updated-created)<1000)) updated = created;
+    if (created > updated || +updated - +created < 1000) updated = created;
     return {
       title: data.title,
       content: data.content,

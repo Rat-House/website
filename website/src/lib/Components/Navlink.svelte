@@ -12,7 +12,7 @@
 </a>
 
 <style lang="postcss">
-    a[aria-current='true'] {
-        @apply font-bold;
-    }
+  a[aria-current='true'] {
+    @apply font-bold;
+  }
 </style>

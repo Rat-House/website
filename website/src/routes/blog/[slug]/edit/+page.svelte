@@ -1,23 +1,23 @@
 <script>
-  import { applyAction, enhance } from "$app/forms";
-  import MarkdownPage from "$lib/Components/MarkdownPage.svelte";
-  import { browser } from "$app/environment";
+  import { applyAction, enhance } from '$app/forms';
+  import MarkdownPage from '$lib/Components/MarkdownPage.svelte';
+  import { browser } from '$app/environment';
 
   export let data;
   export let form;
 
   let sending = false;
 
-  let content = "";
-  let title = "";
+  let content = '';
+  let title = '';
   let published = false;
   if (form?.error === undefined && data) {
     title = data.title;
     content = data.content;
     published = data.published;
-  } else if (form) {
-    content = form.content.toString();
-    title = form.title.toString();
+  } else if (form?.error !== undefined) {
+    content = form?.content?.toString() ?? '';
+    title = form?.title?.toString() ?? '';
   }
 </script>
 
@@ -31,8 +31,8 @@
   <div class="alert alert-success">
     <p>
       Success! your post is now available at <a class="link" href="/blog/{form.blogId}"
-    >{form.blogId}</a
-    >
+        >{form.blogId}</a
+      >
     </p>
   </div>
 {/if}
@@ -47,12 +47,10 @@
       return async ({ result }) => {
         await applyAction(result);
         sending = false;
-        if (result.data.error!==undefined){
-          title=result.data.title;
-          content=result.data.content;
-        } else {
-          title="";
-          content="";
+
+        if (form?.error === undefined) {
+          title = '';
+          content = '';
         }
       };
     }}
@@ -89,7 +87,6 @@
       />
     </div>
 
-
     <div class="join float-right mt-4">
       <button disabled={sending} name="save" value="save" type="submit" class="btn join-item">
         {#if sending}
@@ -101,14 +98,21 @@
           Save draft
         {/if}
       </button>
-      <button disabled={sending} name="save" value="publish" type="submit" class="btn btn-primary join-item">
+      <button
+        disabled={sending}
+        name="save"
+        value="publish"
+        type="submit"
+        class="btn btn-primary join-item"
+      >
         {#if published}
           Save
         {:else}
           Publish
         {/if}
       </button>
-      <div>
+      <div />
+    </div>
   </form>
 
   {#if browser}
