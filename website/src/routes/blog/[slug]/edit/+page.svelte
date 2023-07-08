@@ -27,7 +27,7 @@
   </div>
 {/if}
 
-{#if form?.blogId && !data?.blogId}
+{#if form?.blogId}
   <div class="alert alert-success">
     <p>
       Success! your post is now available at <a class="link" href="/blog/{form.blogId}"
@@ -47,6 +47,8 @@
       return async ({ update }) => {
         await update();
         sending = false;
+        title="";
+        content="";
       };
     }}
   >
@@ -84,7 +86,7 @@
 
 
     <div class="join float-right mt-4">
-      <button disabled={sending} name="save" type="submit" class="btn join-item">
+      <button disabled={sending} name="save" value="save" type="submit" class="btn join-item">
         {#if sending}
           <span class="loading loading-spinner" />
         {/if}
@@ -94,7 +96,7 @@
           Save draft
         {/if}
       </button>
-      <button disabled={sending} name="publish" type="submit" class="btn btn-primary join-item">
+      <button disabled={sending} name="save" value="publish" type="submit" class="btn btn-primary join-item">
         {#if published}
           Save
         {:else}
