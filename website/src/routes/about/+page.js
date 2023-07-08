@@ -1,7 +1,5 @@
 import { HeaderBuilder } from '$lib/headers.js';
 
-export const prerender = true;
-
 /** @type {import("./$types").PageLoad} */
 export async function load() {
   new HeaderBuilder()
