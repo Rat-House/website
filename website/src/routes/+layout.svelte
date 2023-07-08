@@ -3,7 +3,6 @@
   import { MetaTags } from 'svelte-meta-tags';
   import Login from '$lib/Components/Login.svelte';
   import { pb } from '$lib/pocketbase';
-  import { enhance } from '$app/forms';
   import { getAvatarUrl } from '$lib/tools.js';
   import ThemeChanger from '$lib/Components/ThemeChanger.svelte';
   import { Header } from '$lib/headers.js';
@@ -42,10 +41,12 @@
   }
 
   let modalOpen = false;
+
   function openModal() {
     loginModal.showModal();
     modalOpen = true;
   }
+
   function closeModal() {
     loginModal.close();
     modalOpen = false;
@@ -144,19 +145,20 @@
             <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-52">
               <li><a href="/user/{user.id}">Profile</a></li>
               <li>
-                <form
-                  method="POST"
-                  action="/user?/logout"
-                  use:enhance={async ({ cancel, action, formData }) => {
-                    cancel();
-                    pb.authStore.clear();
-                    await fetch(action, { method: 'POST', body: formData });
-                    await invalidateAll();
-                  }}
-                >
-                  <input type="hidden" name="origin" value={$page.url} />
-                  <button>Log out</button>
-                </form>
+                {#if browser}
+                  <button
+                    on:click|once={async () => {
+                      pb.authStore.clear();
+                      await fetch('/user?/logout', { method: 'POST', body: new FormData() });
+                      await invalidateAll();
+                    }}>Log out</button
+                  >
+                {:else}
+                  <form method="POST" action="/user?/logout">
+                    <input type="hidden" name="origin" value={$page.url} />
+                    <button>Log out</button>
+                  </form>
+                {/if}
               </li>
             </ul>
           </div>
