@@ -22,7 +22,7 @@ export async function load({ parent, params }) {
   const user = new Promise((resolve, reject) => {
     pb.collection('userList')
       .getFirstListItem(`id="${params.slug}" || username="${params.slug}"`, {
-        expand: 'authority'
+        expand: 'authority,bio'
       })
       .then((user) => {
         resolve(/** @type {User} */ (user));
