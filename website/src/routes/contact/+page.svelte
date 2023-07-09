@@ -92,7 +92,7 @@
 
       <FloatingLabel>
         <label slot="label" for="reason">Reason for contacting</label>
-        <select slot="field" name="reason" id="reason" disabled={sending}>
+        <select slot="field" name="reason" id="reason" disabled={sending} required>
           <!--      <option disabled selected>Reason</option>-->
           {#key reason}
             {#each ['', 'Game idea', 'Website issue', 'Other'] as contactReason}
