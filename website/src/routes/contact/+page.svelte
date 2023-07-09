@@ -95,8 +95,13 @@
         <select slot="field" name="reason" id="reason" disabled={sending}>
           <!--      <option disabled selected>Reason</option>-->
           {#key reason}
-            {#each ['Other', 'Game idea', 'Website issue'] as contactReason}
-              <option value={contactReason} selected={reason === contactReason}
+            {#each ['', 'Game idea', 'Website issue', 'Other'] as contactReason}
+              {@const isEmpty = contactReason === ''}
+              <option
+                value={contactReason}
+                disabled={isEmpty}
+                hidden={isEmpty}
+                selected={reason === contactReason || (reason !== '' && isEmpty)}
                 >{contactReason}</option
               >
             {/each}

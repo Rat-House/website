@@ -9,6 +9,15 @@
     if (element) {
       element.setAttribute('placeholder', ' ');
     }
+
+    /** @type {HTMLSelectElement|null} */
+    const select = fieldSet.querySelector('fieldset>select');
+    if (select) {
+      select.setAttribute('value', select.value);
+      select.onclick = () => {
+        select.setAttribute('value', select.value);
+      };
+    }
   });
 </script>
 
