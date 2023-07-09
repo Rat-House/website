@@ -77,15 +77,21 @@
       <div class="navbar-start">
         <a class="btn btn-ghost normal-case text-xl" href="/">
           <img
-            src="/FullLogo.png"
-            width="990"
-            class="filter-none dark:invert pointer-events-none w-52"
-            alt="website logo"
+            src="/logo.svg"
+            width="45"
+            class="filter-none dark:invert pointer-events-none"
+            alt="website icon"
+          />
+          <img
+            src="/logoTitle.svg"
+            width="150"
+            class="filter-none dark:invert pointer-events-none max-[420px]:hidden"
+            alt="website name logo"
           />
         </a>
       </div>
       <div class="navbar-end">
-        <div class="dropdown dropdown-end">
+        <div class="dropdown dropdown-hover dropdown-end">
           <button class="btn btn-ghost lg:hidden">
             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
@@ -97,7 +103,7 @@
             </svg>
           </button>
           <ul
-            class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+            class="menu menu-sm dropdown-content z-[1] p-2 shadow bg-base-300 max-[350px]:translate-x-1/3 rounded-box w-52"
           >
             <li>
               <Navlink href="/blog">Blog</Navlink>
@@ -143,7 +149,9 @@
                 />
               </span>
             </button>
-            <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-200 rounded-box w-52">
+            <ul
+              class="dropdown-content z-[1] menu p-2 shadow bg-base-300 rounded-box w-52 max-[300px]:translate-x-1/3"
+            >
               <li><a href="/user/{user.id}">Profile</a></li>
               <li>
                 {#if browser}
@@ -183,7 +191,7 @@
     class="footer sticky top-[100vh] items-center p-4 bg-base-300 pointer-events-none select-none"
   >
     <div class="items-center grid-flow-col">
-      <img src="/house.png" width="234" class="filter-none dark:invert w-12" alt="website icon" />
+      <img src="/logo.svg" width="50" class="filter-none dark:invert" alt="website icon" />
       <p>Copyright © 2023 - All right reserved</p>
     </div>
   </footer>
