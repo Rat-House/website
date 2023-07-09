@@ -1,5 +1,6 @@
 <script>
   import { enhance } from '$app/forms';
+  import FloatingLabel from '$lib/Components/FloatingLabel.svelte';
 
   export let form;
   export let data;
@@ -59,61 +60,68 @@
       };
     }}
   >
-    <div class="form-control">
-      <label class="label" for="name">
-        <span class="label-text">Name</span>
-      </label>
-      <input
-        class="input input-bordered w-full"
-        id="name"
-        name="name"
-        type="text"
-        value={name}
-        maxlength="256"
-        required
-        disabled={sending}
-        placeholder="Your name"
-      />
+    <div class="form-control gap-y-3">
+      <FloatingLabel>
+        <label slot="label" for="name">Name</label>
+        <input
+          slot="field"
+          id="name"
+          name="name"
+          type="text"
+          value={name}
+          maxlength="256"
+          required
+          placeholder=" "
+          disabled={sending}
+        />
+      </FloatingLabel>
 
-      <label class="label" for="email">
-        <span class="label-text">Email</span>
-      </label>
-      <input
-        class="input input-bordered w-full"
-        id="email"
-        name="email"
-        type="email"
-        value={email}
-        required
-        disabled={sending}
-        placeholder="Email Address"
-      />
+      <FloatingLabel>
+        <label slot="label" for="email">Email Address</label>
+        <input
+          slot="field"
+          id="email"
+          name="email"
+          type="email"
+          value={email}
+          required
+          placeholder=" "
+          disabled={sending}
+        />
+      </FloatingLabel>
 
-      <label class="label" for="reason">
-        <span class="label-text">Reason for contacting</span>
-      </label>
-      <select class="select select-bordered w-full" name="reason" id="reason" disabled={sending}>
-        <!--      <option disabled selected>Reason</option>-->
-        {#key reason}
-          {#each ['Other', 'Game idea', 'Website issue'] as contactReason}
-            <option value={contactReason} selected={reason === contactReason}
-              >{contactReason}</option
-            >
-          {/each}
-        {/key}
-      </select>
+      <FloatingLabel>
+        <label slot="label" for="reason">Reason for contacting</label>
+        <select slot="field" name="reason" id="reason" disabled={sending} required>
+          <!--      <option disabled selected>Reason</option>-->
+          {#key reason}
+            {#each ['', 'Game idea', 'Website issue', 'Other'] as contactReason}
+              {@const isEmpty = contactReason === ''}
+              <option
+                value={contactReason}
+                disabled={isEmpty}
+                hidden={isEmpty}
+                selected={reason === contactReason || (reason !== '' && isEmpty)}
+                >{contactReason}</option
+              >
+            {/each}
+          {/key}
+        </select>
+      </FloatingLabel>
 
-      <label class="label" for="message">
-        <span class="label-text">Message</span>
-      </label>
-      <textarea
-        class="textarea textarea-bordered textarea-lg w-full"
-        id="message"
-        name="message"
-        required
-        disabled={sending}
-        placeholder="Message">{message}</textarea
-      >
+      <FloatingLabel>
+        <label slot="label" for="message">Message</label>
+        <textarea
+          slot="field"
+          class="textarea-lg"
+          id="message"
+          name="message"
+          required
+          rows="5"
+          placeholder=" "
+          disabled={sending}>{message}</textarea
+        >
+      </FloatingLabel>
     </div>
     <button disabled={sending} type="submit" class="btn float-right mt-4 mb-2">
       {#if sending}
