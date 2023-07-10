@@ -60,10 +60,10 @@ export async function load({ locals, url, cookies }) {
           })();
         });
 
-      if (user.record.avatar === '') {
-        const updateUserImage = locals.pb.collection('users').update(user.record.id, formData);
-        await updateUserImage;
-      }
+      // if (user.record.avatar === '') { todo make this a setting
+      //   const updateUserImage = locals.pb.collection('users').update(user.record.id, formData);
+      //   await updateUserImage;
+      // }
       await updateOathImage;
     }
   } catch (err) {
