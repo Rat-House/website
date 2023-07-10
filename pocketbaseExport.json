@@ -592,10 +592,12 @@
         }
       }
     ],
-    "indexes": [],
+    "indexes": [
+      "CREATE UNIQUE INDEX `idx_THvKYAu` ON `oathUserImage` (\n  `user`,\n  `provider`\n)"
+    ],
     "listRule": "user = @request.auth.id",
     "viewRule": "user = @request.auth.id",
-    "createRule": "@request.data.user = @request.auth.id",
+    "createRule": "@request.data.user = @request.auth.id && (@request.data.provider = \"discord\" || @request.data.provider = \"github\" || @request.data.provider = \"google\")",
     "updateRule": "user = @request.auth.id && (@request.data.user:isset = false || @request.data.user = user) && (@request.data.provider:isset = false || @request.data.provider = provider)",
     "deleteRule": "user = @request.auth.id",
     "options": {}
