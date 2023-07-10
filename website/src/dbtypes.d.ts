@@ -6,7 +6,7 @@ type ReferenceId = string;
 declare class User extends Record {
   name: string;
   username: string;
-  avatar: string;
+  avatar: string; // file
   authority: ReferenceId;
   bio: ReferenceId;
 }
@@ -53,4 +53,10 @@ declare class Bio extends Record {
   bio: string;
 }
 
-export { User, Authority, Tag, Post, PocketBase, Contact, ContactRead, ReadableContact, Bio };
+declare class OathImage extends Record {
+  provider: string;
+  user: ReferenceId;
+  avatar: string; // file
+}
+
+export { User, Authority, Tag, Post, PocketBase, Contact, ContactRead, ReadableContact, Bio, OathImage };
