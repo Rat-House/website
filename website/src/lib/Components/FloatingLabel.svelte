@@ -15,7 +15,7 @@
     const select = fieldSet.querySelector('fieldset>select');
     if (select) {
       select.setAttribute('value', select.value);
-      select.onclick = () => {
+      select.onchange = () => {
         select.setAttribute('value', select.value);
       };
     }
