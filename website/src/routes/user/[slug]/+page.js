@@ -9,8 +9,7 @@ import { HeaderBuilder } from '$lib/headers.js';
 
 /** @type {import("./$types").PageLoad} */
 export async function load({ parent, params }) {
-  const data = await parent();
-  authFromCookie(data.pbCookie);
+  authFromCookie(await parent().pbCookie);
 
   /** @type {function(string):void} */
   let userAuthResolve;
@@ -41,7 +40,7 @@ export async function load({ parent, params }) {
   });
 
   return {
-    user: user,
+    selectedUser: user,
     authorityName: userAuth
   };
 }

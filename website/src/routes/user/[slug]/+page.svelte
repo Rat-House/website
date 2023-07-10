@@ -10,8 +10,14 @@
   /** @type {import("./$types").PageData} */
   export let data;
 
-  let user = /** @type {User} */ data.user || {};
+  let user = /** @type {User} */ data.selectedUser || {};
 </script>
+
+{#if user.id === data.user?.id}
+<a class="absolute btn right-4 mt-4" href="/user/{data.user?.id}/edit">Edit</a>
+  {:else}
+  todo promote button
+{/if}
 
 <div class="flex items-center shadow-xl rounded-box w-fit px-8 py-4 mb-7 mx-auto">
   <div class="avatar border-2 border-secondary rounded-full m-1.5">
