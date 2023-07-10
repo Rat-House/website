@@ -1,7 +1,7 @@
 <script>
   import '../app.css';
   import { MetaTags } from 'svelte-meta-tags';
-  import Login from '$lib/Components/Login.svelte';
+  import LoginList from '$lib/Components/LoginList.svelte';
   import { pb } from '$lib/pocketbase';
   import { getAvatarUrl } from '$lib/tools.js';
   import ThemeChanger from '$lib/Components/ThemeChanger.svelte';
@@ -205,7 +205,7 @@
         {#await getProviders()}
           loading providers...
         {:then providers}
-          <Login {providers} on:auth={closeModal} />
+          <LoginList {providers} on:auth={closeModal} />
         {/await}
       {/if}
       <div class="pb-4" />
