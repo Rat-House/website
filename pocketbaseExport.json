@@ -57,7 +57,7 @@
     "system": false,
     "schema": [
       {
-        "id": "v2z53jei",
+        "id": "h4npwll6",
         "name": "published",
         "type": "bool",
         "system": false,
@@ -409,11 +409,11 @@
       }
     ],
     "indexes": [],
-    "listRule": "id = @request.auth.id",
-    "viewRule": "id = @request.auth.id",
+    "listRule": "id = @request.auth.id || (@request.auth.id != \"\" && @request.auth.authority.level >= 2)",
+    "viewRule": "id = @request.auth.id || (@request.auth.id != \"\" && @request.auth.authority.level >= 2)",
     "createRule": "@request.data.authority.level = 0 || @request.auth.authority.level >= @request.data.authority.level",
-    "updateRule": "id = @request.auth.id && (@request.data.authority:isset = false || (@request.data.authority:isset = true && @request.auth.authority.level >= @request.data.authority.level))",
-    "deleteRule": "id = @request.auth.id",
+    "updateRule": "(id = @request.auth.id && (@request.data.authority:isset = false || (@request.data.authority:isset = true && @request.auth.authority.level >= @request.data.authority.level))) || (@request.auth.id != \"\" && @request.auth.authority.level >= 2)",
+    "deleteRule": null,
     "options": {
       "allowEmailAuth": false,
       "allowOAuth2Auth": true,
@@ -459,7 +459,7 @@
     "system": false,
     "schema": [
       {
-        "id": "1dgqui4p",
+        "id": "r4z4ki0b",
         "name": "name",
         "type": "json",
         "system": false,
@@ -467,7 +467,7 @@
         "options": {}
       },
       {
-        "id": "8mg0338g",
+        "id": "lk2wqpbe",
         "name": "username",
         "type": "text",
         "system": false,
@@ -479,7 +479,7 @@
         }
       },
       {
-        "id": "onh5wk2s",
+        "id": "sxekix36",
         "name": "avatar",
         "type": "file",
         "system": false,
@@ -502,7 +502,7 @@
         }
       },
       {
-        "id": "kkz00klm",
+        "id": "pm3jtq4p",
         "name": "authority",
         "type": "relation",
         "system": false,
@@ -519,7 +519,7 @@
         }
       },
       {
-        "id": "czbqjzgj",
+        "id": "scbnvj0r",
         "name": "bio",
         "type": "relation",
         "system": false,
