@@ -22,7 +22,7 @@
   });
 </script>
 
-<fieldset class="relative border border-solid border-gray-300" bind:this={fieldSet}>
+<fieldset class="floating relative border border-solid border-gray-300" bind:this={fieldSet}>
   <legend>
     <slot name="label">
       <label for="demoItem">Label</label>

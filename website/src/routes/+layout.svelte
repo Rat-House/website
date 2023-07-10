@@ -1,7 +1,7 @@
 <script>
   import '../app.css';
   import { MetaTags } from 'svelte-meta-tags';
-  import Login from '$lib/Components/Login.svelte';
+  import LoginList from '$lib/Components/LoginList.svelte';
   import { pb } from '$lib/pocketbase';
   import { getAvatarUrl } from '$lib/tools.js';
   import ThemeChanger from '$lib/Components/ThemeChanger.svelte';
@@ -34,7 +34,7 @@
   }
 
   function preppedHeader() {
-    return Header.updateUrl($page.url).setImage(
+    return Header.updateUrl($page.url).updateImage(
       `${$page.url.origin}/favicon-128.png`,
       'website logo'
     );
@@ -153,6 +153,7 @@
               class="dropdown-content z-[1] menu p-2 shadow bg-base-300 rounded-box w-52 max-[300px]:translate-x-1/3"
             >
               <li><a href="/user/{user.id}">Profile</a></li>
+              <li><a href="/user/settings">Settings</a></li>
               <li>
                 {#if browser}
                   <button
@@ -205,7 +206,7 @@
         {#await getProviders()}
           loading providers...
         {:then providers}
-          <Login {providers} on:auth={closeModal} />
+          <LoginList {providers} on:auth={closeModal} />
         {/await}
       {/if}
       <div class="pb-4" />
