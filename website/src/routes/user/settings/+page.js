@@ -7,7 +7,9 @@ export function load({ data }) {
     .setTitle('Editing your profile page')
     .setDescription(`currently editing ${data.user.name}'s profile`)
     .setImage(
-      getAvatarUrl(/** @type {import("../../../dbtypes.d").User} */ (data.user)),
+      getAvatarUrl(
+        /** @type {import("../../../dbtypes.d").User} */ (/** @type {unknown} */ (data.user))
+      ),
       `${data.user.name}'s avatar`
     )
     .save();
