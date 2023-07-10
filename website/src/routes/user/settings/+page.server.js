@@ -5,7 +5,7 @@
  */
 
 import { error, fail } from '@sveltejs/kit';
-import { getFileUrlFromRecord } from '$lib/tools.js';
+import { getAvatarUrl, getFileUrlFromRecord } from '$lib/tools.js';
 
 /** @type {import("./$types").PageServerLoad} */
 export async function load({ locals }) {
@@ -26,7 +26,8 @@ export async function load({ locals }) {
           name: user.name,
           username: user.username,
           bio: user.bio ? /** @type {Bio} */ (user.expand.bio).bio : '',
-          avatar: user.avatar
+          avatar: getAvatarUrl(user),
+          avatarRaw: user.avatar
         };
       }
     });
@@ -99,16 +100,33 @@ export const actions = {
     if (data.get('image') == null && data.get('imageLink') == null)
       return fail(400, { image: null, imageLink: null, missing: true });
 
+    /** @type {FormData|{avatar:null}} */
     let submit = new FormData();
-    if (data.has('imageLink')) {
+    if ((data.get('imageLink') ?? '') !== '') {
       submit.append(
         'avatar',
         await fetch(/** @type {FormDataEntryValue} */ (data.get('imageLink')).toString()).then(
           (r) => r.blob()
         )
       );
-    } else {
+    } else if (data.has('image')) {
       submit.append('avatar', /** @type {FormDataEntryValue} */ (data.get('image')));
+    } else {
+      submit = { avatar: null };
+    }
+
+    if (!('avatar' in submit)) {
+      const imageType = /** @type {Blob} */ (submit.get('avatar')).type;
+      switch (imageType) {
+        case 'image/webp':
+        case 'image/gif':
+        case 'image/svg+xml':
+        case 'image/png':
+        case 'image/jpeg':
+          break;
+        default:
+          return fail(415, { unknownType: imageType });
+      }
     }
 
     await locals.pb.collection('users').update(locals.pb.authStore.model.id, submit);
