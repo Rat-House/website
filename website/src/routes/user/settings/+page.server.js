@@ -2,6 +2,7 @@
  * @typedef {import("../../../dbtypes.d").User} User
  * @typedef {import("../../../dbtypes.d").Bio} Bio
  * @typedef {import("../../../dbtypes.d").OathImage} OathImage
+ * @typedef {import("../../../dbtypes.d").Authority} Authority
  */
 
 import { error, fail } from '@sveltejs/kit';
@@ -164,5 +165,40 @@ export const actions = {
     if (updateUser === undefined) return;
 
     await locals.pb.collection('users').update(user.id, updateUser);
+  },
+
+  promote: async ({ locals, request }) => {
+    if (!locals.pb.authStore.model) throw error(401, 'not signed in');
+    const data = await request.formData();
+    const userId = data.get('user')?.toString();
+    if (!userId) return fail(400, { user: userId });
+
+    const authLevel = parseInt(data.get('auth')?.toString());
+    if (isNaN(authLevel)) return fail(400, { authLevel, bad: true });
+
+    if (
+      await locals.pb
+        .collection('authorities')
+        .getOne(/** @type {Authority} */ (locals.pb.authStore.model).authority, {fields:"level"})
+        .then((r) => /** @type {Authority} */ (r).level < authLevel)
+    )
+      return fail(400, { authLevel, insufficient: true });
+
+    /** @type {string} */
+    let authId;
+    try {
+      authId = await locals.pb
+        .collection('authorities')
+        .getFirstListItem(`level=${authLevel}`, {fields:"id"})
+        .then((r) => r.id);
+    } catch (e) {
+      return fail(400, { authLevel, error: e.message });
+    }
+
+    try {
+      await locals.pb.collection('users').update(userId, { authority: authId });
+    } catch (e) {
+      return fail(400, { user: userId, error: e.message });
+    }
   }
 };

@@ -12,12 +12,6 @@ import { getAvatarUrl } from '$lib/tools.js';
 export async function load({ parent, params }) {
   authFromCookie((await parent()).pbCookie);
 
-  /** @type {function(string):void} */
-  let userAuthResolve;
-  /** @type {Promise<String>} */
-  const userAuth = new Promise((resolve) => {
-    userAuthResolve = resolve;
-  });
   /** @type {Promise<User>} */
   const user = new Promise((resolve, reject) => {
     pb.collection('userList')
@@ -28,7 +22,6 @@ export async function load({ parent, params }) {
         const user = /** @type {User} */ (u);
         resolve(user);
         const auth = /** @type {Authority} */ (user.expand.authority);
-        userAuthResolve(auth.name);
 
         new HeaderBuilder()
           .setTitle(`${user.name}'s profile page`)
@@ -37,13 +30,22 @@ export async function load({ parent, params }) {
           .save();
       })
       .catch(() => {
-        userAuthResolve('User');
         reject(error(404, 'not a user'));
+      });
+  });
+
+  const authorities = new Promise((resolve) => {
+    pb.collection('authorities')
+      .getFullList()
+      .then((authRecords) => {
+        const auths = /** @type {Authority[]} */ (authRecords);
+        auths.sort((a, b) => b.level - a.level);
+        resolve(auths);
       });
   });
 
   return {
     selectedUser: user,
-    authorityName: userAuth
+    authorities: authorities
   };
 }
