@@ -91,8 +91,8 @@ export class HeaderBuilder {
    * @param {string} alt
    */
   updateImage(imageAddr, alt) {
-    if (/** @type {OGPProps} */ (this._props.openGraph).images?.length ?? 0 === 0)
-      this.setImage(imageAddr, alt);
+    const ogp = /** @type {OGPProps} */ (this._props.openGraph);
+    if ((ogp.images?.length ?? 0) === 0) this.setImage(imageAddr, alt);
     return this;
   }
 

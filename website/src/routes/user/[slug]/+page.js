@@ -1,7 +1,7 @@
 import { authFromCookie, pb } from '$lib/pocketbase.js';
 import { error } from '@sveltejs/kit';
 import { HeaderBuilder } from '$lib/headers.js';
-import { getAvatarUrl } from '$lib/tools.js';
+import { capitaliseOnlyFirst, getAvatarUrl } from '$lib/tools.js';
 
 /**
  * @typedef {import("../../../dbtypes").User} User
@@ -25,7 +25,7 @@ export async function load({ parent, params }) {
 
         new HeaderBuilder()
           .setTitle(`${user.name}'s profile page`)
-          .setDescription(`${user.name} is a ${auth.name}`)
+          .setDescription(`${user.name} is a ${capitaliseOnlyFirst(auth.name)}`)
           .setImage(getAvatarUrl(user), `${user.name}'s avatar`)
           .save();
       })
