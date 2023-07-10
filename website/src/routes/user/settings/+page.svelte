@@ -220,6 +220,7 @@
         placeholder=" ">{data.user.bio}</textarea
       >
     </FloatingLabel>
+<!--  todo markdown visualiser  -->
 
     <button type="submit" class="btn mt-2" disabled={!anyChange}>Update</button>
   </form>
