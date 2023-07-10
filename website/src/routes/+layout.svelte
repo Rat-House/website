@@ -153,6 +153,7 @@
               class="dropdown-content z-[1] menu p-2 shadow bg-base-300 rounded-box w-52 max-[300px]:translate-x-1/3"
             >
               <li><a href="/user/{user.id}">Profile</a></li>
+              <li><a href="/user/settings">Settings</a></li>
               <li>
                 {#if browser}
                   <button
