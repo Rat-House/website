@@ -78,9 +78,18 @@ export const actions = {
     const data = await request.formData();
     if (!(data.has("provider"))) return fail(400, "no provider given");
 
+    const provider =      data.get("provider").toString()
+    if(await locals.pb
+      .collection('users')
+      .listExternalAuths(locals.pb.authStore.model.id)
+      .then((pList) => {
+        const providers = pList.map((p) => p.provider)
+        return providers.length<=1 && providers.includes(provider)
+      })) return fail(422, "You are not allowed to unlink all your providers")
+
     await locals.pb.collection('users').unlinkExternalAuth(
       locals.pb.authStore.model.id,
-      data.get("provider").toString()
+      provider
     );
   },
 
