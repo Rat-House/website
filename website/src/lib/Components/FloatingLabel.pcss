@@ -1,10 +1,4 @@
 fieldset {
-  > input,
-  > select,
-  > textarea {
-    @apply w-full focus:outline-none -mt-2.5 pb-1.5;
-  }
-
   > input {
     @apply input input-ghost;
   }
@@ -15,6 +9,12 @@ fieldset {
 
   > textarea {
     @apply textarea textarea-ghost;
+  }
+
+  > input,
+  > select,
+  > textarea {
+    @apply w-full focus:outline-none -mt-2.5 pb-1.5;
   }
 
   legend {
