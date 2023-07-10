@@ -1,15 +1,15 @@
 <script>
-  import { capitaliseOnlyFirst } from "$lib/tools.js";
-  import Login from "$lib/Components/Login.svelte";
-  import { enhance } from "$app/forms";
-  import { browser } from "$app/environment";
-  import { afterNavigate } from "$app/navigation";
-  import { page } from "$app/stores";
+  import { capitaliseOnlyFirst } from '$lib/tools.js';
+  import Login from '$lib/Components/Login.svelte';
+  import { enhance } from '$app/forms';
+  import { browser } from '$app/environment';
+  import { afterNavigate } from '$app/navigation';
+  import { page } from '$app/stores';
 
-  const pages = ["profile", "image"];
+  const pages = /** @type {const} */ (['profile', 'image']);
   const pageNames = {
-    profile: "Profile",
-    image: "Images"
+    profile: 'Profile',
+    image: 'Images'
   };
 
   /**
@@ -30,24 +30,24 @@
   let uploadImage;
 
   afterNavigate(({ to }) => {
-    settingsPage = getPage(to.url);
+    if (to) settingsPage = getPage(to.url);
   });
 </script>
-
 
 <span>{Object.keys(data.user)}</span>
 <div class="tabs justify-center">
   <div class="tab sm:tab-lifted grow sm:block hidden" />
   {#each pages as p}
     <a
-      class="tab tab-bordered sm:tab-lifted {settingsPage===p?'tab-active':''}"
+      class="tab tab-bordered sm:tab-lifted {settingsPage === p ? 'tab-active' : ''}"
       data-sveltekit-replacestate
-      href="?{p}">{pageNames[p]}</a>
+      href="?{p}">{pageNames[/** @type {typeof pages[number]} */ (p)]}</a
+    >
   {/each}
   <div class="tab sm:tab-lifted grow sm:block hidden" />
 </div>
 
-{#if settingsPage === "image"}
+{#if settingsPage === 'image'}
   <div class="flex items-center mb-4">
     <div class="avatar justify-center border-neutral rounded-full border-2">
       <div class="w-32 rounded-full">
@@ -63,7 +63,7 @@
           value=""
           class="btn btn-sm btn-info"
           disabled={!data.user.avatarRaw}
-        >Remove image
+          >Remove image
         </button>
       </form>
       <form
@@ -79,17 +79,17 @@
           name="image"
           accept="image/webp,image/gif,image/svg+xml,image/png,image/jpeg"
           class="file-input file-input-sm file-input-bordered w-full max-w-xs {browser
-          ? 'file-input-info'
-          : 'join-item'}"
+            ? 'file-input-info'
+            : 'join-item'}"
           required
           on:change={() => {
-          uploadImage.requestSubmit();
-        }}
+            uploadImage.requestSubmit();
+          }}
         />
         <button
           class="btn btn-sm rounded-r-full btn-info join-item {browser ? 'hidden' : ''}"
           type="submit"
-        >Set image
+          >Set image
         </button>
       </form>
     </div>
@@ -108,7 +108,7 @@
             value={data.oauthImage[provider]}
             class="btn btn-sm btn-info"
             disabled={!hasImage}
-          >Set image
+            >Set image
           </button>
           <button
             type="submit"
@@ -116,7 +116,7 @@
             value={provider}
             formaction="?/unlink"
             class="btn btn-sm btn-error"
-          >Unlink
+            >Unlink
           </button>
         {:else}
           <Login class="btn btn-sm btn-success" text="Link" {provider} />
