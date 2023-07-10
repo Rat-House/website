@@ -7,10 +7,11 @@
   import { page } from '$app/stores';
   import FloatingLabel from '$lib/Components/FloatingLabel.svelte';
 
-  const pages = /** @type {const} */ (['profile', 'image']);
+  const pages = /** @type {const} */ (['profile', 'oath', 'image']);
   const pageNames = {
     profile: 'Profile',
-    image: 'Images'
+    image: 'Images',
+    oath: 'Oath Providers'
   };
 
   /**
@@ -109,10 +110,11 @@
 
   <div class="grid grid-cols-3 w-fit gap-y-4 items-center">
     {#each data.oauthMethods as provider}
-      {@const hasImage = provider in data.oauthImage}
+      {@const linked = data.connectedOauthMethods.includes(provider)}
+      {@const hasImage = provider in data.oauthImage && linked}
       <h1 class="text-xl">{capitaliseOnlyFirst(provider)}:</h1>
-      <form method="post" class="flex flex-col gap-1" use:enhance>
-        {#if data.connectedOauthMethods.includes(provider)}
+      <form method="post" use:enhance>
+        {#if linked}
           <button
             type="submit"
             formaction="?/setImage"
@@ -122,16 +124,8 @@
             disabled={!hasImage}
             >Set image
           </button>
-          <button
-            type="submit"
-            name="provider"
-            value={provider}
-            formaction="?/unlink"
-            class="btn btn-sm btn-error"
-            >Unlink
-          </button>
         {:else}
-          <Login class="btn btn-sm btn-success" text="Link" {provider} />
+          <h1 class="uppercase text-sm font-bold">Not linked</h1>
         {/if}
       </form>
       <div class="avatar justify-center">
@@ -143,6 +137,45 @@
             />
           {/if}
         </div>
+      </div>
+    {/each}
+  </div>
+  <!----------------------------------------------------------------------------->
+{:else if settingsPage === 'oath'}
+  <div>
+    {#each data.oauthMethods as provider}
+      <div class="flex w-fit first:mt-0 mt-4 items-center">
+        <form method="post" use:enhance>
+          {#if data.connectedOauthMethods.includes(provider)}
+            <button
+              type="submit"
+              name="provider"
+              value={provider}
+              formaction="?/unlink"
+              class="btn btn-sm btn-error inline-flex"
+            >
+              <span>Unlink {capitaliseOnlyFirst(provider)}</span>
+              <span>
+                {#if provider in data.oauthImage}
+                  <div class="avatar justify-center">
+                    <div class="w-6 rounded-full">
+                      <img
+                        src={data.oauthImage[provider]}
+                        alt="{data.user.name}'s from {capitaliseOnlyFirst(provider)}"
+                      />
+                    </div>
+                  </div>
+                {/if}
+              </span>
+            </button>
+          {:else}
+            <Login
+              class="btn btn-sm btn-success"
+              text="Link {capitaliseOnlyFirst(provider)}"
+              {provider}
+            />
+          {/if}
+        </form>
       </div>
     {/each}
   </div>
