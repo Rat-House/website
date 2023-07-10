@@ -42,7 +42,7 @@
           type="submit"
           value={auth.level}
           disabled={auth.level > userAuth.level}
-          class="btn {auth.id === authority?.id ? 'btn-primary' : ''} join-item">{auth.name}</button
+          class="btn join-item {auth.id === authority?.id ? 'btn-primary' : ''}">{auth.name}</button
         >
       {/each}
     </form>
