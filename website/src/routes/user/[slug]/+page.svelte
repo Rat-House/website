@@ -14,7 +14,7 @@
 </script>
 
 {#if user.id === data.user?.id}
-<a class="absolute btn right-4 mt-4" href="/user/{data.user?.id}/edit">Edit</a>
+<a class="absolute btn right-4 mt-4" href="/user/settings">Edit</a>
   {:else}
   todo promote button
 {/if}

@@ -6,6 +6,8 @@
   export let provider;
   export let text = undefined;
 
+  const classes = $$props.class ?? "btn btn-accent btn-sm m-0.5"
+
   if (!text) text = "Login with " + provider;
 
   const dispatcher = createEventDispatcher();
@@ -48,7 +50,7 @@
 
 <a
   href="/user/login?provider={provider}"
-  class="btn btn-accent btn-sm m-0.5"
+  class={classes}
   data-sveltekit-preload-data="tap"
   on:click|preventDefault={authLogin(provider)}>{text}</a
 >
