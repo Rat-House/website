@@ -1,6 +1,6 @@
 import { error, redirect } from '@sveltejs/kit';
 
-/** @type {import('./$types').PageServerLoad} */
+/** @type {import("./$types").PageServerLoad} */
 export async function load({ locals, url, cookies }) {
   if (url.searchParams.get('window') !== null) return { path: '' };
   if (url.searchParams.get('error') !== null) {
@@ -34,15 +34,37 @@ export async function load({ locals, url, cookies }) {
     const user = await locals.pb
       .collection('users')
       .authWithOAuth2Code(provider.name, code, provider.codeVerifier, redirectURL);
-    if (user.record.avatar === '') {
+
+    if (user.meta && user.meta.avatarUrl) {
       const formData = new FormData();
-      if (user.meta && user.meta.avatarUrl) {
-        const imageBlob = await fetch(user.meta.avatarUrl).then((r) => r.blob());
-        formData.append('avatar', imageBlob);
-        await locals.pb.collection('users').update(user.record.id, formData);
-      } /*else {
-        formData.append('avatar', 123123); //maybe upload default image
-      }*/
+      const imageBlob = await fetch(user.meta.avatarUrl).then((r) => r.blob());
+      formData.append('avatar', imageBlob);
+
+      const imageFormData = new FormData();
+      imageFormData.append('avatar', imageBlob);
+      const updateOathImage = locals.pb
+        .collection('oathUserImage')
+        .getFirstListItem(`user="${user.record.id}" && provider="${provider.name}"`, {
+          fields: 'id'
+        })
+        .then((p) => {
+          (async () => {
+            await locals.pb.collection('oathUserImage').update(p.id, imageFormData);
+          })();
+        })
+        .catch(() => {
+          imageFormData.append('provider', provider.name);
+          imageFormData.append('user', user.record.id);
+          (async () => {
+            await locals.pb.collection('oathUserImage').create(imageFormData);
+          })();
+        });
+
+      if (user.record.avatar === '') {
+        const updateUserImage = locals.pb.collection('users').update(user.record.id, formData);
+        await updateUserImage;
+      }
+      await updateOathImage;
     }
   } catch (err) {
     console.log('Error logging in with 0Auth user', err);
