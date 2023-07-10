@@ -1,14 +1,15 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-  import { invalidateAll } from "$app/navigation";
+  import { createEventDispatcher } from 'svelte';
+  import { invalidateAll } from '$app/navigation';
 
   /** @type string */
   export let provider;
+  /** @type string|undefined */
   export let text = undefined;
 
-  const classes = $$props.class ?? "btn btn-accent btn-sm m-0.5"
+  const classes = $$props.class ?? 'btn btn-accent btn-sm m-0.5';
 
-  if (!text) text = "Login with " + provider;
+  if (!text) text = 'Login with ' + provider;
 
   const dispatcher = createEventDispatcher();
 
@@ -30,17 +31,17 @@
 
     const w = window.open(
       `/user/login?provider=${provider}&window`,
-      "oauth2-popup",
+      'oauth2-popup',
       `width=${width},height=${height},top=${top},left=${left},resizable,menubar=no`
     );
 
     // catch auth finish
-    const bc = new BroadcastChannel("log_in");
+    const bc = new BroadcastChannel('log_in');
     /** @param {MessageEvent} m */
     bc.onmessage = (m) => {
       console.log(m);
 
-      dispatcher("auth");
+      dispatcher('auth');
       invalidateAll();
       bc.close();
     };
@@ -52,5 +53,5 @@
   href="/user/login?provider={provider}"
   class={classes}
   data-sveltekit-preload-data="tap"
-  on:click|preventDefault={authLogin(provider)}>{text}</a
+  on:click|preventDefault={authLogin}>{text}</a
 >

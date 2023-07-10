@@ -1,7 +1,7 @@
 import { authFromCookie, pb } from '$lib/pocketbase.js';
 import { error } from '@sveltejs/kit';
 import { HeaderBuilder } from '$lib/headers.js';
-import { getAvatarUrl } from "$lib/tools.js";
+import { getAvatarUrl } from '$lib/tools.js';
 
 /**
  * @typedef {import("../../../dbtypes").User} User
@@ -10,7 +10,7 @@ import { getAvatarUrl } from "$lib/tools.js";
 
 /** @type {import("./$types").PageLoad} */
 export async function load({ parent, params }) {
-  authFromCookie(await parent().pbCookie);
+  authFromCookie((await parent()).pbCookie);
 
   /** @type {function(string):void} */
   let userAuthResolve;
@@ -24,8 +24,9 @@ export async function load({ parent, params }) {
       .getFirstListItem(`id="${params.slug}" || username="${params.slug}"`, {
         expand: 'authority,bio'
       })
-      .then((user) => {
-        resolve(/** @type {User} */ (user));
+      .then((u) => {
+        const user = /** @type {User} */ (u);
+        resolve(user);
         const auth = /** @type {Authority} */ (user.expand.authority);
         userAuthResolve(auth.name);
 

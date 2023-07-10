@@ -1,6 +1,6 @@
 <script>
-  import { pb } from "$lib/pocketbase.js";
-  import Login from "$lib/Components/Login.svelte";
+  import { pb } from '$lib/pocketbase.js';
+  import Login from '$lib/Components/Login.svelte';
 
   /** @type string[] */
   export let providers = [];

@@ -59,4 +59,15 @@ declare class OathImage extends Record {
   avatar: string; // file
 }
 
-export { User, Authority, Tag, Post, PocketBase, Contact, ContactRead, ReadableContact, Bio, OathImage };
+export {
+  User,
+  Authority,
+  Tag,
+  Post,
+  PocketBase,
+  Contact,
+  ContactRead,
+  ReadableContact,
+  Bio,
+  OathImage
+};

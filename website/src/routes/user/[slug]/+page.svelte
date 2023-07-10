@@ -14,8 +14,8 @@
 </script>
 
 {#if user.id === data.user?.id}
-<a class="absolute btn right-4 mt-4" href="/user/settings">Edit</a>
-  {:else}
+  <a class="absolute btn right-4 mt-4" href="/user/settings">Edit</a>
+{:else}
   todo promote button
 {/if}
 
@@ -34,11 +34,12 @@
 </div>
 
 {#if user.bio}
+  {@const bio = /** @type {Bio} */ (user.expand.bio)}
   <fieldset
     class="border-y-4 border-x mx-4 md:w-1/2 justify-center flex rounded-b-box rounded-t-lg md:mx-auto border-neutral"
   >
     <legend class="mx-auto px-2"> Bio </legend>
-    <MarkdownPage text={/** @type {Bio} */ (user.expand.bio).bio} />
+    <MarkdownPage text={bio.bio} />
   </fieldset>
 {/if}
 

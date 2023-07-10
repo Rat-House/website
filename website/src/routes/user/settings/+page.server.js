@@ -4,12 +4,12 @@
  * @typedef {import("../../../dbtypes.d").OathImage} OathImage
  */
 
-import { error, fail } from "@sveltejs/kit";
+import { error, fail } from '@sveltejs/kit';
 import { getFileUrlFromRecord } from '$lib/tools.js';
 
 /** @type {import("./$types").PageServerLoad} */
 export async function load({ locals }) {
-  if (!locals.pb.authStore.isValid)
+  if (!locals.pb.authStore.model)
     throw error(401, "You can't edit your profile without logging in");
 
   const user = locals.pb
@@ -19,7 +19,7 @@ export async function load({ locals }) {
     })
     .then((u) => {
       {
-        let user = /** @type {User} */ (u)
+        let user = /** @type {User} */ (u);
 
         return {
           id: user.id,
@@ -73,36 +73,42 @@ export async function load({ locals }) {
 
 /** @type {import("./$types").Actions} */
 export const actions = {
-  unlink: async ({locals, request})=>{
-    if (!locals.pb.authStore.model) return fail(401, "not signed in");
+  unlink: async ({ locals, request }) => {
+    if (!locals.pb.authStore.model) return fail(401); //, 'not signed in');
     const data = await request.formData();
-    if (!(data.has("provider"))) return fail(400, "no provider given");
+    if (!data.has('provider')) return fail(400, { provider: null, missing: true });
 
-    const provider =      data.get("provider").toString()
-    if(await locals.pb
-      .collection('users')
-      .listExternalAuths(locals.pb.authStore.model.id)
-      .then((pList) => {
-        const providers = pList.map((p) => p.provider)
-        return providers.length<=1 && providers.includes(provider)
-      })) return fail(422, "You are not allowed to unlink all your providers")
+    const provider = /** @type {FormDataEntryValue} */ (data.get('provider')).toString();
+    if (
+      await locals.pb
+        .collection('users')
+        .listExternalAuths(locals.pb.authStore.model.id)
+        .then((pList) => {
+          const providers = pList.map((p) => p.provider);
+          return providers.length <= 1 && providers.includes(provider);
+        })
+    )
+      return fail(422); //, 'You are not allowed to unlink all your providers');
 
-    await locals.pb.collection('users').unlinkExternalAuth(
-      locals.pb.authStore.model.id,
-      provider
-    );
+    await locals.pb.collection('users').unlinkExternalAuth(locals.pb.authStore.model.id, provider);
   },
 
-  setImage: async ({locals, request})=>{
-    if (!locals.pb.authStore.model) return fail(401, "not signed in");
+  setImage: async ({ locals, request }) => {
+    if (!locals.pb.authStore.model) return fail(401); //, 'not signed in');
     const data = await request.formData();
-    if (!(data.has("image") || data.has("imageLink"))) return fail(400, "missing image");
+    if (data.get('image') == null && data.get('imageLink') == null)
+      return fail(400, { image: null, imageLink: null, missing: true });
 
     let submit = new FormData();
-    if (data.has("imageLink")){
-      submit.append("avatar", await fetch(data.get("imageLink").toString()).then((r) => r.blob()))
+    if (data.has('imageLink')) {
+      submit.append(
+        'avatar',
+        await fetch(/** @type {FormDataEntryValue} */ (data.get('imageLink')).toString()).then(
+          (r) => r.blob()
+        )
+      );
     } else {
-      submit.append("avatar", data.get("image"))
+      submit.append('avatar', /** @type {FormDataEntryValue} */ (data.get('image')));
     }
 
     await locals.pb.collection('users').update(locals.pb.authStore.model.id, submit);
