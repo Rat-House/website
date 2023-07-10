@@ -173,13 +173,13 @@ export const actions = {
     const userId = data.get('user')?.toString();
     if (!userId) return fail(400, { user: userId });
 
-    const authLevel = parseInt(data.get('auth')?.toString());
+    const authLevel = parseInt(data.get('auth')?.toString() ?? '');
     if (isNaN(authLevel)) return fail(400, { authLevel, bad: true });
 
     if (
       await locals.pb
         .collection('authorities')
-        .getOne(/** @type {Authority} */ (locals.pb.authStore.model).authority, {fields:"level"})
+        .getOne(/** @type {Authority} */ (locals.pb.authStore.model).authority, { fields: 'level' })
         .then((r) => /** @type {Authority} */ (r).level < authLevel)
     )
       return fail(400, { authLevel, insufficient: true });
@@ -189,16 +189,16 @@ export const actions = {
     try {
       authId = await locals.pb
         .collection('authorities')
-        .getFirstListItem(`level=${authLevel}`, {fields:"id"})
+        .getFirstListItem(`level=${authLevel}`, { fields: 'id' })
         .then((r) => r.id);
     } catch (e) {
-      return fail(400, { authLevel, error: e.message });
+      return fail(400, { authLevel, error: /** @type {Error} */ (e).message });
     }
 
     try {
       await locals.pb.collection('users').update(userId, { authority: authId });
     } catch (e) {
-      return fail(400, { user: userId, error: e.message });
+      return fail(400, { user: userId, error: /** @type {Error} */ (e).message });
     }
   }
 };
