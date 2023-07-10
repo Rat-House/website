@@ -13,7 +13,7 @@ export async function load({ locals }) {
     throw error(401, "You can't edit your profile without logging in");
 
   const user = locals.pb
-    .collection('userList')
+    .collection('users')
     .getFirstListItem(`id="${locals.pb.authStore.model.id}"`, {
       expand: 'bio'
     })
@@ -75,7 +75,7 @@ export async function load({ locals }) {
 /** @type {import("./$types").Actions} */
 export const actions = {
   unlink: async ({ locals, request }) => {
-    if (!locals.pb.authStore.model) return fail(401); //, 'not signed in');
+    if (!locals.pb.authStore.model) throw error(401, 'not signed in');
     const data = await request.formData();
     if (!data.has('provider')) return fail(400, { provider: null, missing: true });
 
@@ -95,7 +95,7 @@ export const actions = {
   },
 
   setImage: async ({ locals, request }) => {
-    if (!locals.pb.authStore.model) return fail(401); //, 'not signed in');
+    if (!locals.pb.authStore.model) throw error(401, 'not signed in');
     const data = await request.formData();
     if (data.get('image') == null && data.get('imageLink') == null)
       return fail(400, { image: null, imageLink: null, missing: true });
@@ -130,5 +130,39 @@ export const actions = {
     }
 
     await locals.pb.collection('users').update(locals.pb.authStore.model.id, submit);
+  },
+
+  updateProfile: async ({ locals, request }) => {
+    if (!locals.pb.authStore.model) throw error(401, 'not signed in');
+    const data = await request.formData();
+    const user = /** @type {User} */ (
+      await locals.pb.collection('users').getOne(locals.pb.authStore.model.id)
+    );
+    if (!('bio' in user)) return fail(403, { bioId: undefined });
+
+    /** @type {{name?:string,bio?:string}|undefined} */
+    let updateUser = undefined;
+    if (data.has('bio')) {
+      const bioData = {
+        bio: data.get('bio')?.toString()
+      };
+
+      if (user.bio !== '') {
+        console.log(user.bio, bioData);
+        await locals.pb.collection('bios').update(user.bio, bioData);
+      } else {
+        const record = await locals.pb.collection('bios').create(bioData);
+        updateUser = { bio: record.id };
+      }
+    }
+
+    if (data.has('name')) {
+      if (updateUser === undefined) updateUser = {};
+      updateUser.name = data.get('name')?.toString();
+    }
+
+    if (updateUser === undefined) return;
+
+    await locals.pb.collection('users').update(user.id, updateUser);
   }
 };

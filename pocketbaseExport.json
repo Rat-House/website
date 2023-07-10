@@ -448,8 +448,8 @@
     "listRule": null,
     "viewRule": "",
     "createRule": "@request.auth.id != \"\"",
-    "updateRule": "@collection.users.id = @request.auth.id && @collection.users.bio = @request.data.id",
-    "deleteRule": "@collection.users.id = @request.auth.id && @collection.users.bio = @request.data.id",
+    "updateRule": "@request.auth.id != \"\" && @request.auth.bio.id = id",
+    "deleteRule": "@request.auth.id != \"\" && @request.auth.bio.id = id",
     "options": {}
   },
   {

@@ -5,6 +5,7 @@
   import { browser } from '$app/environment';
   import { afterNavigate } from '$app/navigation';
   import { page } from '$app/stores';
+  import FloatingLabel from '$lib/Components/FloatingLabel.svelte';
 
   const pages = /** @type {const} */ (['profile', 'image']);
   const pageNames = {
@@ -29,12 +30,23 @@
   /** @type {HTMLFormElement} */
   let uploadImage;
 
+  /** @type {Set.<string>} */
+  let changed = new Set();
+  let anyChange = !browser;
+
+  /** @param {Event} event */
+  function changeWatcher(event) {
+    if (event.target === null) return;
+    changed.add(/** @type {HTMLFormElement} */ (event.target).name);
+    anyChange = changed.size !== 0;
+  }
+
   afterNavigate(({ to }) => {
     if (to) settingsPage = getPage(to.url);
   });
 </script>
 
-<span>{Object.keys(data.user)}</span>
+<!--<span>{Object.keys(data.user)}</span>-->
 <div class="tabs justify-center">
   <div class="tab sm:tab-lifted grow sm:block hidden" />
   {#each pages as p}
@@ -136,5 +148,46 @@
   </div>
   <!----------------------------------------------------------------------------->
 {:else}
-  e
+  <form
+    action="?{settingsPage}&/updateProfile"
+    method="post"
+    use:enhance={({ formData }) => {
+      for (let entry of formData.entries()) if (!changed.has(entry[0])) formData.delete(entry[0]);
+
+      return async ({ update }) => {
+        changed.forEach((e) => changed.delete(e));
+        anyChange = false;
+        await update({ reset: false });
+      };
+    }}
+  >
+    <FloatingLabel>
+      <label slot="label" for="name">Name</label>
+      <input
+        slot="field"
+        id="name"
+        name="name"
+        type="text"
+        value={data.user.name}
+        maxlength="256"
+        placeholder=" "
+        on:input={changeWatcher}
+      />
+    </FloatingLabel>
+
+    <FloatingLabel>
+      <label slot="label" for="bio">Bio</label>
+      <textarea
+        slot="field"
+        class="textarea-lg"
+        id="bio"
+        name="bio"
+        rows="5"
+        on:input={changeWatcher}
+        placeholder=" ">{data.user.bio}</textarea
+      >
+    </FloatingLabel>
+
+    <button type="submit" class="btn mt-2" disabled={!anyChange}>Update</button>
+  </form>
 {/if}
