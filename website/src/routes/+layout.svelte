@@ -34,7 +34,7 @@
   }
 
   function preppedHeader() {
-    return Header.updateUrl($page.url).setImage(
+    return Header.updateUrl($page.url).updateImage(
       `${$page.url.origin}/favicon-128.png`,
       'website logo'
     );
