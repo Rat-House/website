@@ -14,7 +14,7 @@
 <span>{Object.keys(data.user)}</span>
 
 <div class="flex items-center mb-4">
-  <div class="avatar justify-center">
+  <div class="avatar justify-center border-neutral rounded-full border-2">
     <div class="w-32 rounded-full">
       <img src={data.user.avatar} alt="{data.user.name}'s current avatar" />
     </div>

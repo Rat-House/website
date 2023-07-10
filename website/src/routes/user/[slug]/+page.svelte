@@ -19,8 +19,8 @@
   todo promote button
 {/if}
 
-<div class="flex items-center shadow-xl rounded-box w-fit px-8 py-4 mb-7 mx-auto">
-  <div class="avatar border-2 border-secondary rounded-full m-1.5">
+<div class="flex items-center shadow-xl rounded-box w-fit px-8 py-4 mb-7 mx-auto bg-base-200">
+  <div class="avatar border-2 border-neutral rounded-full m-1.5">
     <div class="w-32 rounded-full">
       <img src={data ? getAvatarUrl(/** @type {User!} */ (user)) : ''} alt="{user.name}'s icon" />
     </div>
