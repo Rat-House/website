@@ -1,7 +1,7 @@
 <script>
-  import Login from '$lib/Components/Login.svelte';
+  import LoginList from '$lib/Components/LoginList.svelte';
 
   export let data;
 </script>
 
-<Login providers={data.providers} />
+<LoginList providers={data.providers} />

@@ -86,6 +86,16 @@ export class HeaderBuilder {
     return this;
   }
 
+  /**
+   * @param {string|URL} imageAddr
+   * @param {string} alt
+   */
+  updateImage(imageAddr, alt) {
+    const ogp = /** @type {OGPProps} */ (this._props.openGraph);
+    if ((ogp.images?.length ?? 0) === 0) this.setImage(imageAddr, alt);
+    return this;
+  }
+
   /** @return {MetaTagsProps} */
   export() {
     return this._props;

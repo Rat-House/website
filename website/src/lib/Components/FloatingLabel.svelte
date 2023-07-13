@@ -15,14 +15,14 @@
     const select = fieldSet.querySelector('fieldset>select');
     if (select) {
       select.setAttribute('value', select.value);
-      select.onclick = () => {
+      select.onchange = () => {
         select.setAttribute('value', select.value);
       };
     }
   });
 </script>
 
-<fieldset class="relative border border-solid border-gray-300" bind:this={fieldSet}>
+<fieldset class="floating relative border border-solid border-gray-300" bind:this={fieldSet}>
   <legend>
     <slot name="label">
       <label for="demoItem">Label</label>
