@@ -601,5 +601,42 @@
     "updateRule": "user = @request.auth.id && (@request.data.user:isset = false || @request.data.user = user) && (@request.data.provider:isset = false || @request.data.provider = provider)",
     "deleteRule": "user = @request.auth.id",
     "options": {}
+  },
+  {
+    "id": "lqedkz18p9rk03v",
+    "name": "online",
+    "type": "base",
+    "system": false,
+    "schema": [
+      {
+        "id": "nlj0tfwp",
+        "name": "uid",
+        "type": "text",
+        "system": false,
+        "required": true,
+        "options": {
+          "min": 40,
+          "max": 40,
+          "pattern": "^[0-9a-z]{40}$"
+        }
+      },
+      {
+        "id": "wsjpybxf",
+        "name": "data",
+        "type": "json",
+        "system": false,
+        "required": true,
+        "options": {}
+      }
+    ],
+    "indexes": [
+      "CREATE UNIQUE INDEX `idx_wYtr2ys` ON `online` (`uid`)"
+    ],
+    "listRule": "",
+    "viewRule": "",
+    "createRule": "",
+    "updateRule": "@request.data.uid:isset = false || @request.data.uid = uid",
+    "deleteRule": "@request.data.uid:isset = false || @request.data.uid = uid",
+    "options": {}
   }
 ]
