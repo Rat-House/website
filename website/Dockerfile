@@ -1,26 +1,31 @@
-FROM node:18-alpine as builder
-WORKDIR /build
-
-COPY package.json package-lock.json ./
-RUN npm install --frozen-lockfile
-
-COPY . .
-RUN npm run lint
-RUN npm run check
-RUN npm run build
-
-##################
-
-FROM node:18-alpine
+FROM node:18-buster as builder
 WORKDIR /app
 
-COPY package.json ./
-RUN npm install --omit=dev
+# install bun
+RUN curl -fsSL https://bun.sh/install | bash
 
-COPY --from=builder /build/build ./app
-COPY --from=builder /build/static ./static
+COPY . .
+RUN /root/.bun/bin/bun install --frozen-lockfile
+
+# running on install is not working -- bunx
+RUN /root/.bun/bin/bun svelte-kit sync
+
+RUN /root/.bun/bin/bun run lint
+RUN /root/.bun/bin/bun run check
+RUN /root/.bun/bin/bun run build
+
+#######################################
+
+FROM oven/bun:0.7
+WORKDIR /app
+
+COPY package.json bun.lockb .
+RUN bun install --production
+
+COPY --from=builder /app/build ./src
+COPY --from=builder /app/static ./static
 
 ENV PORT=5173
 
-EXPOSE 5173
-CMD ["node", "app"]
+EXPOSE $PORT
+CMD ["./src/index.js"]
