@@ -1,6 +1,7 @@
 import PocketBase from 'pocketbase';
 import { PUBLIC_POCKETBASE_PAGEURL } from '$env/static/public';
 import { cookieRegex } from '$lib/stores/theme.js';
+import { open, upgrade } from "$lib/server/websocket.js";
 
 /** @type {import("@sveltejs/kit").Handle} */
 export async function handle({ event, resolve }) {
@@ -38,3 +39,9 @@ export async function handle({ event, resolve }) {
 
   return response;
 }
+
+/** @type {import("svelte-adapter-bun").WebSocketHandler} */
+export const handleWebsocket = {
+  open: open,
+ upgrade:upgrade,
+};
